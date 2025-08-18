@@ -141,7 +141,7 @@ export default function DouglassHicksLawPage() {
               <Link href="#practice-areas" className="text-gray-300 hover:text-white transition-colors">
                 Practice Areas
               </Link>
-              <Link href="#attorneys" className="text-gray-300 hover:text-white transition-colors">
+              <Link href="/team" className="text-gray-300 hover:text-white transition-colors">
                 Our Team
               </Link>
               <Link href="/results" className="text-gray-300 hover:text-white transition-colors">
