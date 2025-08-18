@@ -18,121 +18,109 @@ import {
   Lock,
   Search,
   Calendar,
-  DollarSign
+  DollarSign,
+  Phone,
+  Mail,
+  MapPin,
+  Award,
+  Building,
+  Heart
 } from 'lucide-react'
 
-export default function LawFlyPage() {
-  const features = [
-    {
-      icon: Scale,
-      title: "Attorney-Client Privilege Protection",
-      description: "Database-level privilege enforcement with field-level encryption ensures complete protection of confidential communications.",
-      benefits: ["Field-level encryption", "Privilege detection", "Audit trail compliance"]
-    },
-    {
-      icon: FileText,
-      title: "Electronic Signature System", 
-      description: "Legally binding electronic signatures with tamper-proof verification and multi-party workflow support.",
-      benefits: ["Legal validity", "Audit trails", "Multi-party workflows"]
-    },
-    {
-      icon: Database,
-      title: "Enterprise Backend Architecture",
-      description: "25+ database tables with multi-tenant isolation, ensuring complete separation between law firms.",
-      benefits: ["Multi-tenant isolation", "Performance optimization", "Scalable architecture"]
-    },
+export default function DouglassHicksLawPage() {
+  const practiceAreas = [
     {
       icon: Shield,
-      title: "Legal Compliance & Security",
-      description: "SOC 2 Type II compliance with built-in data retention policies and secure document management.",
-      benefits: ["SOC 2 compliance", "Data retention", "Secure storage"]
+      title: "Personal Injury",
+      description: "Fighting for victims of accidents, medical malpractice, and negligence with compassionate representation.",
+      highlights: ["Auto Accidents", "Medical Malpractice", "Workplace Injuries", "Product Liability"]
+    },
+    {
+      icon: Scale,
+      title: "Civil Rights",
+      description: "Protecting fundamental rights and fighting discrimination with unwavering dedication to justice.",
+      highlights: ["Police Brutality", "Employment Discrimination", "Housing Rights", "Disability Rights"]
+    },
+    {
+      icon: Gavel,
+      title: "Criminal Defense",
+      description: "Aggressive defense strategies from a team with experience defending high-profile cases.",
+      highlights: ["White Collar Crimes", "Drug Charges", "Violent Crimes", "Appeals"]
+    },
+    {
+      icon: Building,
+      title: "Employment Law",
+      description: "Advocating for workers' rights and fighting workplace discrimination and harassment.",
+      highlights: ["Wrongful Termination", "Wage & Hour", "Harassment", "Discrimination"]
     }
   ]
 
-  const capabilities = [
-    {
-      title: "Case Management",
-      description: "Complete case lifecycle management from intake to resolution with deadline tracking.",
-      metrics: "500+ concurrent users per firm",
-      icon: Gavel
-    },
-    {
-      title: "Document Management",
-      description: "Version-controlled document storage with OCR processing and privilege detection.",
-      metrics: "99.9% encryption compliance",
-      icon: FileText
-    },
-    {
-      title: "Time & Billing",
-      description: "Automated time tracking with billing integration and financial reporting.",
-      metrics: "40% reduction in billing time", 
-      icon: DollarSign
-    },
-    {
-      title: "Legal Research",
-      description: "Integrated case law research with citation management and brief generation.",
-      metrics: "10x faster research",
-      icon: Search
-    },
-    {
-      title: "Calendar Management",
-      description: "Court date tracking with automated reminders and conflict detection.",
-      metrics: "Zero missed deadlines",
-      icon: Calendar
-    },
-    {
-      title: "Communication Hub",
-      description: "Secure messaging with client portal access and privilege protection.",
-      metrics: "95% client satisfaction",
-      icon: Users
-    }
-  ]
-
-  const testimonials = [
+  const attorneys = [
     {
       name: "Carl E. Douglas",
-      role: "Founding Partner, Douglass Hicks Law Firm",
-      content: "LawFly Pro has revolutionized our practice management. The privilege protection and enterprise features are exactly what high-stakes litigation requires.",
-      rating: 5
+      role: "Founding Partner",
+      specialties: ["Personal Injury", "Civil Rights", "Criminal Defense"],
+      description: "Member of O.J. Simpson's 'Dream Team' defense, with over 30 years fighting for justice and achieving record-breaking verdicts.",
+      achievements: ["$4.9B verdict record holder", "O.J. Simpson Dream Team member", "30+ years experience"]
     },
     {
       name: "Jamon R. Hicks", 
-      role: "Partner, Douglass Hicks Law Firm",
-      content: "The multi-tenant architecture allows us to maintain complete client confidentiality while streamlining our case management workflows.",
-      rating: 5
+      role: "Partner",
+      specialties: ["Trial Advocacy", "Personal Injury", "Civil Rights"],
+      description: "Trial advocacy professor and skilled litigator with a track record of multi-million dollar settlements and verdicts.",
+      achievements: ["$5M+ settlements", "Trial advocacy professor", "Expert litigator"]
+    }
+  ]
+
+  const results = [
+    {
+      amount: "$8M",
+      case: "Police Brutality Verdict",
+      description: "Record-setting verdict for excessive force case"
     },
     {
-      name: "Senior Partner",
-      role: "AmLaw 100 Firm",
-      content: "Finally, a legal backend system built by developers who understand attorney-client privilege. The audit trails alone saved us during our last compliance review.",
-      rating: 5
+      amount: "$5M",
+      case: "Personal Injury Settlement",
+      description: "Major settlement for catastrophic injury victim"
+    },
+    {
+      amount: "$1.5M",
+      case: "Disability Discrimination",
+      description: "Landmark case protecting disability rights"
     }
   ]
 
   return (
     <div className="min-h-screen bg-black">
       {/* Navigation */}
-      <nav className="relative bg-black/50 backdrop-blur-xl border-b border-white/10 sticky top-0 z-50">
+      <nav className="relative bg-black/90 backdrop-blur-xl border-b border-gray-800 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="/" className="flex items-center">
-              <span className="text-2xl font-bold bg-gradient-to-r from-amber-400 via-yellow-500 to-orange-500 bg-clip-text text-transparent">
-                LawFly Pro
+              <Scale className="w-8 h-8 text-blue-400 mr-3" />
+              <span className="text-xl font-bold text-white">
+                Douglass Hicks Law Firm
               </span>
             </Link>
             <div className="hidden md:flex items-center space-x-8">
-              <Link href="#features" className="text-gray-300 hover:text-white transition-colors">
-                Features
+              <Link href="#practice-areas" className="text-gray-300 hover:text-white transition-colors">
+                Practice Areas
               </Link>
-              <Link href="#capabilities" className="text-gray-300 hover:text-white transition-colors">
-                Capabilities
+              <Link href="#attorneys" className="text-gray-300 hover:text-white transition-colors">
+                Our Team
               </Link>
-              <Link href="#testimonials" className="text-gray-300 hover:text-white transition-colors">
-                Testimonials
+              <Link href="#results" className="text-gray-300 hover:text-white transition-colors">
+                Results
               </Link>
-              <button className="bg-gradient-to-r from-amber-600 to-orange-600 text-white px-6 py-2 rounded-lg hover:from-amber-700 hover:to-orange-700 transition-all">
-                Request Demo
-              </button>
+              <Link href="#contact" className="text-gray-300 hover:text-white transition-colors">
+                Contact
+              </Link>
+              <Link 
+                href="/portal"
+                className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-all"
+              >
+                Client Portal
+              </Link>
             </div>
           </div>
         </div>
@@ -140,86 +128,89 @@ export default function LawFlyPage() {
 
       {/* Hero Section */}
       <section className="relative pt-20 pb-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-amber-600/20 via-yellow-600/20 to-orange-600/20"></div>
-        <div className="absolute inset-0 bg-gradient-to-tr from-red-600/10 via-transparent to-amber-600/10"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-gray-900/20 to-blue-800/20"></div>
         
         <div className="max-w-7xl mx-auto relative">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
-              <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-amber-600/20 to-orange-600/20 rounded-full border border-white/10 mb-6">
-                <Scale className="w-4 h-4 text-amber-400 mr-2" />
-                <span className="text-sm text-gray-300">Enterprise Legal Platform</span>
+              <div className="inline-flex items-center px-4 py-2 bg-blue-600/20 rounded-full border border-blue-400/30 mb-6">
+                <Award className="w-4 h-4 text-blue-400 mr-2" />
+                <span className="text-sm text-gray-300">Dream Team Legacy</span>
               </div>
               
               <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-                <span className="bg-gradient-to-r from-amber-400 via-yellow-500 to-orange-500 bg-clip-text text-transparent">
-                  LawFly
+                <span className="text-white">
+                  Fighting for
                 </span>
                 <br />
-                <span className="text-white">Pro</span>
+                <span className="bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600 bg-clip-text text-transparent">
+                  Justice
+                </span>
               </h1>
               
               <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl">
-                Enterprise law firm backend system with multi-tenant architecture, attorney-client privilege protection, and complete case management automation.
+                From the O.J. Simpson Dream Team to today&rsquo;s most challenging cases. We rebuild lives financially and emotionally with David vs. Goliath representation.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link 
-                  href="https://lawflyai.com"
-                  target="_blank"
-                  className="inline-flex items-center justify-center px-8 py-4 text-lg font-medium text-white bg-gradient-to-r from-amber-600 to-orange-600 rounded-lg hover:from-amber-700 hover:to-orange-700 transition-all"
+                  href="#contact"
+                  className="inline-flex items-center justify-center px-8 py-4 text-lg font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-all"
                 >
-                  <PlayCircle className="mr-2 w-5 h-5" />
-                  View Live Demo
+                  <Phone className="mr-2 w-5 h-5" />
+                  Free Consultation
                 </Link>
-                <button className="inline-flex items-center justify-center px-8 py-4 text-lg font-medium text-white border border-white/20 rounded-lg hover:bg-white/10 transition-all">
-                  Enterprise Consultation
+                <Link 
+                  href="/portal"
+                  className="inline-flex items-center justify-center px-8 py-4 text-lg font-medium text-white border border-gray-400 rounded-lg hover:bg-white/10 transition-all"
+                >
+                  Client Portal
                   <ArrowRight className="ml-2 w-5 h-5" />
-                </button>
+                </Link>
               </div>
               
               <div className="mt-8 flex items-center gap-6 text-sm text-gray-400">
                 <div className="flex items-center gap-2">
                   <CheckCircle className="w-4 h-4 text-green-400" />
-                  <span>SOC 2 Compliant</span>
+                  <span>30+ Years Experience</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle className="w-4 h-4 text-green-400" />
-                  <span>Attorney-Client Privilege</span>
+                  <span>Dream Team Alumni</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle className="w-4 h-4 text-green-400" />
-                  <span>99.9% Uptime SLA</span>
+                  <span>Multi-Million Results</span>
                 </div>
               </div>
             </div>
             
             <div className="relative">
-              <div className="bg-gradient-to-br from-amber-900/50 to-orange-900/50 backdrop-blur-xl rounded-xl p-8 border border-white/10">
+              <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-xl rounded-xl p-8 border border-gray-700">
                 <div className="text-center mb-6">
-                  <div className="w-24 h-24 bg-gradient-to-br from-amber-600 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Scale className="w-12 h-12 text-white" />
+                  <div className="w-24 h-24 bg-gradient-to-br from-blue-600 to-blue-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Building className="w-12 h-12 text-white" />
                   </div>
                   <h3 className="text-xl font-semibold text-white">Douglass Hicks Law Firm</h3>
-                  <p className="text-gray-400 text-sm">Pilot Implementation - Live System</p>
+                  <p className="text-gray-400 text-sm">Los Angeles • Since 1990</p>
                 </div>
                 
                 <div className="space-y-4">
                   <div className="flex items-center justify-between p-3 bg-black/30 rounded-lg">
-                    <span className="text-gray-300 text-sm">Database Tables</span>
-                    <span className="text-amber-400 font-semibold">25+ Enterprise</span>
+                    <span className="text-gray-300 text-sm">Record Verdict</span>
+                    <span className="text-green-400 font-semibold">$4.9B</span>
                   </div>
                   <div className="flex items-center justify-between p-3 bg-black/30 rounded-lg">
-                    <span className="text-gray-300 text-sm">Query Performance</span>
-                    <span className="text-yellow-400 font-semibold">&lt;200ms</span>
+                    <span className="text-gray-300 text-sm">Cases Won</span>
+                    <span className="text-blue-400 font-semibold">1,000+</span>
                   </div>
                   <div className="flex items-center justify-between p-3 bg-black/30 rounded-lg">
-                    <span className="text-gray-300 text-sm">Security Compliance</span>
-                    <span className="text-orange-400 font-semibold">SOC 2 Type II</span>
+                    <span className="text-gray-300 text-sm">Client Satisfaction</span>
+                    <span className="text-yellow-400 font-semibold">98%</span>
                   </div>
                   <div className="flex items-center justify-between p-3 bg-black/30 rounded-lg">
-                    <span className="text-gray-300 text-sm">Privilege Protection</span>
-                    <span className="text-red-400 font-semibold">100% Encrypted</span>
+                    <span className="text-gray-300 text-sm">Years of Service</span>
+                    <span className="text-purple-400 font-semibold">30+</span>
                   </div>
                 </div>
               </div>
@@ -228,33 +219,33 @@ export default function LawFlyPage() {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section id="features" className="py-20 px-4 sm:px-6 lg:px-8">
+      {/* Practice Areas Section */}
+      <section id="practice-areas" className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-900/50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-white mb-4">
-              Enterprise-Grade Legal Infrastructure
+              Our Practice Areas
             </h2>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-              Built from the ground up for law firms handling high-stakes litigation, with attorney-client privilege protection as the foundational principle.
+              Decades of experience fighting for justice across multiple areas of law
             </p>
           </div>
           
           <div className="grid md:grid-cols-2 gap-8">
-            {features.map((feature, index) => {
-              const Icon = feature.icon
+            {practiceAreas.map((area, index) => {
+              const Icon = area.icon
               return (
-                <div key={index} className="bg-black/50 backdrop-blur-xl rounded-xl p-8 border border-white/10">
-                  <div className="w-16 h-16 bg-gradient-to-br from-amber-600 to-orange-600 rounded-lg flex items-center justify-center mb-6">
+                <div key={index} className="bg-black/50 backdrop-blur-xl rounded-xl p-8 border border-gray-700">
+                  <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-blue-800 rounded-lg flex items-center justify-center mb-6">
                     <Icon className="w-8 h-8 text-white" />
                   </div>
-                  <h3 className="text-2xl font-bold text-white mb-4">{feature.title}</h3>
-                  <p className="text-gray-400 mb-6">{feature.description}</p>
+                  <h3 className="text-2xl font-bold text-white mb-4">{area.title}</h3>
+                  <p className="text-gray-400 mb-6">{area.description}</p>
                   <div className="space-y-2">
-                    {feature.benefits.map((benefit, idx) => (
+                    {area.highlights.map((highlight, idx) => (
                       <div key={idx} className="flex items-center gap-3">
-                        <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
-                        <span className="text-gray-300">{benefit}</span>
+                        <CheckCircle className="w-5 h-5 text-blue-400 flex-shrink-0" />
+                        <span className="text-gray-300">{highlight}</span>
                       </div>
                     ))}
                   </div>
@@ -265,62 +256,40 @@ export default function LawFlyPage() {
         </div>
       </section>
 
-      {/* Capabilities Section */}
-      <section id="capabilities" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-amber-900/10 to-orange-900/10">
+      {/* Attorneys Section */}
+      <section id="attorneys" className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-white mb-4">
-              Complete Legal Practice Management
+              Our Legal Team
             </h2>
             <p className="text-xl text-gray-400">
-              Every component built for the demanding requirements of professional legal practice
+              Award-winning attorneys with a legacy of justice
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {capabilities.map((capability, index) => {
-              const Icon = capability.icon
-              return (
-                <div key={index} className="bg-black/50 backdrop-blur-xl rounded-xl p-6 border border-white/10 text-center">
-                  <div className="w-12 h-12 bg-gradient-to-br from-amber-600 to-orange-600 rounded-lg flex items-center justify-center mx-auto mb-4">
-                    <Icon className="w-6 h-6 text-white" />
+          <div className="grid md:grid-cols-2 gap-8">
+            {attorneys.map((attorney, index) => (
+              <div key={index} className="bg-black/50 backdrop-blur-xl rounded-xl p-8 border border-gray-700">
+                <div className="mb-6">
+                  <h3 className="text-2xl font-bold text-white mb-2">{attorney.name}</h3>
+                  <p className="text-blue-400 font-semibold mb-4">{attorney.role}</p>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {attorney.specialties.map((specialty, idx) => (
+                      <span key={idx} className="px-3 py-1 bg-blue-600/20 text-blue-300 rounded-full text-sm">
+                        {specialty}
+                      </span>
+                    ))}
                   </div>
-                  <h3 className="text-lg font-semibold text-white mb-3">{capability.title}</h3>
-                  <p className="text-gray-400 text-sm mb-4">{capability.description}</p>
-                  <div className="text-xs text-green-400 font-semibold bg-green-400/10 px-3 py-1 rounded-full">
-                    {capability.metrics}
+                  <p className="text-gray-400 mb-6">{attorney.description}</p>
+                  <div className="space-y-2">
+                    {attorney.achievements.map((achievement, idx) => (
+                      <div key={idx} className="flex items-center gap-3">
+                        <Star className="w-4 h-4 text-yellow-400 flex-shrink-0" />
+                        <span className="text-gray-300 text-sm">{achievement}</span>
+                      </div>
+                    ))}
                   </div>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section id="testimonials" className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-white mb-4">
-              Trusted by Leading Legal Professionals
-            </h2>
-            <p className="text-xl text-gray-400">
-              Built in partnership with Douglass Hicks Law Firm - O.J. Simpson &ldquo;Dream Team&rdquo; legacy
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <div key={index} className="bg-black/50 backdrop-blur-xl rounded-xl p-6 border border-white/10">
-                <div className="flex mb-4">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
-                  ))}
-                </div>
-                <p className="text-gray-300 mb-6 italic">&ldquo;{testimonial.content}&rdquo;</p>
-                <div>
-                  <p className="text-white font-semibold">{testimonial.name}</p>
-                  <p className="text-gray-400 text-sm">{testimonial.role}</p>
                 </div>
               </div>
             ))}
@@ -328,69 +297,156 @@ export default function LawFlyPage() {
         </div>
       </section>
 
-      {/* Technical Specs Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-amber-900/10 to-orange-900/10">
+      {/* Results Section */}
+      <section id="results" className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-900/50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-white mb-4">
-              Enterprise Technical Specifications
+              Proven Results
             </h2>
             <p className="text-xl text-gray-400">
-              Built on battle-tested enterprise architecture with legal compliance at every layer
+              Recent victories and settlements for our clients
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-black/50 backdrop-blur-xl rounded-xl p-6 border border-white/10 text-center">
-              <Database className="w-12 h-12 text-amber-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-white mb-2">25+ Database Tables</h3>
-              <p className="text-gray-400 text-sm">Complete legal workflow coverage</p>
+          <div className="grid md:grid-cols-3 gap-8">
+            {results.map((result, index) => (
+              <div key={index} className="bg-black/50 backdrop-blur-xl rounded-xl p-8 border border-gray-700 text-center">
+                <div className="text-4xl font-bold text-green-400 mb-4">{result.amount}</div>
+                <h3 className="text-xl font-semibold text-white mb-3">{result.case}</h3>
+                <p className="text-gray-400">{result.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section id="contact" className="py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-white mb-4">
+              Contact Us Today
+            </h2>
+            <p className="text-xl text-gray-400">
+              Free consultation for your case
+            </p>
+          </div>
+          
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div>
+              <div className="space-y-8">
+                <div className="flex items-start gap-4">
+                  <MapPin className="w-6 h-6 text-blue-400 mt-1" />
+                  <div>
+                    <h3 className="text-lg font-semibold text-white mb-2">Office Location</h3>
+                    <p className="text-gray-400">
+                      5120 W. Goldleaf Circle, Suite 140<br />
+                      Los Angeles, CA 90056
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-4">
+                  <Phone className="w-6 h-6 text-blue-400 mt-1" />
+                  <div>
+                    <h3 className="text-lg font-semibold text-white mb-2">Phone</h3>
+                    <p className="text-gray-400">(323) 733-1111</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-4">
+                  <Mail className="w-6 h-6 text-blue-400 mt-1" />
+                  <div>
+                    <h3 className="text-lg font-semibold text-white mb-2">Email</h3>
+                    <p className="text-gray-400">info@douglashickslaw.com</p>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="bg-black/50 backdrop-blur-xl rounded-xl p-6 border border-white/10 text-center">
-              <Shield className="w-12 h-12 text-yellow-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-white mb-2">Field-Level Encryption</h3>
-              <p className="text-gray-400 text-sm">Attorney-client privilege protection</p>
-            </div>
-            <div className="bg-black/50 backdrop-blur-xl rounded-xl p-6 border border-white/10 text-center">
-              <Clock className="w-12 h-12 text-orange-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-white mb-2">&lt;200ms Query Time</h3>
-              <p className="text-gray-400 text-sm">Optimized for performance</p>
-            </div>
-            <div className="bg-black/50 backdrop-blur-xl rounded-xl p-6 border border-white/10 text-center">
-              <Users className="w-12 h-12 text-red-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-white mb-2">Multi-Tenant Architecture</h3>
-              <p className="text-gray-400 text-sm">Complete firm isolation</p>
+            
+            <div className="bg-black/50 backdrop-blur-xl rounded-xl p-8 border border-gray-700">
+              <h3 className="text-2xl font-bold text-white mb-6">Free Case Evaluation</h3>
+              <form className="space-y-4">
+                <div>
+                  <input 
+                    type="text" 
+                    placeholder="Your Name" 
+                    className="w-full p-4 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <input 
+                    type="email" 
+                    placeholder="Your Email" 
+                    className="w-full p-4 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <input 
+                    type="tel" 
+                    placeholder="Your Phone" 
+                    className="w-full p-4 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <textarea 
+                    placeholder="Describe your case..." 
+                    rows={4}
+                    className="w-full p-4 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none"
+                  ></textarea>
+                </div>
+                <button 
+                  type="submit"
+                  className="w-full bg-blue-600 text-white py-4 rounded-lg font-semibold hover:bg-blue-700 transition-all"
+                >
+                  Get Free Consultation
+                </button>
+              </form>
             </div>
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-amber-900/20 to-orange-900/20">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Ready to Transform Your Legal Practice?
-          </h2>
-          <p className="text-xl text-gray-300 mb-12">
-            Join the next generation of law firms using enterprise-grade backend systems built specifically for legal professionals
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link 
-              href="https://lawflyai.com"
-              target="_blank"
-              className="px-8 py-4 text-lg font-medium text-white bg-gradient-to-r from-amber-600 to-orange-600 rounded-lg hover:from-amber-700 hover:to-orange-700 transition-all"
-            >
-              Schedule Enterprise Demo
-            </Link>
-            <button className="px-8 py-4 text-lg font-medium text-white border border-white/20 rounded-lg hover:bg-white/10 transition-all">
-              Request Technical Specs
-            </button>
+      {/* Footer */}
+      <footer className="bg-gray-900 border-t border-gray-800 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-8">
+            <div>
+              <div className="flex items-center mb-4">
+                <Scale className="w-8 h-8 text-blue-400 mr-3" />
+                <span className="text-xl font-bold text-white">Douglass Hicks Law Firm</span>
+              </div>
+              <p className="text-gray-400 mb-4">
+                Fighting for justice with David vs. Goliath representation since 1990.
+              </p>
+              <p className="text-gray-500 text-sm">
+                © 2024 Douglass Hicks Law Firm. All rights reserved.
+              </p>
+            </div>
+            
+            <div>
+              <h4 className="text-lg font-semibold text-white mb-4">Practice Areas</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li>Personal Injury</li>
+                <li>Civil Rights</li>
+                <li>Criminal Defense</li>
+                <li>Employment Law</li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 className="text-lg font-semibold text-white mb-4">Contact Info</h4>
+              <div className="space-y-2 text-gray-400">
+                <p>5120 W. Goldleaf Circle, Suite 140</p>
+                <p>Los Angeles, CA 90056</p>
+                <p>(323) 733-1111</p>
+                <p>info@douglashickslaw.com</p>
+              </div>
+            </div>
           </div>
-          <p className="text-sm text-gray-400 mt-6">
-            SOC 2 compliant • Attorney-client privilege protected • 99.9% uptime SLA
-          </p>
         </div>
-      </section>
+      </footer>
     </div>
   )
 }
