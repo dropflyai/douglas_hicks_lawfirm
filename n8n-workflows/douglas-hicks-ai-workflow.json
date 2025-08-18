@@ -1,0 +1,632 @@
+{
+  "name": "Douglas Hicks Law - AI Case Evaluation System",
+  "description": "Omnichannel AI workflow handling voice calls and web chat for legal case evaluation and qualification",
+  "version": "1.0",
+  "nodes": [
+    {
+      "id": "webhook-chat",
+      "name": "Chat Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [200, 100],
+      "parameters": {
+        "path": "douglas-hicks-chat",
+        "httpMethod": "POST",
+        "responseMode": "responseNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "webhook-voice",
+      "name": "VAPI Voice Webhook",
+      "type": "n8n-nodes-base.webhook", 
+      "typeVersion": 1,
+      "position": [200, 300],
+      "parameters": {
+        "path": "douglas-hicks-vapi",
+        "httpMethod": "POST",
+        "responseMode": "responseNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "vapi-handler",
+      "name": "VAPI Event Handler",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [400, 300],
+      "parameters": {
+        "functionCode": "// Handle different VAPI webhook events\nconst { type, call, message } = $json;\n\nswitch (type) {\n  case 'call-start':\n    return {\n      event_type: 'call_started',\n      call_id: call.id,\n      caller_number: call.customer?.number,\n      started_at: call.startedAt,\n      input_type: 'voice'\n    };\n    \n  case 'transcript':\n    return {\n      event_type: 'transcript_received',\n      call_id: call.id,\n      transcript: message.transcript,\n      role: message.role, // 'user' or 'assistant'\n      timestamp: message.timestamp,\n      input_type: 'voice'\n    };\n    \n  case 'function-call':\n    return {\n      event_type: 'function_called',\n      call_id: call.id,\n      function_name: message.function?.name,\n      function_parameters: message.function?.parameters,\n      input_type: 'voice'\n    };\n    \n  case 'call-end':\n    return {\n      event_type: 'call_ended',\n      call_id: call.id,\n      ended_at: call.endedAt,\n      duration: call.duration,\n      cost: call.cost,\n      transcript: call.transcript,\n      summary: call.summary,\n      input_type: 'voice'\n    };\n    \n  default:\n    return {\n      event_type: 'unknown',\n      raw_data: $json,\n      input_type: 'voice'\n    };\n}"
+      }
+    },
+    {
+      "id": "process-transcript",
+      "name": "Process Voice Transcript",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [600, 300],
+      "parameters": {
+        "functionCode": "// Process VAPI transcript for case analysis\nconst { event_type, transcript, call_id } = $json;\n\n// Only process user transcripts (not assistant responses)\nif (event_type === 'transcript_received' && transcript) {\n  return {\n    call_id: call_id,\n    message: transcript,\n    input_type: 'voice',\n    timestamp: new Date().toISOString(),\n    ready_for_analysis: true\n  };\n}\n\n// For call-end events, use the full transcript\nif (event_type === 'call_ended' && transcript) {\n  return {\n    call_id: call_id,\n    message: transcript,\n    input_type: 'voice',\n    timestamp: new Date().toISOString(),\n    ready_for_analysis: true,\n    call_completed: true\n  };\n}\n\n// Skip processing for other event types\nreturn null;"
+      }
+    },
+    {
+      "id": "input-router",
+      "name": "Route Input Type",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 1,
+      "position": [800, 200],
+      "parameters": {
+        "rules": {
+          "rules": [
+            {
+              "operation": "equal",
+              "value1": "={{ $json.input_type }}",
+              "value2": "chat"
+            },
+            {
+              "operation": "equal", 
+              "value1": "={{ $json.input_type }}",
+              "value2": "voice"
+            }
+          ]
+        },
+        "fallbackOutput": 0
+      }
+    },
+    {
+      "id": "extract-case-info",
+      "name": "Extract Case Information",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [1000, 200],
+      "parameters": {
+        "resource": "chat",
+        "operation": "create",
+        "model": "gpt-4",
+        "messages": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a legal case intake AI for Douglas Hicks Law, a premier civil rights and personal injury firm. Extract structured case information from client communications. Focus on:\n\n1. CASE TYPE IDENTIFICATION:\n- Personal Injury (auto accident, slip/fall, medical malpractice)\n- Civil Rights (police brutality, discrimination, wrongful death)\n- Employment (wrongful termination, harassment, discrimination)\n- Product Liability (defective products, design flaws)\n\n2. KEY DETAILS TO EXTRACT:\n- Injury type and severity\n- Incident date and location\n- Parties involved (defendants, witnesses)\n- Medical treatment received\n- Financial damages (medical bills, lost wages)\n- Evidence available (photos, videos, police reports)\n- Insurance involvement\n- Statute of limitations status\n\n3. URGENCY ASSESSMENT:\n- Immediate medical emergency\n- Statute of limitations concern\n- Ongoing harassment/discrimination\n- Evidence preservation needs\n\n4. QUALIFICATION SCORING:\n- Strong case (high damages, clear liability)\n- Moderate case (some challenges but viable)\n- Weak case (significant obstacles)\n- Referral needed (outside expertise required)\n\nReturn JSON with structured case data for legal analysis."
+            },
+            {
+              "role": "user",
+              "content": "={{ $json.message || $json.transcript }}"
+            }
+          ]
+        },
+        "options": {
+          "temperature": 0.3,
+          "maxTokens": 1500
+        }
+      },
+      "credentials": {
+        "openAiApi": {
+          "id": "openai-douglas-hicks",
+          "name": "OpenAI Douglas Hicks Law"
+        }
+      }
+    },
+    {
+      "id": "case-value-analysis",
+      "name": "AI Case Value Analysis",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [1200, 200],
+      "parameters": {
+        "resource": "chat",
+        "operation": "create",
+        "model": "gpt-4",
+        "messages": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are the AI brain for Douglas Hicks Law, analyzing cases with the expertise of attorneys who secured a $4.9 billion GM verdict and $8M police brutality settlements.\n\nANALYZE EACH CASE USING THESE CRITERIA:\n\n1. DAMAGE ASSESSMENT:\n- Medical expenses (current + future)\n- Lost wages (current + future earning capacity)\n- Pain & suffering multiplier (1.5x to 5x based on severity)\n- Punitive damages potential (corporate negligence, civil rights)\n- Wrongful death calculations (economic + non-economic)\n\n2. LIABILITY STRENGTH:\n- Clear negligence/fault (90-100% = Tier 1)\n- Strong but some complexity (70-89% = Tier 2) \n- Moderate challenges (50-69% = Tier 3)\n- Weak or disputed (Below 50% = Refer/Decline)\n\n3. EVIDENCE QUALITY:\n- Video/photo evidence (+30% value boost)\n- Police reports (+20% credibility)\n- Medical records (+25% documentation)\n- Expert witness availability (+15% strength)\n- Witness testimony quality (variable)\n\n4. DEFENDANT ANALYSIS:\n- Corporation/Government (high insurance/assets)\n- Small business (moderate recovery potential)\n- Individual (insurance dependent)\n- Public entity (sovereign immunity considerations)\n\n5. PRECEDENT MATCHING:\nReference firm victories:\n- $4.9B GM Product Liability (design defect)\n- $8M Police Brutality (wrongful death)\n- $5M Medical Malpractice (surgical error)\n- $1.576M Disability Discrimination\n- $733K Employment Discrimination\n\nPROVIDE:\n- Estimated settlement range\n- Trial value potential \n- Success probability (settlement vs trial)\n- Case tier (Platinum/Gold/Silver/Bronze/Decline)\n- Timeline estimate\n- Recommended attorney assignment\n- Immediate action items\n\nReturn detailed JSON analysis."
+            },
+            {
+              "role": "user",
+              "content": "={{ JSON.stringify($json) }}"
+            }
+          ]
+        },
+        "options": {
+          "temperature": 0.2,
+          "maxTokens": 2000
+        }
+      },
+      "credentials": {
+        "openAiApi": {
+          "id": "openai-douglas-hicks",
+          "name": "OpenAI Douglas Hicks Law"
+        }
+      }
+    },
+    {
+      "id": "precedent-search",
+      "name": "Search Case Precedents",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [1000, 400],
+      "parameters": {
+        "method": "POST",
+        "url": "https://your-website.vercel.app/api/ai-agent",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "httpHeaderAuth": {
+          "name": "Authorization",
+          "value": "Bearer {{ $env.AI_API_KEY }}"
+        },
+        "options": {
+          "timeout": 10000
+        },
+        "body": {
+          "mode": "json",
+          "json": {
+            "action": "search_precedents",
+            "data": "={{ $json }}"
+          }
+        }
+      }
+    },
+    {
+      "id": "generate-response",
+      "name": "Generate Client Response",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [1400, 200],
+      "parameters": {
+        "resource": "chat",
+        "operation": "create",
+        "model": "gpt-4",
+        "messages": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are the client communication AI for Douglas Hicks Law. Based on the case analysis, generate appropriate responses:\n\nFOR STRONG CASES (Platinum/Gold Tier):\n- Express confidence and urgency\n- Highlight firm's record ($4.9B GM verdict, $8M settlements)\n- Schedule immediate consultation\n- Emphasize time-sensitive nature\n\nFOR MODERATE CASES (Silver Tier):\n- Show interest with realistic expectations\n- Explain evaluation process\n- Schedule consultation for detailed review\n- Gather additional information needed\n\nFOR WEAK CASES (Bronze/Decline):\n- Professional and respectful decline\n- Provide referral resources when appropriate\n- Offer general legal guidance\n- Maintain firm's reputation\n\nFOR VOICE CALLS:\n- Warm, empathetic tone\n- Clear next steps\n- Immediate scheduling if urgent\n- Professional but personal approach\n\nFOR CHAT:\n- Concise but comprehensive\n- Include relevant case examples\n- Clear call-to-action\n- Professional formatting\n\nALWAYS INCLUDE:\n- Reference to firm's expertise in the case type\n- Relevant victory examples when applicable\n- Clear next steps\n- Contact information\n- Urgency indicators when needed"
+            },
+            {
+              "role": "user",
+              "content": "Generate response for: {{ JSON.stringify($json) }}"
+            }
+          ]
+        },
+        "options": {
+          "temperature": 0.4,
+          "maxTokens": 1000
+        }
+      },
+      "credentials": {
+        "openAiApi": {
+          "id": "openai-douglas-hicks",
+          "name": "OpenAI Douglas Hicks Law"
+        }
+      }
+    },
+    {
+      "id": "text-to-speech",
+      "name": "Convert Text to Speech",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [1400, 400],
+      "parameters": {
+        "resource": "audio",
+        "operation": "generate",
+        "model": "tts-1-hd",
+        "voice": "alloy",
+        "responseFormat": "mp3",
+        "speed": 1.0
+      },
+      "credentials": {
+        "openAiApi": {
+          "id": "openai-douglas-hicks",
+          "name": "OpenAI Douglas Hicks Law"
+        }
+      }
+    },
+    {
+      "id": "save-case-data",
+      "name": "Save Case to CRM",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [1600, 100],
+      "parameters": {
+        "method": "POST",
+        "url": "https://your-website.vercel.app/api/cases",
+        "authentication": "genericCredentialType", 
+        "genericAuthType": "httpHeaderAuth",
+        "httpHeaderAuth": {
+          "name": "Authorization",
+          "value": "Bearer {{ $env.WEBSITE_API_KEY }}"
+        },
+        "body": {
+          "mode": "json",
+          "json": {
+            "case_data": "={{ $json.case_info }}",
+            "analysis": "={{ $json.analysis }}",
+            "source": "={{ $json.input_type }}",
+            "timestamp": "={{ $now }}",
+            "status": "new_lead"
+          }
+        }
+      }
+    },
+    {
+      "id": "send-chat-response",
+      "name": "Send Chat Response",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [1600, 200],
+      "parameters": {
+        "responseMode": "responseData",
+        "responseData": "={{ JSON.stringify({\n  message: $json.response,\n  case_tier: $json.analysis.tier,\n  confidence: $json.analysis.confidence,\n  next_steps: $json.analysis.next_steps,\n  urgent: $json.analysis.urgent,\n  timestamp: $now\n}) }}"
+      }
+    },
+    {
+      "id": "send-voice-response",
+      "name": "Send Voice Response",
+      "type": "n8n-nodes-base.twilioApi",
+      "typeVersion": 1,
+      "position": [1600, 400],
+      "parameters": {
+        "resource": "call",
+        "operation": "update",
+        "twiml": "={{ $json.twiml_response }}",
+        "options": {}
+      },
+      "credentials": {
+        "twilioApi": {
+          "id": "twilio-douglas-hicks",
+          "name": "Twilio Douglas Hicks Law"
+        }
+      }
+    },
+    {
+      "id": "schedule-consultation",
+      "name": "Auto-Schedule High-Value Cases", 
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [1800, 200],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.analysis.tier }}",
+              "rightValue": "Platinum",
+              "operator": {
+                "operation": "equal"
+              }
+            },
+            {
+              "leftValue": "={{ $json.analysis.tier }}",
+              "rightValue": "Gold",
+              "operator": {
+                "operation": "equal"
+              }
+            }
+          ],
+          "combineOperation": "any"
+        }
+      }
+    },
+    {
+      "id": "calendly-booking",
+      "name": "Create Calendly Booking",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [2000, 200],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.calendly.com/scheduled_events",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth", 
+        "httpHeaderAuth": {
+          "name": "Authorization",
+          "value": "Bearer {{ $env.CALENDLY_API_KEY }}"
+        },
+        "body": {
+          "mode": "json",
+          "json": {
+            "event_type": "urgent-consultation",
+            "invitee": {
+              "name": "={{ $json.client_name }}",
+              "email": "={{ $json.client_email }}",
+              "phone": "={{ $json.client_phone }}"
+            },
+            "questions_and_answers": [
+              {
+                "question": "Case Type",
+                "answer": "={{ $json.case_type }}"
+              },
+              {
+                "question": "Estimated Value", 
+                "answer": "={{ $json.analysis.estimated_value }}"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "send-alerts",
+      "name": "Send Attorney Alerts",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [2000, 100],
+      "parameters": {
+        "method": "POST",
+        "url": "https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK",
+        "body": {
+          "mode": "json",
+          "json": {
+            "text": "🚨 HIGH-VALUE CASE ALERT 🚨",
+            "attachments": [
+              {
+                "color": "good",
+                "fields": [
+                  {
+                    "title": "Case Type",
+                    "value": "={{ $json.case_type }}",
+                    "short": true
+                  },
+                  {
+                    "title": "Estimated Value",
+                    "value": "={{ $json.analysis.estimated_value }}",
+                    "short": true
+                  },
+                  {
+                    "title": "Client",
+                    "value": "={{ $json.client_name }} ({{ $json.client_phone }})",
+                    "short": false
+                  },
+                  {
+                    "title": "Confidence",
+                    "value": "={{ $json.analysis.confidence }}%",
+                    "short": true
+                  },
+                  {
+                    "title": "Source",
+                    "value": "={{ $json.input_type === 'voice' ? '📞 Phone Call' : '💬 Web Chat' }}",
+                    "short": true
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "webhook-response",
+      "name": "Send Website Response",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [1800, 100],
+      "parameters": {
+        "method": "POST",
+        "url": "https://your-website.vercel.app/api/webhooks/n8n",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "httpHeaderAuth": {
+          "name": "X-N8N-Signature",
+          "value": "{{ $env.N8N_WEBHOOK_SECRET }}"
+        },
+        "body": {
+          "mode": "json",
+          "json": {
+            "type": "case_analysis_complete",
+            "data": {
+              "session_id": "={{ $json.session_id }}",
+              "analysis": "={{ $json.analysis }}",
+              "confidence": "={{ $json.analysis.confidence }}",
+              "recommendations": "={{ $json.recommendations }}"
+            },
+            "real_time": true
+          }
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Chat Webhook": {
+      "main": [
+        [
+          {
+            "node": "Route Input Type",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "VAPI Voice Webhook": {
+      "main": [
+        [
+          {
+            "node": "VAPI Event Handler",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "VAPI Event Handler": {
+      "main": [
+        [
+          {
+            "node": "Process Voice Transcript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Voice Transcript": {
+      "main": [
+        [
+          {
+            "node": "Route Input Type",
+            "type": "main", 
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route Input Type": {
+      "main": [
+        [
+          {
+            "node": "Extract Case Information",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Extract Case Information",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Case Information": {
+      "main": [
+        [
+          {
+            "node": "AI Case Value Analysis",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Search Case Precedents",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Case Value Analysis": {
+      "main": [
+        [
+          {
+            "node": "Generate Client Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search Case Precedents": {
+      "main": [
+        [
+          {
+            "node": "Generate Client Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Client Response": {
+      "main": [
+        [
+          {
+            "node": "Save Case to CRM",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send Website Response",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send Chat Response",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Convert Text to Speech",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert Text to Speech": {
+      "main": [
+        [
+          {
+            "node": "Send Voice Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Chat Response": {
+      "main": [
+        [
+          {
+            "node": "Auto-Schedule High-Value Cases",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Voice Response": {
+      "main": [
+        [
+          {
+            "node": "Auto-Schedule High-Value Cases",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Auto-Schedule High-Value Cases": {
+      "main": [
+        [
+          {
+            "node": "Create Calendly Booking",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send Attorney Alerts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "timezone": "America/Los_Angeles",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "executionTimeout": 300
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "id": "douglas-hicks-law",
+      "name": "Douglas Hicks Law"
+    },
+    {
+      "id": "ai-case-evaluation", 
+      "name": "AI Case Evaluation"
+    },
+    {
+      "id": "omnichannel",
+      "name": "Omnichannel"
+    }
+  ]
+}

@@ -292,16 +292,8 @@ export default function TeamPage() {
                 onClick={() => setSelectedAttorney(attorney)}
               >
                 <div className="relative bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl overflow-hidden border border-gray-700 hover:border-yellow-500 transition-all duration-500 transform hover:scale-[1.02] hover:-translate-y-2">
-                  {/* Background Image */}
-                  <div className="absolute inset-0 opacity-20">
-                    <Image
-                      src={attorney.backgroundImage}
-                      alt=""
-                      fill
-                      className="object-cover group-hover:scale-110 transition-transform duration-700"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/50"></div>
-                  </div>
+                  {/* Clean Gradient Background */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-purple-900/20 to-gray-900/20"></div>
 
                   <div className="relative p-8">
                     {/* Attorney Photo */}
@@ -379,16 +371,8 @@ export default function TeamPage() {
         <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto border border-gray-700">
             <div className="relative">
-              {/* Background */}
-              <div className="absolute inset-0 opacity-30">
-                <Image
-                  src={selectedAttorney.backgroundImage}
-                  alt=""
-                  fill
-                  className="object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/70"></div>
-              </div>
+              {/* Clean Background */}
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-900/30 via-purple-900/30 to-gray-900/30"></div>
 
               <div className="relative p-8">
                 {/* Close Button */}
@@ -465,12 +449,12 @@ export default function TeamPage() {
 
                     <h3 className="text-xl font-bold text-white mb-4">Bar Admissions</h3>
                     <ul className="text-gray-300 mb-6">
-                      {selectedAttorney.barAdmissions.map((bar, idx) => (
+                      {selectedAttorney.barAdmissions?.map((bar, idx) => (
                         <li key={idx} className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-400" />
                           {bar}
                         </li>
-                      ))}
+                      )) || <li className="text-gray-400">No bar admissions listed</li>}
                     </ul>
                   </div>
 

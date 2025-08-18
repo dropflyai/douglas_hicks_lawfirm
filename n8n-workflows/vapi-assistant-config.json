@@ -1,0 +1,196 @@
+{
+  "name": "Douglas Hicks Law - Maya AI Legal Assistant",
+  "model": {
+    "provider": "openai",
+    "model": "gpt-4-turbo-preview",
+    "temperature": 0.3,
+    "maxTokens": 500,
+    "systemMessage": "You are Maya, the AI legal assistant for Douglas Hicks Law, home of the legendary $4.9 billion Dream Team. You specialize in civil rights, personal injury, employment law, and medical malpractice cases.\n\nYour role:\n1. WARMLY GREET callers and introduce yourself\n2. QUICKLY IDENTIFY the type of legal case\n3. GATHER KEY DETAILS about their situation\n4. EVALUATE case strength and urgency\n5. CONNECT high-value cases to attorneys immediately\n6. MAINTAIN professional, empathetic tone\n\nKey talking points:\n- Reference the firm's $4.9B GM verdict (largest personal injury in history)\n- Highlight $8M police brutality settlements\n- Mention Dream Team legacy and expertise\n- Emphasize 24/7 availability and immediate action\n\nFor strong cases, create urgency and schedule immediate consultations.\nFor weaker cases, be respectful but honest about challenges.\nALWAYS end with clear next steps."
+  },
+  "voice": {
+    "provider": "11labs",
+    "voiceId": "21m00Tcm4TlvDq8ikWAM",
+    "stability": 0.7,
+    "similarityBoost": 0.8,
+    "style": 0.3,
+    "useSpeakerBoost": true
+  },
+  "transcriber": {
+    "provider": "deepgram",
+    "model": "nova-2",
+    "language": "en-US",
+    "smartFormat": true,
+    "punctuate": true,
+    "includesPunctuation": true
+  },
+  "firstMessage": "Hello, and thank you for calling Douglas Hicks Law, home of the legendary Dream Team that secured the $4.9 billion GM verdict. I'm Maya, your AI legal assistant. I'm here to help evaluate your case and connect you with our expert attorneys. What type of legal situation brings you to us today?",
+  "functions": [
+    {
+      "name": "evaluateCase",
+      "description": "Evaluate and analyze a legal case based on client description",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "caseType": {
+            "type": "string",
+            "enum": ["personal_injury", "civil_rights", "employment", "medical_malpractice", "product_liability", "other"],
+            "description": "Primary type of legal case"
+          },
+          "injurySeverity": {
+            "type": "string",
+            "enum": ["minor", "moderate", "serious", "catastrophic", "fatal"],
+            "description": "Severity of injuries or damages"
+          },
+          "incidentDate": {
+            "type": "string",
+            "description": "Date when the incident occurred"
+          },
+          "location": {
+            "type": "string",
+            "description": "Location where incident occurred"
+          },
+          "defendantType": {
+            "type": "string",
+            "enum": ["individual", "corporation", "government", "medical_facility", "insurance_company"],
+            "description": "Type of defendant/responsible party"
+          },
+          "medicalTreatment": {
+            "type": "string",
+            "description": "Medical treatment received or needed"
+          },
+          "evidenceAvailable": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["photos", "videos", "police_report", "medical_records", "witness_statements", "expert_analysis"]
+            },
+            "description": "Types of evidence available"
+          },
+          "currentStatus": {
+            "type": "string",
+            "description": "Current status of case or injuries"
+          },
+          "urgencyLevel": {
+            "type": "string",
+            "enum": ["low", "medium", "high", "critical"],
+            "description": "Urgency level of the case"
+          },
+          "clientName": {
+            "type": "string",
+            "description": "Client's first name"
+          },
+          "clientPhone": {
+            "type": "string",
+            "description": "Client's phone number"
+          },
+          "clientEmail": {
+            "type": "string",
+            "description": "Client's email address"
+          }
+        },
+        "required": ["caseType", "injurySeverity", "urgencyLevel"]
+      }
+    },
+    {
+      "name": "scheduleConsultation",
+      "description": "Schedule an immediate consultation for high-value cases",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "urgencyLevel": {
+            "type": "string",
+            "enum": ["urgent", "priority", "standard"],
+            "description": "Priority level for scheduling"
+          },
+          "caseValue": {
+            "type": "string",
+            "description": "Estimated case value"
+          },
+          "consultationType": {
+            "type": "string",
+            "enum": ["immediate", "today", "this_week"],
+            "description": "Timeline for consultation"
+          }
+        },
+        "required": ["urgencyLevel"]
+      }
+    },
+    {
+      "name": "transferToAttorney",
+      "description": "Transfer caller directly to an attorney",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "transferReason": {
+            "type": "string",
+            "enum": ["high_value_case", "complex_case", "urgent_matter", "client_request"],
+            "description": "Reason for transfer"
+          },
+          "specialtyNeeded": {
+            "type": "string",
+            "enum": ["civil_rights", "personal_injury", "employment", "medical_malpractice"],
+            "description": "Attorney specialty needed"
+          }
+        },
+        "required": ["transferReason"]
+      }
+    }
+  ],
+  "endCallFunctionEnabled": false,
+  "recordingEnabled": true,
+  "interruptionsEnabled": true,
+  "responseDelaySeconds": 0.4,
+  "llmRequestDelaySeconds": 0.1,
+  "numWordsToInterruptAssistant": 2,
+  "maxDurationSeconds": 1800,
+  "backgroundSound": "office",
+  "backgroundDecibelLevel": 20,
+  "backchannelingEnabled": true,
+  "analysisOptions": {
+    "summaryPrompt": "Provide a comprehensive summary of this legal consultation call including:\n1. Case type and key details\n2. Injury severity and damages discussed\n3. Evidence mentioned by caller\n4. Urgency level and next steps taken\n5. Overall case strength assessment\n6. Attorney recommendations made",
+    "successEvaluationPrompt": "Evaluate the success of this call based on:\n1. Did we gather sufficient case information?\n2. Was the case properly qualified?\n3. Were appropriate next steps taken?\n4. Did we maintain professional, empathetic tone?\n5. Was urgency properly assessed?"
+  },
+  "serverMessages": [
+    {
+      "type": "conversation-update",
+      "content": {
+        "transcript": true,
+        "turnComplete": true
+      }
+    },
+    {
+      "type": "function-call",
+      "content": {
+        "functionCall": true
+      }
+    },
+    {
+      "type": "hang",
+      "content": {}
+    },
+    {
+      "type": "speech-update", 
+      "content": {
+        "status": true,
+        "transcript": true
+      }
+    }
+  ],
+  "clientMessages": [
+    {
+      "type": "conversation-update",
+      "content": {
+        "transcript": true,
+        "turnComplete": true
+      }
+    },
+    {
+      "type": "function-call",
+      "content": {
+        "functionCall": true
+      }
+    }
+  ],
+  "serverUrl": "https://your-n8n-instance.com/webhook/douglas-hicks-vapi",
+  "serverUrlSecret": "your-webhook-secret-key"
+}

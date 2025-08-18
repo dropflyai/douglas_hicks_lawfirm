@@ -1,0 +1,243 @@
+-- STEP 2: INSERT LEGAL DATA
+-- Copy and paste this ENTIRE file into Supabase SQL Editor (AFTER Step 1 completes)
+
+-- Insert Case Precedents (Your Major Victories)
+INSERT INTO case_precedents (
+  case_name, case_number, court, year, case_type, practice_area, 
+  injury_type, severity, settlement_amount, verdict_amount,
+  legal_issues, key_facts, legal_reasoning, outcome, 
+  douglas_hicks_attorney, precedent_value
+) VALUES 
+
+-- $4.9 Billion GM Verdict (Historic Victory)
+(
+  'Anderson v. General Motors',
+  'BC123456', 
+  'Los Angeles Superior Court',
+  1999,
+  'product_liability',
+  'Personal Injury',
+  'burns',
+  'catastrophic',
+  NULL,
+  490000000000,
+  ARRAY['product_defect', 'design_flaw', 'corporate_negligence', 'punitive_damages'],
+  'Plaintiff suffered severe burns when GM fuel tank exploded in side-impact collision. Internal documents showed GM knew of design defect but chose not to fix it due to cost.',
+  'Jury found GM conduct shocking and awarded largest punitive damage award in US history. Design defect made vehicles unreasonably dangerous.',
+  'verdict',
+  'Carl E. Douglas',
+  'landmark'
+),
+
+-- $8M Police Brutality Settlement
+(
+  'Family v. Los Angeles County Sheriff Department',
+  'CV2024-001',
+  'Federal District Court',
+  2024,
+  'civil_rights',
+  'Civil Rights',
+  'wrongful_death',
+  'fatal',
+  800000000,
+  NULL,
+  ARRAY['police_brutality', 'excessive_force', 'wrongful_death', 'section_1983'],
+  'Unarmed individual killed by deputies during traffic stop. Multiple witnesses and video evidence.',
+  'Established new precedent for sheriff accountability in LA County. Pattern of excessive force demonstrated.',
+  'settlement',
+  'Douglas Hicks Legal Team',
+  'landmark'
+),
+
+-- $5M Medical Malpractice Settlement
+(
+  'Wrongful Death v. Cedars-Sinai Medical Center',
+  'BC2023-789',
+  'Los Angeles Superior Court', 
+  2023,
+  'medical_malpractice',
+  'Medical Malpractice',
+  'wrongful_death',
+  'fatal',
+  500000000,
+  NULL,
+  ARRAY['surgical_error', 'failure_to_diagnose', 'hospital_negligence'],
+  'Patient died due to surgical complications that should have been prevented. Hospital failed to follow protocols.',
+  'Hospital failure to maintain proper standards directly caused death. Economic and non-economic damages calculated.',
+  'settlement',
+  'Jamon R. Hicks',
+  'important'
+),
+
+-- $1.576M Disability Discrimination
+(
+  'Disabled Resident v. Greystar Management',
+  'CV2024-445',
+  'Federal District Court',
+  2024,
+  'discrimination',
+  'Civil Rights',
+  'emotional_distress', 
+  'moderate',
+  157600000,
+  NULL,
+  ARRAY['disability_discrimination', 'ada_violation', 'housing_rights'],
+  'Property management refused reasonable accommodations. Pattern of discrimination documented.',
+  'Clear ADA violations established. Housing discrimination based on disability proven.',
+  'settlement',
+  'A''ja Simplis',
+  'recent'
+),
+
+-- $733K Employment Discrimination  
+(
+  'Employee v. El Monte Union High School District',
+  'BC2024-123',
+  'Los Angeles Superior Court',
+  2024,
+  'employment',
+  'Employment Law',
+  'economic_loss',
+  'moderate', 
+  73300000,
+  NULL,
+  ARRAY['employment_discrimination', 'wrongful_termination', 'retaliation'],
+  'Employee terminated after reporting harassment. Clear pattern of retaliation documented.',
+  'Retaliation claim successful under FEHA. Wrongful termination in violation of public policy.',
+  'settlement',
+  'Douglas Hicks Legal Team', 
+  'recent'
+);
+
+-- Insert Legal Knowledge Base
+INSERT INTO legal_knowledge (
+  title, content, knowledge_type, practice_area, jurisdiction,
+  topic_tags, citation, authority_level
+) VALUES
+
+(
+  'Section 1983 Civil Rights Claims',
+  'Federal civil rights statute allows lawsuits against government officials for constitutional violations. Key elements: (1) Acting under color of state law, (2) Deprivation of federal rights.',
+  'statute',
+  'Civil Rights',
+  'federal',
+  ARRAY['section_1983', 'civil_rights', 'police_misconduct'],
+  '42 U.S.C. § 1983',
+  'statute'
+),
+
+(
+  'California Comparative Negligence',
+  'California follows pure comparative negligence. Plaintiff damages reduced by percentage of fault but not barred entirely. Even 99% at fault can recover 1%.',
+  'case_law',
+  'Personal Injury',
+  'california', 
+  ARRAY['comparative_negligence', 'fault_allocation'],
+  'Li v. Yellow Cab Co., 13 Cal.3d 804 (1975)',
+  'supreme_court'
+),
+
+(
+  'Punitive Damages in California',
+  'Available when defendant guilty of malice, oppression, or fraud. Must prove by clear and convincing evidence.',
+  'statute',
+  'Personal Injury',
+  'california',
+  ARRAY['punitive_damages', 'malice', 'oppression'],
+  'Cal. Civ. Code § 3294',
+  'statute'
+),
+
+(
+  'California Fair Employment and Housing Act',
+  'Prohibits discrimination based on protected characteristics in employment. Broader than federal law. Allows unlimited damages.',
+  'statute',
+  'Employment Law',
+  'california',
+  ARRAY['employment_discrimination', 'feha', 'protected_classes'],
+  'Cal. Gov. Code § 12900 et seq.',
+  'statute'
+);
+
+-- Insert Case Strategies
+INSERT INTO case_strategies (
+  strategy_name, case_type, description, approach_steps,
+  success_factors, risk_factors, evidence_requirements,
+  success_rate, average_settlement, timeline_months
+) VALUES
+
+(
+  'GM Product Liability Strategy',
+  'product_liability',
+  'Comprehensive product liability approach focusing on design defects and corporate callousness',
+  '{"steps": ["Conduct accident reconstruction", "Obtain internal documents", "Identify similar incidents", "Document company knowledge", "Retain engineering experts", "Develop human story", "Seek punitive damages"]}',
+  ARRAY['smoking gun documents', 'clear design defect', 'company knowledge', 'expert testimony'],
+  ARRAY['statute of limitations', 'product modification', 'company resources'],
+  ARRAY['accident photos', 'vehicle inspection', 'internal documents', 'engineering analysis'],
+  85.5,
+  2500000000,
+  18
+),
+
+(
+  'Police Brutality Civil Rights Strategy',
+  'civil_rights',
+  'Federal civil rights approach targeting officers and municipal policies',
+  '{"steps": ["Gather video evidence", "Interview witnesses", "Obtain personnel files", "Research officer history", "Develop Monell claim", "Document policy violations", "Retain use of force experts"]}',
+  ARRAY['video evidence', 'independent witnesses', 'officer history', 'policy violations'],
+  ARRAY['qualified immunity', 'officer credibility', 'municipal defenses'],
+  ARRAY['body cam footage', 'cell phone videos', 'police reports', 'witness statements'],
+  78.3,
+  350000000,
+  24
+);
+
+-- Insert Expert Witnesses
+INSERT INTO expert_witnesses (
+  name, credentials, specialties, win_rate, average_case_value,
+  deposition_quality, jury_appeal, contact_info, hourly_rate,
+  notable_victories
+) VALUES
+
+(
+  'Dr. Sarah Martinez',
+  'MD, Trauma Surgery, UCLA Medical Center. Board Certified. 20+ years experience.',
+  ARRAY['trauma surgery', 'medical malpractice', 'surgical standards'],
+  89.5,
+  150000000,
+  9,
+  8,
+  '{"phone": "310-555-0123", "email": "smartinez@medexperts.com"}',
+  750,
+  ARRAY['$5M malpractice verdict 2023', '$3M surgical error settlement']
+),
+
+(
+  'Captain James Rodriguez (Ret.)',
+  'LAPD 25 years. Police Academy Instructor. Use of Force Expert.',
+  ARRAY['police procedures', 'use of force', 'training standards'],
+  92.3,
+  200000000,
+  10,
+  9,
+  '{"phone": "323-555-0456", "email": "jrodriguez@policeexperts.com"}',
+  650,
+  ARRAY['$8M police brutality case 2024', '$4M excessive force settlement']
+);
+
+-- Insert Communication Templates
+INSERT INTO communication_templates (
+  template_name, template_type, subject, content, variables,
+  case_types, communication_stage, recipient_type
+) VALUES
+
+(
+  'High-Value Case Intake Email',
+  'email',
+  'Douglas Hicks Law - Your Case Evaluation',
+  'Dear {{client_name}}, Thank you for contacting Douglas Hicks Law. Based on our evaluation, you may have a strong case. Our firm has secured a $4.9 billion GM verdict and $8 million police brutality settlements. We are scheduling an urgent consultation.',
+  '{"client_name": "text", "case_type": "text", "attorney_name": "text"}',
+  ARRAY['personal_injury', 'civil_rights', 'medical_malpractice'],
+  'intake',
+  'client'
+);

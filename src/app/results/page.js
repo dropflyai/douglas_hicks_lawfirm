@@ -27,18 +27,18 @@ export default function ResultsPage() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [isVisible, setIsVisible] = useState(false)
 
-  const heroImages = [
-    '/images/scraped/hero-1.jpg',
-    '/images/scraped/hero-2.jpg', 
-    '/images/scraped/hero-3.jpg',
-    '/images/scraped/practice-1.jpg',
-    '/images/scraped/practice-2.jpg'
+  const heroGradients = [
+    'from-yellow-900 via-orange-900 to-red-900',
+    'from-blue-900 via-purple-900 to-gray-900',
+    'from-green-900 via-blue-900 to-purple-900',
+    'from-red-900 via-orange-900 to-yellow-900',
+    'from-purple-900 via-blue-900 to-gray-900'
   ]
 
   useEffect(() => {
     setIsVisible(true)
     const interval = setInterval(() => {
-      setCurrentImageIndex((prev) => (prev + 1) % heroImages.length)
+      setCurrentImageIndex((prev) => (prev + 1) % heroGradients.length)
     }, 4000)
     return () => clearInterval(interval)
   }, [])
@@ -51,8 +51,7 @@ export default function ResultsPage() {
       attorney: "Carl E. Douglas",
       year: "Career Defining",
       impact: "Largest verdict in automotive history",
-      category: "Product Liability",
-      image: "/images/scraped/practice-1.jpg"
+      category: "Product Liability"
     },
     {
       amount: "$8.0 MILLION", 
@@ -61,8 +60,7 @@ export default function ResultsPage() {
       attorney: "Douglas Hicks Legal Team",
       year: "2024",
       impact: "Set new precedent for police accountability",
-      category: "Civil Rights",
-      image: "/images/scraped/practice-2.jpg"
+      category: "Civil Rights"
     },
     {
       amount: "$5.0 MILLION",
@@ -71,8 +69,7 @@ export default function ResultsPage() {
       attorney: "Jamon R. Hicks",
       year: "2023", 
       impact: "Life-changing compensation for survivors",
-      category: "Wrongful Death",
-      image: "/images/scraped/practice-3.jpg"
+      category: "Wrongful Death"
     }
   ]
 
@@ -105,26 +102,18 @@ export default function ResultsPage() {
     <div className="min-h-screen bg-black overflow-hidden">
       {/* Cinematic Hero Section */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        {/* Dynamic Background Carousel */}
+        {/* Dynamic Gradient Background */}
         <div className="absolute inset-0">
-          {heroImages.map((image, index) => (
+          {heroGradients.map((gradient, index) => (
             <div 
               key={index}
               className={`absolute inset-0 transition-opacity duration-2000 ${
-                index === currentImageIndex ? 'opacity-60' : 'opacity-0'
+                index === currentImageIndex ? 'opacity-100' : 'opacity-0'
               }`}
             >
-              <Image
-                src={image}
-                alt="Legal Victory"
-                fill
-                className="object-cover"
-              />
+              <div className={`w-full h-full bg-gradient-to-br ${gradient}`}></div>
             </div>
           ))}
-          {/* Dramatic Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent"></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/50"></div>
         </div>
 
         {/* Navigation */}
@@ -283,14 +272,20 @@ export default function ResultsPage() {
                   </div>
 
                   <div className="order-1 lg:order-2">
-                    <div className="relative h-80 rounded-2xl overflow-hidden">
-                      <Image
-                        src={victory.image}
-                        alt={victory.case}
-                        fill
-                        className="object-cover group-hover:scale-110 transition-transform duration-500"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <div className={`relative h-80 rounded-2xl overflow-hidden bg-gradient-to-br ${
+                      index === 0 ? 'from-yellow-600 via-orange-600 to-red-600' :
+                      index === 1 ? 'from-blue-600 via-purple-600 to-indigo-600' :
+                      'from-green-600 via-teal-600 to-blue-600'
+                    } group-hover:scale-105 transition-transform duration-500`}>
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="text-center">
+                          <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-sm">
+                            <Scale className="w-10 h-10 text-white" />
+                          </div>
+                          <p className="text-white font-bold text-lg opacity-80">Legal Victory</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>

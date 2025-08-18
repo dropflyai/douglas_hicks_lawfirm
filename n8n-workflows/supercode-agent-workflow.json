@@ -1,0 +1,493 @@
+{
+  "name": "Douglas Hicks Law - SuperCode AI Agent",
+  "description": "Intelligent AI agent connected to Supabase vector store for comprehensive legal knowledge and case analysis",
+  "version": "2.0",
+  "nodes": [
+    {
+      "id": "webhook-chat-input",
+      "name": "Chat Input Webhook", 
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [100, 200],
+      "parameters": {
+        "path": "douglas-hicks-chat-agent",
+        "httpMethod": "POST",
+        "responseMode": "responseNode"
+      }
+    },
+    {
+      "id": "webhook-vapi-input",
+      "name": "VAPI Input Webhook",
+      "type": "n8n-nodes-base.webhook", 
+      "typeVersion": 1,
+      "position": [100, 400],
+      "parameters": {
+        "path": "douglas-hicks-vapi-agent",
+        "httpMethod": "POST", 
+        "responseMode": "responseNode"
+      }
+    },
+    {
+      "id": "input-processor",
+      "name": "Process Input",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [300, 300],
+      "parameters": {
+        "functionCode": "// Process and normalize inputs from chat and VAPI\nconst inputData = $json;\n\n// Determine input source and extract relevant data\nlet processedInput = {\n  source: 'unknown',\n  message: '',\n  session_id: '',\n  user_info: {},\n  context: {}\n};\n\n// Handle chat input\nif (inputData.message && !inputData.call) {\n  processedInput = {\n    source: 'chat',\n    message: inputData.message,\n    session_id: inputData.session_id || `chat_${Date.now()}`,\n    user_info: {\n      user_agent: inputData.user_agent,\n      ip_address: inputData.ip_address,\n      referrer: inputData.referrer\n    },\n    context: inputData.context || {},\n    timestamp: new Date().toISOString()\n  };\n}\n\n// Handle VAPI input\nelse if (inputData.call || inputData.type === 'transcript') {\n  processedInput = {\n    source: 'vapi',\n    message: inputData.message?.transcript || inputData.transcript || '',\n    session_id: inputData.call?.id || inputData.session_id || `vapi_${Date.now()}`,\n    user_info: {\n      call_id: inputData.call?.id,\n      caller_number: inputData.call?.customer?.number,\n      call_status: inputData.call?.status\n    },\n    context: {\n      vapi_event: inputData.type,\n      function_calls: inputData.message?.function_calls || [],\n      call_duration: inputData.call?.duration\n    },\n    timestamp: new Date().toISOString()\n  };\n}\n\n// Add conversation continuity\nprocessedInput.needs_context_lookup = true;\nprocessedInput.ready_for_agent = !!processedInput.message;\n\nreturn processedInput;"
+      }
+    },
+    {
+      "id": "context-retrieval",
+      "name": "Retrieve Conversation Context",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [500, 300],
+      "parameters": {
+        "operation": "select",
+        "table": "conversation_context",
+        "filterType": "manual",
+        "conditions": [
+          {
+            "key": "session_id",
+            "operator": "eq",
+            "value": "={{ $json.session_id }}"
+          }
+        ],
+        "sort": [
+          {
+            "field": "updated_at",
+            "direction": "desc"
+          }
+        ],
+        "limit": 1
+      },
+      "credentials": {
+        "supabaseApi": {
+          "id": "supabase-douglas-hicks",
+          "name": "Supabase Douglas Hicks Law"
+        }
+      }
+    },
+    {
+      "id": "generate-embedding",
+      "name": "Generate Query Embedding", 
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [700, 300],
+      "parameters": {
+        "resource": "embedding",
+        "model": "text-embedding-ada-002",
+        "input": "={{ $json.message + ' ' + ($json.context?.previous_messages ? $json.context.previous_messages.slice(-3).join(' ') : '') }}"
+      },
+      "credentials": {
+        "openAiApi": {
+          "id": "openai-douglas-hicks",
+          "name": "OpenAI Douglas Hicks Law"
+        }
+      }
+    },
+    {
+      "id": "search-case-precedents",
+      "name": "Search Similar Cases",
+      "type": "n8n-nodes-base.supabase", 
+      "typeVersion": 1,
+      "position": [900, 200],
+      "parameters": {
+        "operation": "rpc",
+        "function": "search_similar_cases",
+        "parameters": {
+          "query_embedding": "={{ JSON.stringify($json.data[0].embedding) }}",
+          "match_threshold": 0.7,
+          "match_count": 5
+        }
+      },
+      "credentials": {
+        "supabaseApi": {
+          "id": "supabase-douglas-hicks", 
+          "name": "Supabase Douglas Hicks Law"
+        }
+      }
+    },
+    {
+      "id": "search-legal-knowledge",
+      "name": "Search Legal Knowledge",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1, 
+      "position": [900, 400],
+      "parameters": {
+        "operation": "rpc",
+        "function": "search_legal_knowledge",
+        "parameters": {
+          "query_embedding": "={{ JSON.stringify($json.data[0].embedding) }}",
+          "match_threshold": 0.7,
+          "match_count": 3
+        }
+      },
+      "credentials": {
+        "supabaseApi": {
+          "id": "supabase-douglas-hicks",
+          "name": "Supabase Douglas Hicks Law"
+        }
+      }
+    },
+    {
+      "id": "supercode-agent",
+      "name": "SuperCode Legal AI Agent",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [1100, 300],
+      "parameters": {
+        "functionCode": "// SuperCode AI Agent - Intelligent Legal Assistant\n// Combines user input, conversation context, and legal knowledge\n\nconst userInput = $('Process Input').first().json;\nconst contextData = $('Retrieve Conversation Context').first().json || [];\nconst casePrecedents = $('Search Similar Cases').first().json || [];\nconst legalKnowledge = $('Search Legal Knowledge').first().json || [];\n\n// Build comprehensive context\nconst conversationHistory = contextData.length > 0 ? contextData[0].messages : [];\nconst previousAnalysis = contextData.length > 0 ? contextData[0].case_analysis : null;\n\n// Create enriched prompt for AI\nconst systemPrompt = `You are Maya, the senior AI legal assistant for Douglas Hicks Law, home of the legendary $4.9 billion Dream Team. You have access to the firm's complete legal knowledge base and case precedents.\n\nFIRM EXPERTISE:\n- $4.9 billion GM product liability verdict (largest in US history)\n- $8 million police brutality settlements \n- $5 million medical malpractice recoveries\n- Hundreds of millions in civil rights victories\n\nYOUR CAPABILITIES:\n1. CASE EVALUATION: Analyze legal situations using firm precedents\n2. LEGAL GUIDANCE: Provide advice based on California and federal law\n3. PRECEDENT MATCHING: Reference similar successful cases\n4. STRATEGY DEVELOPMENT: Suggest approaches based on winning strategies\n5. URGENCY ASSESSMENT: Identify time-sensitive matters\n\nCONVERSATION CONTEXT:\n${conversationHistory.length > 0 ? 'Previous conversation: ' + JSON.stringify(conversationHistory.slice(-5)) : 'New conversation'}\n\nRELEVANT CASE PRECEDENTS:\n${casePrecedents.map(c => `- ${c.case_name}: $${(c.settlement_amount/100).toLocaleString()} (${c.case_type})`).join('\\n')}\n\nLEGAL KNOWLEDGE:\n${legalKnowledge.map(k => `- ${k.title}: ${k.content.substring(0, 200)}...`).join('\\n')}\n\nRESPONSE GUIDELINES:\n- Be professional but warm and empathetic\n- Reference relevant firm victories when applicable\n- Provide specific, actionable advice\n- Identify urgent matters requiring immediate attorney attention\n- Ask clarifying questions to better evaluate cases\n- End with clear next steps\n\nFor ${userInput.source} communication, maintain appropriate tone and detail level.`;\n\nconst userMessage = `${userInput.message}\n\nContext: ${userInput.source} interaction at ${userInput.timestamp}`;\n\n// Prepare AI request\nreturn {\n  system_prompt: systemPrompt,\n  user_message: userMessage,\n  conversation_context: conversationHistory,\n  case_precedents: casePrecedents,\n  legal_knowledge: legalKnowledge,\n  session_id: userInput.session_id,\n  source: userInput.source,\n  timestamp: userInput.timestamp\n};"
+      }
+    },
+    {
+      "id": "openai-analysis",
+      "name": "AI Legal Analysis",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [1300, 300],
+      "parameters": {
+        "resource": "chat",
+        "operation": "create",
+        "model": "gpt-4-turbo-preview",
+        "messages": {
+          "messages": [
+            {
+              "role": "system", 
+              "content": "={{ $json.system_prompt }}"
+            },
+            {
+              "role": "user",
+              "content": "={{ $json.user_message }}"
+            }
+          ]
+        },
+        "options": {
+          "temperature": 0.3,
+          "maxTokens": 1000,
+          "presencePenalty": 0.1,
+          "frequencyPenalty": 0.1
+        }
+      },
+      "credentials": {
+        "openAiApi": {
+          "id": "openai-douglas-hicks",
+          "name": "OpenAI Douglas Hicks Law"
+        }
+      }
+    },
+    {
+      "id": "response-processor",
+      "name": "Process AI Response",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [1500, 300],
+      "parameters": {
+        "functionCode": "// Process AI response and extract actionable insights\nconst aiResponse = $('AI Legal Analysis').first().json.choices[0].message.content;\nconst contextData = $('SuperCode Legal AI Agent').first().json;\n\n// Analyze response for urgency and next actions\nconst urgencyKeywords = ['urgent', 'immediate', 'time-sensitive', 'deadline', 'statute of limitations', 'emergency'];\nconst caseTypeKeywords = {\n  'personal_injury': ['accident', 'injury', 'medical', 'car crash', 'slip and fall'],\n  'civil_rights': ['police', 'discrimination', 'civil rights', 'constitutional', 'brutality'],\n  'employment': ['workplace', 'fired', 'harassment', 'discrimination', 'wrongful termination'],\n  'medical_malpractice': ['doctor', 'hospital', 'surgical error', 'misdiagnosis', 'medical negligence']\n};\n\n// Detect urgency level\nconst isUrgent = urgencyKeywords.some(keyword => \n  aiResponse.toLowerCase().includes(keyword) ||\n  contextData.user_message.toLowerCase().includes(keyword)\n);\n\n// Detect case type\nlet detectedCaseType = 'general';\nlet confidence = 0;\nfor (const [caseType, keywords] of Object.entries(caseTypeKeywords)) {\n  const matches = keywords.filter(keyword => \n    contextData.user_message.toLowerCase().includes(keyword) ||\n    aiResponse.toLowerCase().includes(keyword)\n  ).length;\n  if (matches > confidence) {\n    confidence = matches;\n    detectedCaseType = caseType;\n  }\n}\n\n// Extract potential case value indicators\nconst valueIndicators = {\n  high: ['catastrophic', 'severe', 'permanent', 'death', 'million', 'corporate negligence'],\n  medium: ['serious', 'significant', 'substantial', 'ongoing'],\n  low: ['minor', 'temporary', 'limited']\n};\n\nlet estimatedTier = 'bronze';\nfor (const [tier, indicators] of Object.entries(valueIndicators)) {\n  if (indicators.some(indicator => \n    contextData.user_message.toLowerCase().includes(indicator) ||\n    aiResponse.toLowerCase().includes(indicator)\n  )) {\n    if (tier === 'high') estimatedTier = 'gold';\n    else if (tier === 'medium') estimatedTier = 'silver';\n    break;\n  }\n}\n\n// Check if precedents suggest high value\nif (contextData.case_precedents.some(c => c.settlement_amount > 100000000)) { // >$1M\n  estimatedTier = estimatedTier === 'bronze' ? 'silver' : 'gold';\n}\n\n// Determine next actions\nconst nextActions = [];\nif (isUrgent || estimatedTier === 'gold') {\n  nextActions.push('schedule_urgent_consultation');\n  nextActions.push('alert_attorneys');\n} else if (estimatedTier === 'silver') {\n  nextActions.push('schedule_consultation');\n  nextActions.push('send_intake_packet');\n} else {\n  nextActions.push('provide_resources');\n  nextActions.push('schedule_callback');\n}\n\nreturn {\n  ai_response: aiResponse,\n  analysis: {\n    case_type: detectedCaseType,\n    confidence: confidence,\n    urgency_level: isUrgent ? 'high' : 'normal',\n    estimated_tier: estimatedTier,\n    next_actions: nextActions\n  },\n  session_id: contextData.session_id,\n  source: contextData.source,\n  timestamp: contextData.timestamp,\n  case_precedents: contextData.case_precedents,\n  needs_attorney_review: isUrgent || estimatedTier === 'gold'\n};"
+      }
+    },
+    {
+      "id": "save-conversation",
+      "name": "Save Conversation Context",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [1700, 200],
+      "parameters": {
+        "operation": "upsert",
+        "table": "conversation_context",
+        "data": "={{ {\n  session_id: $json.session_id,\n  user_type: $json.source,\n  messages: JSON.stringify([...(($('Retrieve Conversation Context').first().json[0]?.messages ? JSON.parse($('Retrieve Conversation Context').first().json[0].messages) : [])), {role: 'user', content: $('SuperCode Legal AI Agent').first().json.user_message, timestamp: $json.timestamp}, {role: 'assistant', content: $json.ai_response, timestamp: $json.timestamp}]),\n  case_analysis: $json.analysis,\n  current_intent: $json.analysis.case_type,\n  confidence_score: $json.analysis.confidence / 10,\n  next_suggested_action: $json.analysis.next_actions[0]\n} }}",
+        "onConflict": "session_id"
+      },
+      "credentials": {
+        "supabaseApi": {
+          "id": "supabase-douglas-hicks",
+          "name": "Supabase Douglas Hicks Law"
+        }
+      }
+    },
+    {
+      "id": "attorney-alerts",
+      "name": "Send Attorney Alerts",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [1700, 400],
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.needs_attorney_review }}",
+              "value2": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "slack-alert",
+      "name": "Slack Alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [1900, 350],
+      "parameters": {
+        "method": "POST",
+        "url": "{{ $env.SLACK_WEBHOOK_URL }}",
+        "body": {
+          "mode": "json",
+          "json": {
+            "text": "🚨 HIGH-PRIORITY CASE ALERT 🚨",
+            "attachments": [
+              {
+                "color": "danger",
+                "fields": [
+                  {
+                    "title": "Case Type",
+                    "value": "={{ $json.analysis.case_type }}",
+                    "short": true
+                  },
+                  {
+                    "title": "Tier",
+                    "value": "={{ $json.analysis.estimated_tier }}",
+                    "short": true
+                  },
+                  {
+                    "title": "Source",
+                    "value": "={{ $json.source === 'chat' ? '💬 Web Chat' : '📞 Voice Call' }}",
+                    "short": true
+                  },
+                  {
+                    "title": "Urgency",
+                    "value": "={{ $json.analysis.urgency_level }}",
+                    "short": true
+                  },
+                  {
+                    "title": "Similar Cases",
+                    "value": "={{ $json.case_precedents.length }} matching precedents found",
+                    "short": false
+                  },
+                  {
+                    "title": "Session ID",
+                    "value": "={{ $json.session_id }}",
+                    "short": false
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "response-formatter",
+      "name": "Format Response",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [1900, 200],
+      "parameters": {
+        "functionCode": "// Format final response based on source (chat vs VAPI)\nconst responseData = $json;\n\nif (responseData.source === 'chat') {\n  // Chat response format\n  return {\n    message: responseData.ai_response,\n    analysis: responseData.analysis,\n    session_id: responseData.session_id,\n    timestamp: responseData.timestamp,\n    next_actions: responseData.analysis.next_actions,\n    precedents_found: responseData.case_precedents.length,\n    status: 'success'\n  };\n} else if (responseData.source === 'vapi') {\n  // VAPI response format with function calls if needed\n  const functionCalls = [];\n  \n  if (responseData.analysis.next_actions.includes('schedule_urgent_consultation')) {\n    functionCalls.push({\n      name: 'scheduleConsultation',\n      parameters: {\n        urgencyLevel: 'urgent',\n        caseValue: responseData.analysis.estimated_tier,\n        consultationType: 'immediate'\n      }\n    });\n  }\n  \n  if (responseData.analysis.next_actions.includes('alert_attorneys')) {\n    functionCalls.push({\n      name: 'transferToAttorney', \n      parameters: {\n        transferReason: 'high_value_case',\n        specialtyNeeded: responseData.analysis.case_type\n      }\n    });\n  }\n  \n  return {\n    message: responseData.ai_response,\n    function_calls: functionCalls,\n    session_context: {\n      case_type: responseData.analysis.case_type,\n      urgency: responseData.analysis.urgency_level,\n      tier: responseData.analysis.estimated_tier\n    },\n    timestamp: responseData.timestamp\n  };\n}\n\n// Default response\nreturn {\n  message: responseData.ai_response,\n  session_id: responseData.session_id,\n  timestamp: responseData.timestamp\n};"
+      }
+    },
+    {
+      "id": "chat-response",
+      "name": "Chat Response",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [2100, 150],
+      "parameters": {
+        "responseMode": "responseData",
+        "responseData": "={{ JSON.stringify($json) }}"
+      }
+    },
+    {
+      "id": "vapi-response", 
+      "name": "VAPI Response",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [2100, 250],
+      "parameters": {
+        "responseMode": "responseData",
+        "responseData": "={{ JSON.stringify($json) }}"
+      }
+    }
+  ],
+  "connections": {
+    "Chat Input Webhook": {
+      "main": [
+        [
+          {
+            "node": "Process Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "VAPI Input Webhook": {
+      "main": [
+        [
+          {
+            "node": "Process Input", 
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Input": {
+      "main": [
+        [
+          {
+            "node": "Retrieve Conversation Context",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Generate Query Embedding",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Query Embedding": {
+      "main": [
+        [
+          {
+            "node": "Search Similar Cases",
+            "type": "main", 
+            "index": 0
+          },
+          {
+            "node": "Search Legal Knowledge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retrieve Conversation Context": {
+      "main": [
+        [
+          {
+            "node": "SuperCode Legal AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search Similar Cases": {
+      "main": [
+        [
+          {
+            "node": "SuperCode Legal AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search Legal Knowledge": {
+      "main": [
+        [
+          {
+            "node": "SuperCode Legal AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SuperCode Legal AI Agent": {
+      "main": [
+        [
+          {
+            "node": "AI Legal Analysis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Legal Analysis": {
+      "main": [
+        [
+          {
+            "node": "Process AI Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process AI Response": {
+      "main": [
+        [
+          {
+            "node": "Save Conversation Context",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send Attorney Alerts",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Format Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Attorney Alerts": {
+      "main": [
+        [
+          {
+            "node": "Slack Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Response": {
+      "main": [
+        [
+          {
+            "node": "Chat Response",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "VAPI Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "timezone": "America/Los_Angeles",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "executionTimeout": 300
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "id": "douglas-hicks-law",
+      "name": "Douglas Hicks Law"
+    },
+    {
+      "id": "supercode-agent",
+      "name": "SuperCode AI Agent"
+    },
+    {
+      "id": "supabase-vector-store",
+      "name": "Supabase Vector Store"
+    }
+  ]
+}
