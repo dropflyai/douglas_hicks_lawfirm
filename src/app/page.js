@@ -59,35 +59,63 @@ export default function DouglassHicksLawPage() {
     {
       name: "Carl E. Douglas",
       role: "Founding Partner",
-      specialties: ["Personal Injury", "Civil Rights", "Criminal Defense"],
-      description: "Member of O.J. Simpson's 'Dream Team' defense, with over 30 years fighting for justice and achieving record-breaking verdicts.",
-      achievements: ["$4.9B verdict record holder", "O.J. Simpson Dream Team member", "30+ years experience"]
+      specialties: ["Criminal Defense", "Civil Rights", "Personal Injury"],
+      description: "Former Managing Attorney at Johnnie L. Cochran, Jr.'s law offices and member of O.J. Simpson's criminal defense 'Dream Team'. Represented celebrities including Michael Jackson, Jamie Foxx, and Queen Latifah.",
+      achievements: ["$4.9B verdict against General Motors", "O.J. Simpson Dream Team member", "Former Cochran Firm Managing Attorney", "Celebrity defense attorney"]
     },
     {
       name: "Jamon R. Hicks", 
       role: "Partner",
-      specialties: ["Trial Advocacy", "Personal Injury", "Civil Rights"],
-      description: "Trial advocacy professor and skilled litigator with a track record of multi-million dollar settlements and verdicts.",
-      achievements: ["$5M+ settlements", "Trial advocacy professor", "Expert litigator"]
+      specialties: ["Civil Rights", "Wrongful Death", "Personal Injury", "Trial Advocacy"],
+      description: "Former attorney at the Cochran Firm specializing in civil rights, wrongful death, and personal injury cases. Teaches trial advocacy at Loyola Law School and West Los Angeles Law School.",
+      achievements: ["$5M wrongful death settlement", "Trial advocacy professor at Loyola Law School", "Former Cochran Firm attorney", "Civil rights specialist"]
+    },
+    {
+      name: "A'ja Simplis",
+      role: "Senior Associate",
+      specialties: ["Civil Rights", "Personal Injury", "Employment Law"],
+      description: "Senior Associate with 15 years of comprehensive legal experience across multiple practice areas.",
+      achievements: ["15+ years legal experience", "Senior Associate", "Multi-practice expertise"]
+    },
+    {
+      name: "Bianca Perez",
+      role: "Junior Associate", 
+      specialties: ["Employment Discrimination", "Civil Rights"],
+      description: "Junior Associate specializing in employment discrimination and civil rights cases.",
+      achievements: ["Employment discrimination specialist", "Civil rights advocate", "Rising legal talent"]
     }
   ]
 
   const results = [
     {
-      amount: "$8M",
+      amount: "$8.0M",
       case: "Police Brutality Verdict",
-      description: "Record-setting verdict for excessive force case"
+      description: "Verdict against Los Angeles County for family of man choked to death by sheriff deputies"
     },
     {
-      amount: "$5M",
-      case: "Personal Injury Settlement",
-      description: "Major settlement for catastrophic injury victim"
-    },
-    {
-      amount: "$1.5M",
+      amount: "$1.576M",
       case: "Disability Discrimination",
-      description: "Landmark case protecting disability rights"
+      description: "Verdict against Greystar Management Company for Disability Discrimination"
+    },
+    {
+      amount: "$733K",
+      case: "Employment Discrimination",
+      description: "Verdict for Superintendent against El Monte Union High School District"
+    },
+    {
+      amount: "$4.9B",
+      case: "Product Liability",
+      description: "Record-breaking verdict against General Motors (Carl E. Douglas)"
     }
+  ]
+
+  const criminalResults = [
+    "Not Guilty - Celebrity esthetician charged with murder for hire",
+    "Not Guilty - Felony assault with deadly weapon",
+    "Not Guilty - Felony grand theft",
+    "Not Guilty - Resisting arrest",
+    "Hung Jury - DUI and child endangerment",
+    "Hung Jury - Battery on police officer"
   ]
 
   return (
@@ -149,7 +177,7 @@ export default function DouglassHicksLawPage() {
               </h1>
               
               <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl">
-                From the O.J. Simpson Dream Team to today&rsquo;s most challenging cases. We rebuild lives financially and emotionally with David vs. Goliath representation.
+                We represent people who have been personally injured and/or have had their civil rights violated. We help people rebuild their lives, financially and emotionally.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4">
@@ -309,14 +337,36 @@ export default function DouglassHicksLawPage() {
             </p>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-8">
-            {results.map((result, index) => (
-              <div key={index} className="bg-black/50 backdrop-blur-xl rounded-xl p-8 border border-gray-700 text-center">
-                <div className="text-4xl font-bold text-green-400 mb-4">{result.amount}</div>
-                <h3 className="text-xl font-semibold text-white mb-3">{result.case}</h3>
-                <p className="text-gray-400">{result.description}</p>
-              </div>
-            ))}
+          {/* Civil Verdicts & Settlements */}
+          <div className="mb-16">
+            <h3 className="text-2xl font-bold text-white mb-8 text-center">Civil Verdicts & Settlements</h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {results.map((result, index) => (
+                <div key={index} className="bg-black/50 backdrop-blur-xl rounded-xl p-6 border border-gray-700 text-center">
+                  <div className="text-3xl font-bold text-green-400 mb-3">{result.amount}</div>
+                  <h4 className="text-lg font-semibold text-white mb-2">{result.case}</h4>
+                  <p className="text-gray-400 text-sm">{result.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Criminal Defense Victories */}
+          <div>
+            <h3 className="text-2xl font-bold text-white mb-8 text-center">Criminal Defense Victories</h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {criminalResults.map((result, index) => (
+                <div key={index} className="bg-black/50 backdrop-blur-xl rounded-xl p-6 border border-gray-700">
+                  <div className="flex items-center gap-3 mb-3">
+                    <CheckCircle className="w-6 h-6 text-green-400 flex-shrink-0" />
+                    <span className="text-lg font-semibold text-white">
+                      {result.includes('Not Guilty') ? 'NOT GUILTY' : 'HUNG JURY'}
+                    </span>
+                  </div>
+                  <p className="text-gray-400 text-sm">{result.replace(/^(Not Guilty|Hung Jury) - /, '')}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
