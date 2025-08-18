@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { 
   Scale, 
   FileText, 
@@ -125,7 +126,13 @@ export default function DouglassHicksLawPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="/" className="flex items-center">
-              <Scale className="w-8 h-8 text-blue-400 mr-3" />
+              <Image
+                src="/images/scraped/logo-main.png"
+                alt="Douglass Hicks Law Firm"
+                width={40}
+                height={40}
+                className="mr-3"
+              />
               <span className="text-xl font-bold text-white">
                 Douglass Hicks Law Firm
               </span>
@@ -137,7 +144,7 @@ export default function DouglassHicksLawPage() {
               <Link href="#attorneys" className="text-gray-300 hover:text-white transition-colors">
                 Our Team
               </Link>
-              <Link href="#results" className="text-gray-300 hover:text-white transition-colors">
+              <Link href="/results" className="text-gray-300 hover:text-white transition-colors">
                 Results
               </Link>
               <Link href="#contact" className="text-gray-300 hover:text-white transition-colors">
@@ -464,7 +471,13 @@ export default function DouglassHicksLawPage() {
           <div className="grid md:grid-cols-3 gap-8">
             <div>
               <div className="flex items-center mb-4">
-                <Scale className="w-8 h-8 text-blue-400 mr-3" />
+                <Image
+                  src="/images/scraped/logo-main.png"
+                  alt="Douglass Hicks Law Firm"
+                  width={40}
+                  height={40}
+                  className="mr-3"
+                />
                 <span className="text-xl font-bold text-white">Douglass Hicks Law Firm</span>
               </div>
               <p className="text-gray-400 mb-4">
