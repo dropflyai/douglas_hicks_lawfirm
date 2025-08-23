@@ -66,7 +66,7 @@ export default function ResourcesPage() {
       description: "Comprehensive guide covering police brutality, employment discrimination, housing rights, and disability discrimination claims. Written by our expert civil rights attorneys.",
       image: "/images/scraped/practice-1.jpg",
       author: "Carl E. Douglas & A'ja Simplis",
-      publishDate: "March 15, 2024",
+      publishDate: "March 15, 2025",
       readTime: "12 min read",
       downloads: 2847,
       views: 15420,
@@ -104,7 +104,7 @@ export default function ResourcesPage() {
       description: "Step-by-step checklist for personal injury victims covering immediate actions, evidence preservation, medical documentation, and legal strategy.",
       image: "/images/scraped/practice-2.jpg",
       author: "Jamon R. Hicks",
-      publishDate: "March 10, 2024",
+      publishDate: "March 10, 2025",
       readTime: "8 min read",
       downloads: 3521,
       views: 18905,
@@ -142,7 +142,7 @@ export default function ResourcesPage() {
       description: "Essential guide to criminal defense rights, Miranda warnings, search and seizure laws, and how to interact with law enforcement. Based on Dream Team experience.",
       image: "/images/scraped/practice-3.jpg",
       author: "Carl E. Douglas",
-      publishDate: "February 28, 2024",
+      publishDate: "February 28, 2025",
       readTime: "15 min read",
       downloads: 4156,
       views: 22340,
@@ -180,7 +180,7 @@ export default function ResourcesPage() {
       description: "Comprehensive video series covering workplace discrimination, harassment, wrongful termination, and wage disputes. Featuring real case examples and expert analysis.",
       image: "/images/scraped/practice-4.jpg",
       author: "A'ja Simplis & Bianca Perez",
-      publishDate: "March 5, 2024",
+      publishDate: "March 5, 2025",
       readTime: "45 min total",
       downloads: 1892,
       views: 12670,
@@ -208,15 +208,15 @@ export default function ResourcesPage() {
       downloadUrl: "/resources/employment-discrimination-videos.zip"
     },
     {
-      id: 'legal-news-march-2024',
+      id: 'legal-news-march-2025',
       category: 'news-updates',
       type: 'Legal News',
-      title: "Legal Updates: March 2024",
+      title: "Legal Updates: March 2025",
       subtitle: "Important Changes in Civil Rights and Personal Injury Law",
       description: "Monthly roundup of significant legal developments, new legislation, important court decisions, and their impact on civil rights and personal injury cases.",
       image: "/images/scraped/practice-5.jpg",
       author: "Douglas Hicks Legal Team",
-      publishDate: "March 1, 2024",
+      publishDate: "March 1, 2025",
       readTime: "6 min read",
       downloads: 945,
       views: 8230,
@@ -242,7 +242,7 @@ export default function ResourcesPage() {
       
       tags: ["Legal News", "Legislation Updates", "Court Decisions", "Practice Updates"],
       relatedCases: [],
-      downloadUrl: "/resources/legal-news-march-2024.pdf"
+      downloadUrl: "/resources/legal-news-march-2025.pdf"
     },
     {
       id: 'dream-team-podcast',
@@ -509,16 +509,6 @@ export default function ResourcesPage() {
                 onClick={() => setSelectedResource(resource)}
               >
                 <div className="relative bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl overflow-hidden border border-gray-700 hover:border-blue-500 transition-all duration-500 transform hover:scale-[1.02]">
-                  {/* Background Image */}
-                  <div className="absolute inset-0 opacity-20">
-                    <Image
-                      src={resource.image}
-                      alt={resource.title}
-                      fill
-                      className="object-cover group-hover:scale-110 transition-transform duration-700"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/50"></div>
-                  </div>
 
                   <div className="relative p-8">
                     {/* Header */}
@@ -621,16 +611,8 @@ export default function ResourcesPage() {
                 onClick={() => setSelectedResource(resource)}
               >
                 <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl overflow-hidden border border-gray-700 hover:border-blue-500 transition-all duration-300 transform hover:scale-105">
-                  {/* Resource Image */}
-                  <div className="relative h-48 overflow-hidden">
-                    <Image
-                      src={resource.image}
-                      alt={resource.title}
-                      fill
-                      className="object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
-                    
+                  {/* Header Section */}
+                  <div className="relative h-24 bg-gradient-to-r from-blue-900/30 to-purple-900/30 border-b border-gray-700">
                     {/* Type Badge */}
                     <div className="absolute top-4 left-4">
                       <span className="px-3 py-1 bg-gradient-to-r from-blue-600 to-green-600 text-white font-bold rounded-full text-sm">

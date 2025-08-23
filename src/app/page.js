@@ -34,14 +34,28 @@ import {
   Clock,
   Sparkles,
   Brain,
-  MessageCircle
+  MessageCircle,
+  Send,
+  Loader
 } from 'lucide-react'
+import { consultationHandler } from '@/lib/consultation-handler'
 
 export default function HomePage() {
   const [currentHeroImage, setCurrentHeroImage] = useState(0)
   const [currentTestimonial, setCurrentTestimonial] = useState(0)
   const [isVisible, setIsVisible] = useState(false)
   const [currentVictoryIndex, setCurrentVictoryIndex] = useState(0)
+  
+  // Consultation form state
+  const [consultationForm, setConsultationForm] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    message: ''
+  })
+  const [isSubmittingConsultation, setIsSubmittingConsultation] = useState(false)
+  const [consultationSubmitted, setConsultationSubmitted] = useState(false)
+  const [consultationResult, setConsultationResult] = useState(null)
 
   const heroImages = [
     '/images/scraped/hero-2.jpg', 
@@ -66,7 +80,7 @@ export default function HomePage() {
       description: 'Historic verdict against Los Angeles County that set new precedents for police accountability.',
       image: '/images/scraped/practice-2.jpg',
       attorney: 'Douglas Hicks Team',
-      year: '2024',
+      year: '2025',
       color: 'from-red-400 to-pink-500'
     },
     {
@@ -86,7 +100,7 @@ export default function HomePage() {
       description: 'Federal court verdict that forced nationwide policy changes for disabled tenants.',
       image: '/images/scraped/practice-4.jpg',
       attorney: "A'ja Simplis",
-      year: '2024',
+      year: '2025',
       color: 'from-green-400 to-emerald-500'
     }
   ]
@@ -150,6 +164,39 @@ export default function HomePage() {
       color: 'from-gray-600 to-gray-800'
     }
   ]
+
+  // Handle consultation form submission
+  const handleConsultationSubmit = async (e) => {
+    e.preventDefault()
+    setIsSubmittingConsultation(true)
+    
+    try {
+      const result = await consultationHandler.submitConsultationRequest(consultationForm)
+      setConsultationResult(result)
+      setConsultationSubmitted(true)
+      
+      // Reset form
+      setConsultationForm({
+        name: '',
+        email: '',
+        phone: '',
+        message: ''
+      })
+    } catch (error) {
+      console.error('Consultation submission failed:', error)
+      // Show error message or fallback
+      alert('There was an issue submitting your consultation request. Please call us directly at (323) 337-3636.')
+    } finally {
+      setIsSubmittingConsultation(false)
+    }
+  }
+
+  const updateConsultationForm = (field, value) => {
+    setConsultationForm(prev => ({
+      ...prev,
+      [field]: value
+    }))
+  }
 
   useEffect(() => {
     setIsVisible(true)
@@ -221,7 +268,7 @@ export default function HomePage() {
                 href="/portal"
                 className="bg-gradient-to-r from-yellow-600 to-orange-600 text-white px-6 py-2 rounded-lg hover:scale-105 transition-all font-semibold"
               >
-                Client Portal
+                Sign In
               </Link>
               <Link 
                 href="/intake"
@@ -302,7 +349,7 @@ export default function HomePage() {
               className="inline-flex items-center px-12 py-6 text-xl font-black text-white bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl hover:scale-105 transition-all transform shadow-2xl"
             >
               <Shield className="mr-3 h-6 w-6" />
-              Client Portal Login
+              Sign In
             </Link>
             <button className="inline-flex items-center px-12 py-6 text-xl font-black text-white bg-transparent border-4 border-white rounded-xl hover:bg-white hover:text-black transition-all transform hover:scale-105">
               <PlayCircle className="mr-3 h-6 w-6" />
@@ -718,42 +765,97 @@ export default function HomePage() {
             
             <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-8 border border-gray-700">
               <h3 className="text-2xl font-bold text-white mb-6">Free Case Evaluation</h3>
-              <form className="space-y-6">
-                <div>
-                  <input 
-                    type="text" 
-                    placeholder="Your Name" 
-                    className="w-full p-4 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none"
-                  />
+              
+              {consultationSubmitted ? (
+                <div className="bg-gradient-to-r from-green-900/50 to-emerald-900/50 rounded-xl p-6 border border-green-500">
+                  <div className="text-center">
+                    <CheckCircle className="w-12 h-12 text-green-400 mx-auto mb-4" />
+                    <h4 className="text-2xl font-bold text-white mb-2">Consultation Request Submitted!</h4>
+                    <p className="text-green-400 font-semibold mb-4">
+                      {consultationResult?.consultation_id && `Consultation ID: ${consultationResult.consultation_id}`}
+                    </p>
+                    <p className="text-gray-300 mb-4">
+                      Your case has been assigned to: <span className="text-white font-bold">{consultationResult?.recommended_attorney}</span>
+                    </p>
+                    <p className="text-gray-400 text-sm mb-4">
+                      Expected response: {consultationResult?.response_timeframe}
+                    </p>
+                    <button 
+                      onClick={() => setConsultationSubmitted(false)}
+                      className="text-blue-400 hover:text-blue-300 font-semibold"
+                    >
+                      Submit Another Request
+                    </button>
+                  </div>
                 </div>
-                <div>
-                  <input 
-                    type="email" 
-                    placeholder="Your Email" 
-                    className="w-full p-4 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none"
-                  />
-                </div>
-                <div>
-                  <input 
-                    type="tel" 
-                    placeholder="Your Phone" 
-                    className="w-full p-4 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none"
-                  />
-                </div>
-                <div>
-                  <textarea 
-                    placeholder="Tell us about your case..." 
-                    rows={4}
-                    className="w-full p-4 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none"
-                  ></textarea>
-                </div>
-                <button 
-                  type="submit"
-                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-lg font-bold hover:scale-105 transition-all"
-                >
-                  Get Free Consultation
-                </button>
-              </form>
+              ) : (
+                <form onSubmit={handleConsultationSubmit} className="space-y-6">
+                  <div>
+                    <input 
+                      type="text" 
+                      placeholder="Your Name *" 
+                      value={consultationForm.name}
+                      onChange={(e) => updateConsultationForm('name', e.target.value)}
+                      required
+                      className="w-full p-4 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <input 
+                      type="email" 
+                      placeholder="Your Email *" 
+                      value={consultationForm.email}
+                      onChange={(e) => updateConsultationForm('email', e.target.value)}
+                      required
+                      className="w-full p-4 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <input 
+                      type="tel" 
+                      placeholder="Your Phone *" 
+                      value={consultationForm.phone}
+                      onChange={(e) => updateConsultationForm('phone', e.target.value)}
+                      required
+                      className="w-full p-4 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <textarea 
+                      placeholder="Tell us about your case... *" 
+                      rows={4}
+                      value={consultationForm.message}
+                      onChange={(e) => updateConsultationForm('message', e.target.value)}
+                      required
+                      className="w-full p-4 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none"
+                    ></textarea>
+                  </div>
+                  <button 
+                    type="submit"
+                    disabled={isSubmittingConsultation}
+                    className={`w-full py-4 rounded-lg font-bold transition-all ${
+                      isSubmittingConsultation 
+                        ? 'bg-gray-600 cursor-not-allowed' 
+                        : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:scale-105'
+                    }`}
+                  >
+                    {isSubmittingConsultation ? (
+                      <span className="flex items-center justify-center gap-2">
+                        <Loader className="w-5 h-5 animate-spin" />
+                        Submitting...
+                      </span>
+                    ) : (
+                      <span className="flex items-center justify-center gap-2">
+                        <Send className="w-5 h-5" />
+                        Get Free Consultation
+                      </span>
+                    )}
+                  </button>
+                  <p className="text-gray-400 text-xs text-center">
+                    * Required fields. All information is confidential and protected by attorney-client privilege.
+                  </p>
+                </form>
+              )}
             </div>
           </div>
         </div>
@@ -806,7 +908,7 @@ export default function HomePage() {
           
           <div className="border-t border-gray-800 mt-8 pt-8 text-center">
             <p className="text-gray-500 text-sm">
-              © 2024 Douglass Hicks Law. All rights reserved. | Dream Team Legacy | $4.9B Record Verdict
+              © 2025 Douglass Hicks Law. All rights reserved. | Dream Team Legacy | $4.9B Record Verdict
             </p>
           </div>
         </div>

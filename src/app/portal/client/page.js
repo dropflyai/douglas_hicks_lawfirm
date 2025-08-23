@@ -43,21 +43,21 @@ export default function ClientDashboard() {
   // Sample client data
   const clientData = {
     name: "Sarah Johnson",
-    caseNumber: "DHL-2024-0156",
+    caseNumber: "DHL-2025-0156",
     attorney: "Carl E. Douglas",
     caseType: "Personal Injury",
     status: "Active Discovery",
-    nextHearing: "March 25, 2024",
+    nextHearing: "March 25, 2025",
     caseValue: "$2.8M",
     lastUpdate: "2 hours ago"
   }
 
   const caseDocuments = [
-    { name: "Initial Complaint Filing", date: "Jan 15, 2024", type: "PDF", size: "2.4 MB", status: "Final" },
-    { name: "Medical Records Summary", date: "Feb 8, 2024", type: "PDF", size: "8.7 MB", status: "Updated" },
-    { name: "Witness Statements", date: "Feb 20, 2024", type: "PDF", size: "1.2 MB", status: "New" },
-    { name: "Expert Analysis Report", date: "Mar 5, 2024", type: "PDF", size: "5.1 MB", status: "Draft" },
-    { name: "Settlement Proposal", date: "Mar 12, 2024", type: "PDF", size: "892 KB", status: "Confidential" }
+    { name: "Initial Complaint Filing", date: "Jan 15, 2025", type: "PDF", size: "2.4 MB", status: "Final" },
+    { name: "Medical Records Summary", date: "Feb 8, 2025", type: "PDF", size: "8.7 MB", status: "Updated" },
+    { name: "Witness Statements", date: "Feb 20, 2025", type: "PDF", size: "1.2 MB", status: "New" },
+    { name: "Expert Analysis Report", date: "Mar 5, 2025", type: "PDF", size: "5.1 MB", status: "Draft" },
+    { name: "Settlement Proposal", date: "Mar 12, 2025", type: "PDF", size: "892 KB", status: "Confidential" }
   ]
 
   const recentActivity = [
@@ -69,9 +69,9 @@ export default function ClientDashboard() {
   ]
 
   const upcomingEvents = [
-    { title: "Expert Witness Deposition", date: "Mar 20, 2024", time: "10:00 AM", location: "Downtown Office" },
-    { title: "Settlement Conference", date: "Mar 25, 2024", time: "2:00 PM", location: "Superior Court" },
-    { title: "Client Check-in Call", date: "Apr 1, 2024", time: "3:00 PM", location: "Phone Conference" }
+    { title: "Expert Witness Deposition", date: "Mar 20, 2025", time: "10:00 AM", location: "Downtown Office" },
+    { title: "Settlement Conference", date: "Mar 25, 2025", time: "2:00 PM", location: "Superior Court" },
+    { title: "Client Check-in Call", date: "Apr 1, 2025", time: "3:00 PM", location: "Phone Conference" }
   ]
 
   const billingInfo = [

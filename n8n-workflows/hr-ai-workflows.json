@@ -1,0 +1,385 @@
+{
+  "name": "Douglas Hicks Law - HR AI Workflows",
+  "description": "Complete N8N workflow specifications for AI-powered HR features",
+  "version": "1.0.0",
+  "workflows": [
+    {
+      "id": "resume-ai-scanner",
+      "name": "AI Resume Scanner & Scoring",
+      "description": "Automatically analyze uploaded resumes and generate AI scores",
+      "trigger": {
+        "type": "webhook",
+        "endpoint": "/hr/resume-upload",
+        "method": "POST"
+      },
+      "nodes": [
+        {
+          "id": "1",
+          "type": "webhook",
+          "parameters": {
+            "httpMethod": "POST",
+            "path": "resume-upload",
+            "responseMode": "responseNode"
+          }
+        },
+        {
+          "id": "2", 
+          "type": "function",
+          "name": "Extract Resume Data",
+          "parameters": {
+            "functionCode": "// Extract file and candidate info\nconst fileData = items[0].json.file;\nconst candidateInfo = items[0].json.candidate;\n\nreturn [{\n  json: {\n    fileUrl: fileData.url,\n    fileName: fileData.name,\n    candidateName: candidateInfo.name,\n    position: candidateInfo.position,\n    email: candidateInfo.email\n  }\n}];"
+          }
+        },
+        {
+          "id": "3",
+          "type": "openai",
+          "name": "Parse Resume with GPT-4",
+          "parameters": {
+            "model": "gpt-4",
+            "prompt": "Analyze this resume and extract the following information in JSON format:\\n\\nSkills: [array of technical and soft skills]\\nExperience: [years of relevant experience]\\nEducation: [highest degree and institution]\\nCertifications: [professional certifications]\\nPreviousRoles: [array of previous job titles]\\nAchievements: [notable accomplishments]\\nSalaryRange: [estimated salary expectation based on experience]\\n\\nResume text: {{ $json.resumeText }}"
+          }
+        },
+        {
+          "id": "4",
+          "type": "function",
+          "name": "Calculate AI Score",
+          "parameters": {
+            "functionCode": "// AI scoring algorithm\nconst resume = JSON.parse(items[0].json.choices[0].message.content);\nconst position = items[0].json.position;\n\n// Scoring weights\nconst weights = {\n  skills: 0.3,\n  experience: 0.25,\n  education: 0.15,\n  achievements: 0.15,\n  certifications: 0.15\n};\n\n// Calculate scores (0-100)\nlet skillsScore = calculateSkillsMatch(resume.Skills, position);\nlet experienceScore = Math.min(resume.Experience * 10, 100);\nlet educationScore = calculateEducationScore(resume.Education);\nlet achievementsScore = resume.Achievements.length * 20;\nlet certificationsScore = resume.Certifications.length * 25;\n\n// Weighted total\nlet totalScore = Math.round(\n  (skillsScore * weights.skills) +\n  (experienceScore * weights.experience) +\n  (educationScore * weights.education) +\n  (achievementsScore * weights.achievements) +\n  (certificationsScore * weights.certifications)\n);\n\n// Cultural fit prediction (mock)\nlet culturalFit = Math.floor(Math.random() * 20) + 80;\n\nfunction calculateSkillsMatch(skills, position) {\n  const requiredSkills = {\n    'Associate Attorney': ['Legal Research', 'Contract Law', 'Litigation', 'Client Communication'],\n    'Paralegal': ['Legal Research', 'Document Preparation', 'Client Communication', 'Case Management'],\n    'Legal Secretary': ['Administrative Skills', 'Legal Documentation', 'Communication', 'Organization']\n  };\n  \n  const required = requiredSkills[position] || [];\n  const matches = skills.filter(skill => \n    required.some(req => skill.toLowerCase().includes(req.toLowerCase()))\n  );\n  \n  return Math.min((matches.length / required.length) * 100, 100);\n}\n\nfunction calculateEducationScore(education) {\n  if (education.includes('JD') || education.includes('Law')) return 100;\n  if (education.includes('Master')) return 80;\n  if (education.includes('Bachelor')) return 60;\n  return 40;\n}\n\nreturn [{\n  json: {\n    candidateName: items[0].json.candidateName,\n    position: items[0].json.position,\n    aiScore: totalScore,\n    culturalFit: culturalFit,\n    breakdown: {\n      skills: skillsScore,\n      experience: experienceScore,\n      education: educationScore,\n      achievements: achievementsScore,\n      certifications: certificationsScore\n    },\n    extractedData: resume,\n    recommendation: totalScore >= 90 ? 'Strong Hire' : \n                   totalScore >= 80 ? 'Consider' : \n                   totalScore >= 70 ? 'Maybe' : 'Pass'\n  }\n}];"
+          }
+        },
+        {
+          "id": "5",
+          "type": "supabase",
+          "name": "Save to Database",
+          "parameters": {
+            "operation": "insert",
+            "table": "candidates",
+            "fields": {
+              "name": "={{ $json.candidateName }}",
+              "position": "={{ $json.position }}",
+              "ai_score": "={{ $json.aiScore }}",
+              "cultural_fit": "={{ $json.culturalFit }}",
+              "skills": "={{ JSON.stringify($json.extractedData.Skills) }}",
+              "experience_years": "={{ $json.extractedData.Experience }}",
+              "education": "={{ $json.extractedData.Education }}",
+              "recommendation": "={{ $json.recommendation }}",
+              "created_at": "={{ new Date().toISOString() }}"
+            }
+          }
+        },
+        {
+          "id": "6",
+          "type": "respond",
+          "name": "Return Results",
+          "parameters": {
+            "respondWith": "json",
+            "responseData": "={{ $json }}"
+          }
+        }
+      ]
+    },
+    {
+      "id": "interview-automation",
+      "name": "AI Interview Automation",
+      "description": "Generate interview questions and schedule interviews",
+      "trigger": {
+        "type": "webhook",
+        "endpoint": "/hr/schedule-interview",
+        "method": "POST"
+      },
+      "nodes": [
+        {
+          "id": "1",
+          "type": "webhook",
+          "parameters": {
+            "httpMethod": "POST",
+            "path": "schedule-interview"
+          }
+        },
+        {
+          "id": "2",
+          "type": "openai",
+          "name": "Generate Interview Questions",
+          "parameters": {
+            "model": "gpt-4",
+            "prompt": "Generate 10 interview questions for a {{ $json.position }} position at a law firm. Include:\\n\\n1. Technical/Legal questions (40%)\\n2. Behavioral questions (40%)\\n3. Situational questions (20%)\\n\\nCandidate background:\\n- Skills: {{ $json.skills }}\\n- Experience: {{ $json.experience }}\\n- Education: {{ $json.education }}\\n\\nReturn as JSON array with questions and recommended answers."
+          }
+        },
+        {
+          "id": "3",
+          "type": "google-calendar",
+          "name": "Schedule Interview",
+          "parameters": {
+            "operation": "create",
+            "calendarId": "douglas.hicks@lawfirm.com",
+            "summary": "Interview: {{ $json.candidateName }} - {{ $json.position }}",
+            "description": "Interview for {{ $json.candidateName }}\\n\\nGenerated Questions:\\n{{ $json.questions }}",
+            "startTime": "{{ $json.preferredTime }}",
+            "duration": 60,
+            "attendees": ["{{ $json.interviewer }}", "{{ $json.candidateEmail }}"]
+          }
+        },
+        {
+          "id": "4",
+          "type": "send-email",
+          "name": "Send Interview Invitation",
+          "parameters": {
+            "to": "{{ $json.candidateEmail }}",
+            "subject": "Interview Invitation - {{ $json.position }} Position",
+            "template": "interview-invitation",
+            "variables": {
+              "candidateName": "{{ $json.candidateName }}",
+              "position": "{{ $json.position }}",
+              "interviewTime": "{{ $json.preferredTime }}",
+              "interviewer": "{{ $json.interviewer }}",
+              "meetingLink": "{{ $json.meetingLink }}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "background-check-automation",
+      "name": "Automated Background Check",
+      "description": "Trigger background checks for candidates",
+      "trigger": {
+        "type": "webhook",
+        "endpoint": "/hr/background-check",
+        "method": "POST"
+      },
+      "nodes": [
+        {
+          "id": "1",
+          "type": "webhook"
+        },
+        {
+          "id": "2",
+          "type": "sterling-background",
+          "name": "Initiate Background Check",
+          "parameters": {
+            "candidateName": "={{ $json.candidateName }}",
+            "ssn": "={{ $json.ssn }}",
+            "address": "={{ $json.address }}",
+            "checkTypes": ["criminal", "employment", "education", "references"]
+          }
+        },
+        {
+          "id": "3",
+          "type": "supabase",
+          "name": "Update Candidate Status",
+          "parameters": {
+            "operation": "update",
+            "table": "candidates",
+            "filter": "id.eq.{{ $json.candidateId }}",
+            "fields": {
+              "background_check_status": "in_progress",
+              "background_check_id": "={{ $json.checkId }}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "predictive-analytics",
+      "name": "HR Predictive Analytics",
+      "description": "Generate workforce predictions and insights",
+      "trigger": {
+        "type": "schedule",
+        "interval": "daily"
+      },
+      "nodes": [
+        {
+          "id": "1",
+          "type": "schedule",
+          "parameters": {
+            "rule": {
+              "interval": [{"field": "hour", "value": 9}]
+            }
+          }
+        },
+        {
+          "id": "2",
+          "type": "supabase",
+          "name": "Get Employee Data",
+          "parameters": {
+            "operation": "select",
+            "table": "employees",
+            "fields": "*"
+          }
+        },
+        {
+          "id": "3",
+          "type": "openai",
+          "name": "Analyze Workforce Trends",
+          "parameters": {
+            "model": "gpt-4",
+            "prompt": "Analyze this employee data and provide workforce insights:\\n\\nData: {{ JSON.stringify($json) }}\\n\\nProvide predictions for:\\n1. Turnover risk (identify employees likely to leave)\\n2. Hiring needs (departments that need staff)\\n3. Performance trends\\n4. Salary benchmarking\\n5. Training recommendations\\n\\nReturn as structured JSON."
+          }
+        },
+        {
+          "id": "4",
+          "type": "supabase",
+          "name": "Save Analytics",
+          "parameters": {
+            "operation": "insert",
+            "table": "hr_analytics",
+            "fields": {
+              "report_date": "={{ new Date().toISOString() }}",
+              "insights": "={{ $json.choices[0].message.content }}",
+              "type": "daily_workforce_analysis"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "compliance-alerts",
+      "name": "Compliance Alert System",
+      "description": "Monitor and alert on compliance deadlines",
+      "trigger": {
+        "type": "schedule",
+        "interval": "daily"
+      },
+      "nodes": [
+        {
+          "id": "1",
+          "type": "schedule"
+        },
+        {
+          "id": "2",
+          "type": "supabase",
+          "name": "Check Compliance Items",
+          "parameters": {
+            "operation": "select",
+            "table": "compliance_tracking",
+            "filter": "due_date.lte.{{ new Date(Date.now() + 90*24*60*60*1000).toISOString() }}"
+          }
+        },
+        {
+          "id": "3",
+          "type": "function",
+          "name": "Categorize Alerts",
+          "parameters": {
+            "functionCode": "const now = new Date();\nconst alerts = items[0].json.map(item => {\n  const dueDate = new Date(item.due_date);\n  const daysUntilDue = Math.ceil((dueDate - now) / (1000 * 60 * 60 * 24));\n  \n  let urgency;\n  if (daysUntilDue <= 30) urgency = 'critical';\n  else if (daysUntilDue <= 60) urgency = 'warning';\n  else urgency = 'info';\n  \n  return {\n    ...item,\n    daysUntilDue,\n    urgency\n  };\n});\n\nreturn [{ json: { alerts } }];"
+          }
+        },
+        {
+          "id": "4",
+          "type": "send-email",
+          "name": "Send Compliance Alerts",
+          "parameters": {
+            "to": "hr@douglashickslaw.com",
+            "subject": "Daily Compliance Report - {{ new Date().toLocaleDateString() }}",
+            "template": "compliance-report",
+            "variables": {
+              "alerts": "{{ $json.alerts }}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "document-processing",
+      "name": "AI Document Processing",
+      "description": "Process and categorize uploaded HR documents",
+      "trigger": {
+        "type": "webhook",
+        "endpoint": "/hr/document-upload",
+        "method": "POST"
+      },
+      "nodes": [
+        {
+          "id": "1",
+          "type": "webhook"
+        },
+        {
+          "id": "2",
+          "type": "google-vision",
+          "name": "OCR Document",
+          "parameters": {
+            "operation": "textDetection",
+            "imageUrl": "{{ $json.documentUrl }}"
+          }
+        },
+        {
+          "id": "3",
+          "type": "openai",
+          "name": "Classify Document",
+          "parameters": {
+            "model": "gpt-4",
+            "prompt": "Classify this HR document and extract key information:\\n\\nDocument text: {{ $json.extractedText }}\\n\\nDetermine:\\n1. Document type (I-9, W-4, resume, contract, etc.)\\n2. Employee name\\n3. Important dates\\n4. Key information to track\\n5. Compliance requirements\\n\\nReturn as JSON."
+          }
+        },
+        {
+          "id": "4",
+          "type": "supabase",
+          "name": "Save Document Record",
+          "parameters": {
+            "operation": "insert",
+            "table": "hr_documents",
+            "fields": {
+              "employee_id": "={{ $json.employeeId }}",
+              "document_type": "={{ $json.documentType }}",
+              "file_url": "={{ $json.documentUrl }}",
+              "extracted_text": "={{ $json.extractedText }}",
+              "classification": "={{ $json.classification }}",
+              "upload_date": "={{ new Date().toISOString() }}"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "email_templates": {
+    "interview-invitation": {
+      "subject": "Interview Invitation - {{position}} Position at Douglas Hicks Law",
+      "html": "<!DOCTYPE html><html><body style='font-family: Arial, sans-serif; line-height: 1.6; color: #333;'><div style='max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;'><div style='background: linear-gradient(135deg, #f4c900, #b68600); padding: 20px; border-radius: 10px 10px 0 0; text-align: center;'><h1 style='color: white; margin: 0;'>Douglas Hicks Law</h1><p style='color: white; margin: 5px 0 0 0;'>Interview Invitation</p></div><div style='padding: 30px 20px;'><h2 style='color: #333;'>Dear {{candidateName}},</h2><p>We are pleased to invite you for an interview for the <strong>{{position}}</strong> position at Douglas Hicks Law.</p><div style='background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;'><h3 style='margin-top: 0; color: #f4c900;'>Interview Details</h3><p><strong>Date & Time:</strong> {{interviewTime}}</p><p><strong>Interviewer:</strong> {{interviewer}}</p><p><strong>Meeting Link:</strong> <a href='{{meetingLink}}'>Join Video Call</a></p></div><p>Please confirm your attendance by replying to this email. If you need to reschedule, please let us know at least 24 hours in advance.</p><p>We look forward to speaking with you!</p><div style='margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee;'><p style='margin: 0;'><strong>Douglas Hicks Law</strong></p><p style='margin: 5px 0;'>5120 W. Goldleaf Circle, Suite 140</p><p style='margin: 5px 0;'>Los Angeles, CA 90056</p></div></div></div></body></html>"
+    },
+    "compliance-report": {
+      "subject": "Daily Compliance Report - {{date}}",
+      "html": "<!DOCTYPE html><html><body style='font-family: Arial, sans-serif;'><h2>Daily Compliance Report</h2><div>{{#each alerts}}<div style='padding: 10px; margin: 10px 0; border-left: 4px solid {{#if (eq urgency 'critical')}}#dc3545{{else}}{{#if (eq urgency 'warning')}}#ffc107{{else}}#28a745{{/if}}{{/if}}; background: #f8f9fa;'><h4>{{item}} - {{employee}}</h4><p>Due: {{due_date}} ({{daysUntilDue}} days)</p><p>Status: {{urgency}}</p></div>{{/each}}</div></body></html>"
+    }
+  },
+  "database_schema": {
+    "candidates": {
+      "id": "uuid primary key",
+      "name": "text not null",
+      "email": "text unique",
+      "position": "text",
+      "ai_score": "integer",
+      "cultural_fit": "integer",
+      "skills": "jsonb",
+      "experience_years": "integer",
+      "education": "text",
+      "status": "text default 'applied'",
+      "interview_stage": "text",
+      "background_check_status": "text",
+      "created_at": "timestamp default now()"
+    },
+    "compliance_tracking": {
+      "id": "uuid primary key",
+      "employee_id": "uuid references employees(id)",
+      "item_type": "text not null",
+      "due_date": "date not null",
+      "status": "text default 'pending'",
+      "last_reminder": "timestamp",
+      "created_at": "timestamp default now()"
+    },
+    "hr_documents": {
+      "id": "uuid primary key",
+      "employee_id": "uuid references employees(id)",
+      "document_type": "text not null",
+      "file_url": "text not null",
+      "extracted_text": "text",
+      "classification": "jsonb",
+      "upload_date": "timestamp default now()"
+    },
+    "hr_analytics": {
+      "id": "uuid primary key",
+      "report_date": "date not null",
+      "insights": "jsonb not null",
+      "type": "text not null",
+      "created_at": "timestamp default now()"
+    }
+  }
+}

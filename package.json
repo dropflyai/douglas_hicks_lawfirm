@@ -1,13 +1,27 @@
 {
-  "name": "douglass-hicks-law",
-  "version": "0.1.0",
+  "name": "lawfly-pro-platform",
+  "version": "1.0.0",
+  "description": "Security-first legal operations platform with BYOK encryption, zero-trust architecture, and multi-tenant isolation",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "setup": "./scripts/dev-setup.sh",
+    "deploy": "./scripts/deploy-prod.sh",
+    "demo": "./scripts/security-demo.sh",
+    "onboard": "./scripts/onboard-customer.sh"
   },
+  "keywords": [
+    "legal-tech",
+    "security-first",
+    "zero-trust",
+    "byok-encryption",
+    "compliance-monitoring",
+    "multi-tenant",
+    "law-firm-software"
+  ],
   "dependencies": {
     "@supabase/supabase-js": "^2.55.0",
     "lucide-react": "^0.539.0",

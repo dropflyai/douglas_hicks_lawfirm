@@ -31,10 +31,10 @@ export class VectorDatabase {
     },
     
     {
-      id: 'family_v_la_county_2024',
+      id: 'family_v_la_county_2025',
       case_name: 'Family v. Los Angeles County',
       amount: 8000000,
-      year: 2024,
+      year: 2025,
       attorney: 'Douglas Hicks Legal Team',
       case_type: 'civil_rights',
       practice_area: 'Civil Rights',
@@ -69,10 +69,10 @@ export class VectorDatabase {
     },
     
     {
-      id: 'disability_discrimination_2024',
+      id: 'disability_discrimination_2025',
       case_name: 'Disability Discrimination v. Greystar',
       amount: 1576000,
-      year: 2024,
+      year: 2025,
       attorney: "A'ja Simplis",
       case_type: 'discrimination',
       practice_area: 'Civil Rights',
@@ -88,10 +88,10 @@ export class VectorDatabase {
     },
     
     {
-      id: 'employment_discrimination_2024',
+      id: 'employment_discrimination_2025',
       case_name: 'Employment Discrimination v. El Monte USD',
       amount: 733000,
-      year: 2024,
+      year: 2025,
       attorney: 'Douglas Hicks Legal Team',
       case_type: 'employment',
       practice_area: 'Employment Law',
@@ -121,7 +121,7 @@ export class VectorDatabase {
       
       // Sort by similarity and filter above threshold
       return similarities
-        .filter(case => case.similarity >= this.similarity_threshold)
+        .filter(caseItem => caseItem.similarity >= this.similarity_threshold)
         .sort((a, b) => b.similarity - a.similarity)
         .slice(0, limit)
         
@@ -204,7 +204,7 @@ export class VectorDatabase {
         ...precedent,
         similarity: this.keywordSimilarity(inputKeywords, precedent.keywords)
       }))
-      .filter(case => case.similarity > 0.3)
+      .filter(caseItem => caseItem.similarity > 0.3)
       .sort((a, b) => b.similarity - a.similarity)
       .slice(0, limit)
   }
@@ -325,7 +325,7 @@ export class VectorDatabase {
       }))
       
       return results
-        .filter(case => case.similarity > 0.3)
+        .filter(caseItem => caseItem.similarity > 0.3)
         .sort((a, b) => b.similarity - a.similarity)
         .slice(0, limit)
         

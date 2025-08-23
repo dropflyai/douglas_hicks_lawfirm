@@ -1,0 +1,80 @@
+{
+  "name": "@lawfly/compliance-dashboard",
+  "version": "1.0.0",
+  "description": "Real-time compliance monitoring dashboard for LawFly Pro",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/index.js",
+    "test": "jest",
+    "lint": "eslint src/**/*.ts",
+    "format": "prettier --write src/**/*.ts"
+  },
+  "keywords": [
+    "compliance",
+    "dashboard",
+    "monitoring",
+    "soc2",
+    "gdpr",
+    "hipaa",
+    "legal-tech",
+    "security"
+  ],
+  "author": "LawFly Pro Security Team",
+  "license": "PROPRIETARY",
+  "dependencies": {
+    "@aws-sdk/client-cloudwatch": "^3.490.0",
+    "@aws-sdk/client-s3": "^3.490.0",
+    "@aws-sdk/client-kms": "^3.490.0",
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "helmet": "^7.1.0",
+    "compression": "^1.7.4",
+    "pg": "^8.11.3",
+    "redis": "^4.6.11",
+    "winston": "^3.11.0",
+    "node-cron": "^3.0.3",
+    "joi": "^17.11.0",
+    "jsonwebtoken": "^9.0.2",
+    "crypto": "^1.0.1",
+    "uuid": "^9.0.1",
+    "moment": "^2.29.4",
+    "lodash": "^4.17.21",
+    "fast-csv": "^4.3.6",
+    "pdfkit": "^0.13.0",
+    "chart.js": "^4.4.1",
+    "canvas": "^2.11.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.5",
+    "@types/express": "^4.17.21",
+    "@types/cors": "^2.8.17",
+    "@types/compression": "^1.7.5",
+    "@types/pg": "^8.10.9",
+    "@types/uuid": "^9.0.7",
+    "@types/jsonwebtoken": "^9.0.5",
+    "@types/lodash": "^4.14.202",
+    "@types/jest": "^29.5.8",
+    "typescript": "^5.3.3",
+    "tsx": "^4.6.2",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.1",
+    "eslint": "^8.56.0",
+    "@typescript-eslint/parser": "^6.15.0",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "prettier": "^3.1.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lawfly-pro/compliance-dashboard.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lawfly-pro/compliance-dashboard/issues"
+  },
+  "homepage": "https://github.com/lawfly-pro/compliance-dashboard#readme"
+}

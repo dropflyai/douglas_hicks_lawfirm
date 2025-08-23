@@ -49,21 +49,21 @@ export default function CivilRightsPage() {
       amount: "$8.0 MILLION",
       case: "Police Brutality Verdict",
       description: "Landmark verdict against Los Angeles County for family of man choked to death by sheriff deputies",
-      year: "2024",
+      year: "2025",
       impact: "Set new precedent for police accountability"
     },
     {
       amount: "$1.576 MILLION", 
       case: "Disability Discrimination",
       description: "Verdict against Greystar Management Company for Disability Discrimination",
-      year: "2024",
+      year: "2025",
       impact: "Protected disabled tenant rights"
     },
     {
       amount: "$733,000",
       case: "Employment Discrimination",
       description: "Verdict for Superintendent against El Monte Union High School District", 
-      year: "2024",
+      year: "2025",
       impact: "Stopped workplace discrimination"
     }
   ]

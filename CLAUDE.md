@@ -39,7 +39,17 @@ This file provides guidance to Claude Code when working with the LawFly Pro demo
 - React 18 with JavaScript (not TypeScript)
 - Tailwind CSS for styling
 - Lucide React for icons
+- **N8N Automation Platform** - Complete AI workflow capabilities
+- **OpenAI Integration via N8N** - GPT-4 for all AI features
+- **Supabase Database** - Enterprise data management
 - Responsive design with mobile-first approach
+
+**🚨 CRITICAL AI CAPABILITIES AVAILABLE:**
+- **ALL AI FEATURES ARE IMPLEMENTABLE** via existing N8N workflows
+- **OpenAI GPT-4 Integration** - Document analysis, legal research, contract generation
+- **External API Integration** - Westlaw, LexisNexis, court databases via N8N
+- **No AI Limitations** - Any AI feature can be built and deployed immediately
+- **Existing HR AI Workflows** - Template for legal AI workflow development
 
 **Key Features Showcased**:
 1. **Attorney-Client Privilege Protection** - Database-level encryption

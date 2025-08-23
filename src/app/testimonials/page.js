@@ -86,7 +86,7 @@ export default function TestimonialsPage() {
       image: "/images/scraped/practice-2.jpg",
       avatar: "/images/attorneys/jamon-hicks.jpg",
       rating: 5,
-      date: "2024",
+      date: "2025",
       
       quote: "The Douglas Hicks team fought the entire system to get justice for our son. When the police department covered up what really happened, they uncovered the truth and made them pay. This verdict won't bring him back, but it honors his memory.",
       
@@ -146,7 +146,7 @@ export default function TestimonialsPage() {
       image: "/images/scraped/practice-4.jpg",
       avatar: "/images/attorneys/aja-simplis.jpg",
       rating: 5,
-      date: "2024",
+      date: "2025",
       
       quote: "A'ja Simplis turned my worst experience into a victory that will help disabled people everywhere. Greystar Management thought they could discriminate against me because of my disability. A'ja proved them wrong and made them pay.",
       
@@ -175,7 +175,7 @@ export default function TestimonialsPage() {
       image: "/images/scraped/practice-5.jpg",
       avatar: "/images/attorneys/bianca-perez.jpg",
       rating: 5,
-      date: "2024",
+      date: "2025",
       
       quote: "Bianca Perez fought for me when my own school district discriminated against me. As a superintendent, I thought I had protection, but when they targeted me for my ethnicity, Bianca made them pay and got me justice.",
       
@@ -204,7 +204,7 @@ export default function TestimonialsPage() {
       image: "/images/scraped/practice-6.jpg",
       avatar: "/images/attorneys/carl-douglas.jpg",
       rating: 5,
-      date: "2024",
+      date: "2025",
       
       quote: "After my accident, I couldn't work and the insurance company was trying to give me nothing. Carl Douglas's team fought for every penny and got me enough to support my family while I recovered. They treated me like family.",
       

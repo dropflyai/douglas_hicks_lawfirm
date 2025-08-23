@@ -50,7 +50,7 @@ export default function AboutPage() {
       name: "A'ja Simplis",
       role: "Senior Associate", 
       specialties: ["Civil Rights", "Personal Injury", "Employment Law"],
-      bio: "A&rsquo;ja Simplis brings 15 years of comprehensive legal experience to the firm as a Senior Associate. Her extensive background spans multiple practice areas, with particular expertise in civil rights, personal injury, and employment law. A&rsquo;ja&rsquo;s dedication to client advocacy and her deep understanding of complex legal matters make her an invaluable member of the legal team.",
+      bio: "A'ja Simplis brings 15 years of comprehensive legal experience to the firm as a Senior Associate. Her extensive background spans multiple practice areas, with particular expertise in civil rights, personal injury, and employment law. A'ja's dedication to client advocacy and her deep understanding of complex legal matters make her an invaluable member of the legal team.",
       achievements: [
         "15+ years legal experience",
         "Multi-practice expertise",

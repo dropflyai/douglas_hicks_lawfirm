@@ -117,7 +117,7 @@ export default function CaseStudiesPage() {
       subtitle: "Justice for Family of Police Brutality Victim",
       category: "Civil Rights",
       amount: "$8.0 MILLION",
-      year: "2024",
+      year: "2025",
       attorney: "Douglas Hicks Legal Team",
       duration: "2 Years",
       jurisdiction: "Los Angeles County",
@@ -235,7 +235,7 @@ export default function CaseStudiesPage() {
       subtitle: "Fighting Housing Discrimination",
       category: "Civil Rights",
       amount: "$1.576 MILLION",
-      year: "2024",
+      year: "2025",
       attorney: "A'ja Simplis",
       duration: "14 Months",
       jurisdiction: "Federal Court",
@@ -440,19 +440,8 @@ export default function CaseStudiesPage() {
                 className="group cursor-pointer"
                 onClick={() => setSelectedCase(caseStudy)}
               >
-                <div className="relative bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl overflow-hidden border border-gray-700 hover:border-yellow-500 transition-all duration-500 transform hover:scale-[1.02]">
-                  {/* Background Image */}
-                  <div className="absolute inset-0 opacity-30">
-                    <Image
-                      src={caseStudy.image}
-                      alt={caseStudy.title}
-                      fill
-                      className="object-cover group-hover:scale-110 transition-transform duration-700"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/50"></div>
-                  </div>
-
-                  <div className="relative p-8">
+                <div className="relative bg-gray-800 rounded-2xl overflow-hidden border border-gray-700 hover:border-yellow-500 transition-all duration-500 transform hover:scale-[1.02]">
+                  <div className="p-8">
                     {/* Case Header */}
                     <div className="mb-6">
                       <div className="flex items-center gap-4 mb-4">

@@ -58,7 +58,7 @@ export default function ResultsPage() {
       case: "Police Brutality Justice",
       description: "Landmark verdict against Los Angeles County for family of man killed by sheriff deputies",
       attorney: "Douglas Hicks Legal Team",
-      year: "2024",
+      year: "2025",
       impact: "Set new precedent for police accountability",
       category: "Civil Rights"
     },

@@ -49,7 +49,7 @@ export default function MediaPage() {
       subtitle: "Inside the Trial of the Century",
       description: "Carl E. Douglas featured prominently in multiple documentaries about the O.J. Simpson trial, including 'O.J.: Made in America' and 'The People vs. O.J. Simpson'",
       image: "/images/scraped/practice-1.jpg",
-      year: "1995-2024",
+      year: "1995-2025",
       network: "ESPN, Netflix, CNN",
       role: "Defense Team Coordinator",
       impact: "Most watched criminal trial in American history",
@@ -73,7 +73,7 @@ export default function MediaPage() {
       subtitle: "Largest Personal Injury Verdict in History",
       description: "National media coverage of the historic General Motors verdict that changed automotive safety standards forever",
       image: "/images/scraped/practice-2.jpg",
-      year: "2024",
+      year: "2025",
       network: "CNN, Fox News, NBC",
       role: "Lead Attorney Carl E. Douglas",
       impact: "Changed automotive industry safety standards",
@@ -97,7 +97,7 @@ export default function MediaPage() {
       subtitle: "Fighting for Justice Against Police Brutality",
       description: "Extensive media coverage of the landmark police brutality verdict that set new precedents for law enforcement accountability",
       image: "/images/scraped/practice-3.jpg",
-      year: "2024",
+      year: "2025",
       network: "CNN, MSNBC, Local News",
       role: "Douglas Hicks Legal Team",
       impact: "New precedent for police accountability",
@@ -121,7 +121,7 @@ export default function MediaPage() {
       subtitle: "Regular Expert Commentary on Major Cases",
       description: "Carl Douglas frequently appears as a legal expert commentator on high-profile criminal and civil cases nationwide",
       image: "/images/scraped/practice-4.jpg",
-      year: "2020-2024",
+      year: "2020-2025",
       network: "CNN, Fox News, Court TV",
       role: "Legal Expert Analyst",
       impact: "Educating public on complex legal issues",
@@ -145,7 +145,7 @@ export default function MediaPage() {
       subtitle: "Carrying Forward Johnnie Cochran's Mission",
       description: "Features about Carl Douglas's role as Managing Attorney at the Cochran Firm and continuing Johnnie Cochran's legacy of fighting for justice",
       image: "/images/scraped/practice-5.jpg",
-      year: "2005-2024",
+      year: "2005-2025",
       network: "BET, CNN, Legal Documentaries",
       role: "Former Managing Attorney",
       impact: "Continuing civil rights advocacy legacy",
@@ -169,7 +169,7 @@ export default function MediaPage() {
       subtitle: "Defending Entertainment Industry Icons",
       description: "Media coverage of Carl Douglas representing major celebrities including Michael Jackson, Jamie Foxx, and Queen Latifah",
       image: "/images/scraped/practice-6.jpg",
-      year: "2000-2024",
+      year: "2000-2025",
       network: "Entertainment Tonight, TMZ, E!",
       role: "Celebrity Defense Attorney",
       impact: "Protecting entertainment industry figures",
@@ -189,17 +189,17 @@ export default function MediaPage() {
 
   const pressReleases = [
     {
-      date: "March 15, 2024",
+      date: "March 15, 2025",
       title: "Douglas Hicks Law Secures $8 Million Verdict in Police Brutality Case",
       summary: "Landmark verdict against Los Angeles County sets new precedent for police accountability"
     },
     {
-      date: "February 28, 2024", 
+      date: "February 28, 2025", 
       title: "Carl E. Douglas Inducted into Consumer Attorneys Hall of Fame",
       summary: "Recognition for lifetime achievement in personal injury and civil rights litigation"
     },
     {
-      date: "January 10, 2024",
+      date: "January 10, 2025",
       title: "$1.576 Million Disability Rights Victory Against Greystar Management",
       summary: "Federal court verdict establishes strong precedent for housing discrimination cases"
     },
