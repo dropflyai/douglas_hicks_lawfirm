@@ -8,6 +8,7 @@ import {
   Clock,
   Eye,
   Star,
+  CheckCircle,
   Search,
   Filter,
   Grid,

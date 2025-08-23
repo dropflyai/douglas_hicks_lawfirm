@@ -552,7 +552,7 @@ export default function LawFlyPlatform() {
                 <span className="text-2xl font-bold text-white">LawFly Pro</span>
               </div>
               <p className="text-gray-400 mb-4">
-                The first legal platform built for firms that take security seriously. Where security isn't an afterthought—it's the foundation.
+                The first legal platform built for firms that take security seriously. Where security isn&apos;t an afterthought—it&apos;s the foundation.
               </p>
               <div className="flex items-center gap-4">
                 <div className="text-blue-400 font-bold">Security-First</div>

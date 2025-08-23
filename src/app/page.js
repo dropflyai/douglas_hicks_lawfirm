@@ -191,7 +191,7 @@ export default function HomePage() {
                     <ul className="text-gray-400 space-y-1">
                       <li>• Security added as afterthought</li>
                       <li>• Vendor controls your encryption keys</li>
-                      <li>• "Trust us" approach to data isolation</li>
+                      <li>• &quot;Trust us&quot; approach to data isolation</li>
                       <li>• Manual compliance preparation</li>
                       <li>• AI uses your data for training</li>
                     </ul>
