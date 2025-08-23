@@ -1,6 +1,6 @@
 {
   "name": "lawfly-pro-platform",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Security-first legal operations platform with BYOK encryption, zero-trust architecture, and multi-tenant isolation",
   "private": true,
   "scripts": {
