@@ -7,9 +7,14 @@ import {
   ArrowUpRight, Sparkles, Activity, Award, Scale,
   ChevronRight, Bell, Search, Settings, User,
   Mic, MicOff, Volume2, AlertTriangle, CheckCircle,
-  BarChart3, Shield, Briefcase, Eye
+  BarChart3, Shield, Briefcase, Eye, X, Globe
 } from 'lucide-react'
 import LegalMessagingHub from '../messaging/LegalMessagingHub'
+import DocumentBrowser from '../documents/DocumentBrowser'
+import DocumentViewer from '../documents/DocumentViewer'
+import DocumentVersionControl from '../documents/DocumentVersionControl'
+import CollaborationHub from '../documents/CollaborationHub'
+import UnifiedBrowser from '../browser/UnifiedBrowser'
 
 const AttorneyCommandCenter = ({ userRole, aiActive, setAiActive }) => {
   const [currentTime, setCurrentTime] = useState(new Date())
@@ -17,6 +22,11 @@ const AttorneyCommandCenter = ({ userRole, aiActive, setAiActive }) => {
   const [aiListening, setAiListening] = useState(false)
   const [showPrediction, setShowPrediction] = useState(false)
   const [showMessaging, setShowMessaging] = useState(false)
+  const [showDocumentBrowser, setShowDocumentBrowser] = useState(false)
+  const [selectedDocument, setSelectedDocument] = useState(null)
+  const [showVersionControl, setShowVersionControl] = useState(false)
+  const [showCollaboration, setShowCollaboration] = useState(false)
+  const [showUnifiedBrowser, setShowUnifiedBrowser] = useState(false)
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000)
@@ -455,6 +465,8 @@ const AttorneyCommandCenter = ({ userRole, aiActive, setAiActive }) => {
       <div className="relative bg-white/5 backdrop-blur-2xl border-t border-white/10 px-8 py-4 sticky bottom-0">
         <div className="flex items-center space-x-3 overflow-x-auto">
           {[
+            { icon: <Globe className="w-5 h-5" />, label: 'AI Browser', action: 'browser', gradient: 'from-indigo-500 to-indigo-600' },
+            { icon: <Briefcase className="w-5 h-5" />, label: 'Document Browser', action: 'documents', gradient: 'from-violet-500 to-violet-600' },
             { icon: <FileText className="w-5 h-5" />, label: 'Draft Motion', action: 'draft', gradient: 'from-blue-500 to-blue-600' },
             { icon: <Scale className="w-5 h-5" />, label: 'Legal Research', action: 'research', gradient: 'from-purple-500 to-purple-600' },
             { icon: <DollarSign className="w-5 h-5" />, label: 'Settlement Calculator', action: 'calculate', gradient: 'from-green-500 to-green-600' },
@@ -468,7 +480,15 @@ const AttorneyCommandCenter = ({ userRole, aiActive, setAiActive }) => {
           ].map((tool) => (
             <button
               key={tool.action}
-              onClick={() => console.log(`${tool.action} clicked`)}
+              onClick={() => {
+                if (tool.action === 'documents') {
+                  setShowDocumentBrowser(true)
+                } else if (tool.action === 'browser') {
+                  setShowUnifiedBrowser(true)
+                } else {
+                  console.log(`${tool.action} clicked`)
+                }
+              }}
               className={`group flex items-center space-x-3 px-4 py-2.5 bg-white/10 hover:bg-gradient-to-r hover:${tool.gradient} backdrop-blur-sm border border-white/20 hover:border-white/30 rounded-2xl text-slate-300 hover:text-white transition-all duration-300 font-medium whitespace-nowrap hover:scale-105 shadow-lg hover:shadow-xl`}
               title={tool.label}
             >
@@ -489,6 +509,63 @@ const AttorneyCommandCenter = ({ userRole, aiActive, setAiActive }) => {
           userRole={userRole}
         />
       )}
+
+      {/* Document Browser Modal */}
+      {showDocumentBrowser && (
+        <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50">
+          <DocumentBrowser
+            caseId={selectedCase?.id || 'general'}
+            userRole={userRole}
+            onDocumentSelect={(doc) => {
+              setSelectedDocument(doc)
+              setShowDocumentBrowser(false)
+            }}
+          />
+          <button
+            onClick={() => setShowDocumentBrowser(false)}
+            className="absolute top-4 right-4 p-3 bg-gray-900 hover:bg-gray-800 rounded-xl text-white transition-colors z-60"
+          >
+            <X className="w-6 h-6" />
+          </button>
+        </div>
+      )}
+
+      {/* Document Viewer Modal */}
+      {selectedDocument && (
+        <DocumentViewer
+          document={selectedDocument}
+          onClose={() => setSelectedDocument(null)}
+          userRole={userRole}
+          collaborators={['Carl Douglas', 'Sarah Johnson', 'Michael Chen']}
+        />
+      )}
+
+      {/* Document Version Control Modal */}
+      {showVersionControl && (
+        <DocumentVersionControl
+          document={selectedDocument}
+          onVersionSelect={(version) => {
+            console.log('Version selected:', version)
+            setShowVersionControl(false)
+          }}
+          onClose={() => setShowVersionControl(false)}
+        />
+      )}
+
+      {/* Collaboration Hub */}
+      <CollaborationHub
+        document={selectedDocument}
+        isActive={showCollaboration}
+        onToggle={() => setShowCollaboration(!showCollaboration)}
+        userRole={userRole}
+      />
+
+      {/* Unified Browser with AI Assistant */}
+      <UnifiedBrowser
+        isOpen={showUnifiedBrowser}
+        onClose={() => setShowUnifiedBrowser(false)}
+        userRole={userRole}
+      />
     </div>
   )
 }
