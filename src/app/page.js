@@ -4,131 +4,106 @@ import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { 
-  Scale, 
   Shield, 
   Gavel, 
   Crown,
   Star,
   ArrowRight,
   PlayCircle,
-  CheckCircle,
   Phone,
   Calendar,
   DollarSign,
   Award,
   Trophy,
-  Target,
   Users,
   Heart,
   Zap,
-  Building,
   Car,
-  Briefcase,
-  Eye,
-  TrendingUp,
+  Brain,
+  MessageCircle,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
   MapPin,
   Mail,
-  Clock,
+  Send,
   Sparkles,
-  Brain,
-  MessageCircle
+  CheckCircle
 } from 'lucide-react'
 
 export default function HomePage() {
   const [currentHeroImage, setCurrentHeroImage] = useState(0)
   const [currentTestimonial, setCurrentTestimonial] = useState(0)
+  const [currentVictory, setCurrentVictory] = useState(0)
   const [isVisible, setIsVisible] = useState(false)
-  const [currentVictoryIndex, setCurrentVictoryIndex] = useState(0)
 
   const heroImages = [
-    '/images/scraped/hero-2.jpg', 
-    '/images/scraped/hero-3.jpg'
+    { src: '/images/scraped/hero-2.jpg', alt: 'Professional attorney 1', brightness: 'brightness-125 contrast-110' },
+    { src: '/images/scraped/hero-3.jpg', alt: 'Professional attorney 2', brightness: '' }
   ]
 
   const victories = [
     {
-      case: "$4.9 BILLION GM VERDICT",
-      description: "Historic ignition switch case - Largest personal injury verdict in Los Angeles history",
-      icon: Car,
-      color: "from-emerald-500 to-green-600"
+      amount: "$4.9 BILLION",
+      type: "Product Liability Victory",
+      description: "Largest Personal Injury Verdict in U.S. History",
+      details: "Carl E. Douglas secured this record-breaking verdict against General Motors, changing automotive safety forever.",
+      attorney: "Carl E. Douglas",
+      year: "Career Defining",
+      bgAmount: "$1.576M",
+      bgLabel: "Career Defining"
     },
     {
-      case: "$8.1 MILLION SHERIFF SETTLEMENT", 
-      description: "Police brutality case - Record settlement for excessive force",
-      icon: Shield,
-      color: "from-blue-500 to-cyan-600"
+      amount: "$8.1 MILLION",
+      type: "Civil Rights Settlement",
+      description: "Police Brutality & Excessive Force",
+      details: "Justice for families affected by law enforcement misconduct, setting new precedents for accountability.",
+      attorney: "Douglas & Hicks",
+      year: "Recent Victory",
+      bgAmount: "$8.1M",
+      bgLabel: "Civil Rights"
     },
     {
-      case: "$5.2 MILLION MEDICAL MALPRACTICE",
-      description: "Surgical negligence - Maximum compensation for permanent disability", 
-      icon: Heart,
-      color: "from-red-500 to-pink-600"
+      amount: "$5.2 MILLION",
+      type: "Medical Malpractice",
+      description: "Surgical Negligence & Hospital Error",
+      details: "Holding healthcare providers accountable for preventable medical errors that change lives forever.",
+      attorney: "Jamon R. Hicks",
+      year: "2023 Victory",
+      bgAmount: "$5.2M",
+      bgLabel: "Medical Justice"
+    },
+    {
+      amount: "$3.8 MILLION",
+      type: "Wrongful Death",
+      description: "Construction Site Accident",
+      details: "Fighting for families who lost loved ones due to preventable workplace accidents and safety violations.",
+      attorney: "Full Team",
+      year: "2023 Settlement",
+      bgAmount: "$3.8M",
+      bgLabel: "Family Justice"
     }
   ]
 
   const testimonials = [
     {
-      name: "Maria Rodriguez",
-      case: "GM Ignition Switch Case",
-      quote: "Douglass Hicks fought GM's army of lawyers and won us $4.9 billion. Justice served.",
-      amount: "$4.9B Settlement",
-      image: "/images/attorneys/douglass-hicks.jpg"
+      quote: "Carl Douglas didn't just win our case - he changed the entire automotive industry. The $4.9 billion verdict means accountability and protection for every family.",
+      name: "Patricia Anderson Family",
+      case: "$4.9B GM Verdict",
+      amount: "$4.9B"
     },
     {
-      name: "Robert Johnson", 
-      case: "Police Brutality Settlement",
-      quote: "They never gave up on my case. $8.1 million won't bring back what I lost, but it's justice.",
-      amount: "$8.1M Recovery",
-      image: "/images/attorneys/carl-douglas.jpg"
+      quote: "This verdict honors our son's memory and ensures his death wasn't in vain. The Douglas Hicks team fought when no one else would.",
+      name: "Johnson Family",
+      case: "$8M Police Brutality Victory",
+      amount: "$8M"
     },
     {
-      name: "Jennifer Chen",
-      case: "Medical Malpractice Victory",
-      quote: "The hospital said it wasn't their fault. Douglass Hicks proved them wrong - $5.2 million.",
-      amount: "$5.2M Verdict",
-      image: "/images/attorneys/jamon-hicks.jpg"
+      quote: "Jamon Hicks secured our children's futures and forced the hospital to change so no other family goes through this.",
+      name: "Martinez Family",
+      case: "$5M Wrongful Death",
+      amount: "$5M"
     }
-  ]
-
-  const practiceAreas = [
-    {
-      icon: Car,
-      title: 'Personal Injury',
-      description: 'Record-breaking settlements for auto accidents, medical malpractice, and product liability',
-      cases: '$4.9B+ Recovered',
-      color: 'from-blue-600 to-cyan-600'
-    },
-    {
-      icon: Shield,
-      title: 'Civil Rights',
-      description: 'Fighting police brutality, discrimination, and constitutional violations',
-      cases: '$8M+ Settlements',
-      color: 'from-green-600 to-emerald-600'
-    },
-    {
-      icon: Gavel,
-      title: 'Criminal Defense',
-      description: 'High-stakes criminal defense with a track record of acquittals',
-      cases: '200+ Cases Won',
-      color: 'from-purple-600 to-violet-600'
-    },
-    {
-      icon: Briefcase,
-      title: 'Employment Law',
-      description: 'Workplace discrimination, wrongful termination, and harassment cases',
-      cases: '150+ Victories',
-      color: 'from-amber-600 to-orange-600'
-    }
-  ]
-
-  const stats = [
-    { value: '$4.9B+', label: 'Recovered for Clients', icon: DollarSign },
-    { value: '500+', label: 'Cases Won', icon: Trophy },
-    { value: '30+', label: 'Years Experience', icon: Award },
-    { value: '98%', label: 'Success Rate', icon: Target }
   ]
 
   useEffect(() => {
@@ -142,42 +117,50 @@ export default function HomePage() {
       setCurrentTestimonial((prev) => (prev + 1) % testimonials.length)
     }, 8000)
 
-    const victoryTimer = setInterval(() => {
-      setCurrentVictoryIndex((prev) => (prev + 1) % victories.length)
-    }, 6000)
-
     return () => {
       clearInterval(heroTimer)
-      clearInterval(testimonialTimer) 
-      clearInterval(victoryTimer)
+      clearInterval(testimonialTimer)
     }
   }, [])
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800">
+    <div className="min-h-screen bg-black">
       {/* Navigation */}
-      <nav className="relative bg-slate-900/95 backdrop-blur-xl border-b border-slate-700 sticky top-0 z-50">
+      <nav className="relative bg-black/90 backdrop-blur-xl border-b border-gray-800 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="/" className="flex items-center">
-              <Scale className="w-8 h-8 text-amber-500 mr-3" />
-              <span className="text-2xl font-bold text-white">
+              <Image
+                src="/images/scraped/logo-main.png"
+                alt="Douglass Hicks Law"
+                width={40}
+                height={40}
+                className="mr-3"
+              />
+              <span className="text-xl font-bold text-white">
                 Douglass Hicks Law
               </span>
             </Link>
             
             <div className="hidden md:flex items-center space-x-8">
-              <Link href="/about" className="text-slate-300 hover:text-white transition-colors">About</Link>
-              <Link href="/practice-areas" className="text-slate-300 hover:text-white transition-colors">Practice Areas</Link>
-              <Link href="/results" className="text-slate-300 hover:text-white transition-colors">Results</Link>
-              <Link href="/team" className="text-slate-300 hover:text-white transition-colors">Team</Link>
-              <Link href="/testimonials" className="text-slate-300 hover:text-white transition-colors">Testimonials</Link>
-              <Link href="/portal" className="text-slate-300 hover:text-white transition-colors">Portal</Link>
+              <Link href="/team" className="text-gray-300 hover:text-white transition-colors">Our Team</Link>
+              <Link href="/case-studies" className="text-gray-300 hover:text-white transition-colors">Case Studies</Link>
+              <Link href="/results" className="text-gray-300 hover:text-white transition-colors">Results</Link>
+              <Link href="/testimonials" className="text-gray-300 hover:text-white transition-colors">Testimonials</Link>
+              <Link href="/media" className="text-gray-300 hover:text-white transition-colors">Media</Link>
+              <Link href="/resources" className="text-gray-300 hover:text-white transition-colors">Resources</Link>
+              <Link href="#contact" className="text-gray-300 hover:text-white transition-colors">Contact</Link>
               <Link 
-                href="tel:+1-555-LAW-FIRM"
-                className="bg-gradient-to-r from-amber-600 to-orange-600 text-white px-6 py-2 rounded-lg hover:scale-105 transition-all font-semibold"
+                href="/portal"
+                className="bg-gradient-to-r from-yellow-600 to-orange-600 text-white px-6 py-2 rounded-lg hover:scale-105 transition-all font-semibold"
               >
-                Call Now
+                Sign In
+              </Link>
+              <Link 
+                href="/intake"
+                className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-lg hover:scale-105 transition-all font-semibold"
+              >
+                Free Case Review
               </Link>
             </div>
           </div>
@@ -185,205 +168,368 @@ export default function HomePage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <section className="relative h-screen flex items-center justify-center overflow-hidden">
         {/* Background Images with Crossfade */}
         <div className="absolute inset-0">
           {heroImages.map((image, index) => (
             <div 
-              key={image}
-              className={`absolute inset-0 transition-opacity duration-2000 ${
-                index === currentHeroImage ? 'opacity-30' : 'opacity-0'
+              key={image.src}
+              className={`absolute inset-0 transition-opacity duration-5000 ${
+                index === currentHeroImage ? 'opacity-100' : 'opacity-0'
               }`}
             >
               <Image
-                src={image}
-                alt="Legal victory"
+                src={image.src}
+                alt={image.alt}
                 fill
-                className="object-cover"
+                className={`object-cover ${image.brightness}`}
                 priority={index === 0}
               />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/80"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/50"></div>
             </div>
           ))}
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-blue-900/80 to-slate-900/90"></div>
-        </div>
-
-        {/* Floating Victory Cards */}
-        <div className="absolute top-20 left-10 hidden lg:block">
-          <div className={`bg-gradient-to-r ${victories[currentVictoryIndex].color} p-4 rounded-xl shadow-2xl transform transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
-            <div className="flex items-center gap-3 text-white">
-              {React.createElement(victories[currentVictoryIndex].icon, { className: "w-8 h-8" })}
-              <div>
-                <div className="font-black text-lg">{victories[currentVictoryIndex].case}</div>
-                <div className="text-sm opacity-90">{victories[currentVictoryIndex].description}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* AI Integration Badge */}
-        <div className="absolute top-20 right-10 hidden lg:block">
-          <div className={`bg-gradient-to-r from-purple-600 to-pink-600 p-4 rounded-xl shadow-2xl transform transition-all duration-1000 delay-500 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
-            <div className="flex items-center gap-3 text-white">
-              <Brain className="w-8 h-8" />
-              <div>
-                <div className="font-black text-lg">AI-POWERED</div>
-                <div className="text-sm opacity-90">Legal Analysis & Research</div>
-              </div>
-            </div>
-          </div>
         </div>
         
-        <div className={`relative z-10 text-center max-w-6xl mx-auto px-4 transform transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'}`}>
+        <div className={`relative z-40 text-center max-w-6xl mx-auto px-4 transform transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'}`}>
           <div className="inline-flex items-center gap-3 mb-8">
-            <Crown className="w-8 h-8 text-amber-400" />
-            <span className="text-amber-400 font-bold text-lg">$4.9 BILLION RECOVERED • 30+ YEARS</span>
-            <Crown className="w-8 h-8 text-amber-400" />
+            <Crown className="w-8 h-8 text-yellow-400" />
+            <span className="text-yellow-400 font-bold text-lg">DREAM TEAM LEGEND</span>
+            <Crown className="w-8 h-8 text-yellow-400" />
           </div>
           
           <h1 className="text-6xl md:text-8xl font-black mb-8 leading-tight">
-            <span className="text-white">FIGHTING FOR</span>
+            <span className="text-white">BILLION</span>
             <br />
-            <span className="bg-gradient-to-r from-amber-400 via-orange-500 to-red-500 bg-clip-text text-transparent">
-              JUSTICE
+            <span className="bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 bg-clip-text text-transparent animate-pulse">
+              DOLLAR
             </span>
+            <br />
+            <span className="text-white">LAWYERS</span>
           </h1>
           
-          <p className="text-2xl md:text-3xl text-slate-300 mb-12 font-light leading-relaxed">
-            Record-breaking verdicts. Unmatched experience. AI-powered legal research.<br />
-            We don't just win cases—we make history.
+          <p className="text-2xl md:text-3xl text-gray-300 mb-12 font-light leading-relaxed">
+            From O.J. Simpson's Dream Team to $4.9B verdicts,<br />
+            we deliver legendary legal representation.
           </p>
 
-          {/* Stats Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12 max-w-4xl mx-auto">
-            {stats.map((stat, index) => (
-              <div key={index} className={`text-center transform transition-all duration-700 delay-${index * 200} ${isVisible ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}`}>
-                <stat.icon className="w-12 h-12 text-amber-400 mx-auto mb-3" />
-                <div className="text-4xl font-black text-white mb-2">{stat.value}</div>
-                <p className="text-slate-400">{stat.label}</p>
-              </div>
-            ))}
-          </div>
-
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-6 justify-center">
+          <div className="flex flex-col sm:flex-row gap-6 justify-center mb-12">
             <Link 
-              href="tel:+1-555-LAW-FIRM"
-              className="inline-flex items-center px-12 py-6 text-xl font-black text-white bg-gradient-to-r from-amber-600 via-orange-600 to-red-600 rounded-xl hover:scale-105 transition-all transform shadow-2xl"
+              href="/intake"
+              className="inline-flex items-center px-12 py-6 text-xl font-black text-black bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 rounded-xl hover:scale-105 transition-all transform shadow-2xl"
             >
-              <Phone className="mr-3 h-6 w-6" />
-              FREE Consultation
+              <Zap className="mr-3 h-6 w-6" />
+              FREE AI Case Analysis
             </Link>
             <Link 
               href="/portal"
-              className="inline-flex items-center px-12 py-6 text-xl font-black text-white bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-600 rounded-xl hover:scale-105 transition-all transform shadow-2xl"
+              className="inline-flex items-center px-12 py-6 text-xl font-black text-white bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl hover:scale-105 transition-all transform shadow-2xl"
             >
-              <Users className="mr-3 h-6 w-6" />
-              Client Portal
+              <Shield className="mr-3 h-6 w-6" />
+              Sign In
             </Link>
+            <button className="inline-flex items-center px-12 py-6 text-xl font-black text-white bg-transparent border-4 border-white rounded-xl hover:bg-white hover:text-black transition-all transform hover:scale-105">
+              <PlayCircle className="mr-3 h-6 w-6" />
+              Watch Our Story
+            </button>
           </div>
 
-          {/* Trust Indicators */}
-          <div className="flex items-center justify-center gap-8 mt-12 text-sm text-slate-400">
-            <div className="flex items-center gap-2">
-              <CheckCircle className="w-5 h-5 text-green-400" />
-              <span>No Fee Unless We Win</span>
+          {/* Stats Grid */}
+          <div className="grid md:grid-cols-4 gap-8">
+            <div className="text-center">
+              <div className="text-4xl font-black text-yellow-400 mb-2">$4.9B</div>
+              <p className="text-gray-400">Record Verdict</p>
             </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle className="w-5 h-5 text-green-400" />
-              <span>24/7 Available</span>
+            <div className="text-center">
+              <div className="text-4xl font-black text-green-400 mb-2">30+</div>
+              <p className="text-gray-400">Years Experience</p>
             </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle className="w-5 h-5 text-green-400" />
-              <span>Free Case Review</span>
+            <div className="text-center">
+              <div className="text-4xl font-black text-blue-400 mb-2">1,100+</div>
+              <p className="text-gray-400">Cases Won</p>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-black text-purple-400 mb-2">98%</div>
+              <p className="text-gray-400">Client Satisfaction</p>
             </div>
           </div>
         </div>
-      </section>
 
-      {/* Record Verdicts Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-slate-800/50">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-5xl font-black text-white mb-6">
-              RECORD-BREAKING VICTORIES
-            </h2>
-            <p className="text-xl text-slate-400">
-              When billion-dollar corporations think they're untouchable, we prove them wrong
-            </p>
-          </div>
-
-          <div className="grid lg:grid-cols-3 gap-8">
-            {victories.map((victory, index) => (
-              <div key={index} className={`bg-gradient-to-br ${victory.color} rounded-2xl p-8 text-center transform hover:scale-105 transition-all`}>
-                <victory.icon className="w-16 h-16 text-white mx-auto mb-6" />
-                <h3 className="text-2xl font-black text-white mb-4">{victory.case}</h3>
-                <p className="text-white/90 leading-relaxed">{victory.description}</p>
-                <Link 
-                  href="/results"
-                  className="inline-flex items-center mt-6 text-white font-bold hover:text-yellow-300 transition-colors"
-                >
-                  Read Case Details
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </Link>
-              </div>
-            ))}
-          </div>
-
-          <div className="text-center mt-12">
-            <Link 
-              href="/results"
-              className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-amber-600 to-orange-600 text-white font-bold rounded-lg hover:scale-105 transition-all"
-            >
-              <Trophy className="mr-2 h-5 w-5" />
-              View All Victories
-            </Link>
-          </div>
+        {/* Scroll indicator */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+          <ChevronDown className="w-8 h-8 text-white" />
         </div>
       </section>
 
-      {/* Practice Areas */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-slate-900 to-slate-800">
+      {/* Legendary Victories Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-900 to-black">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-5xl font-black text-white mb-6">
-              PRACTICE AREAS
+              LEGENDARY VICTORIES
             </h2>
-            <p className="text-xl text-slate-400">
-              Comprehensive legal services with a proven track record of success
+            <p className="text-xl text-gray-400">
+              Record-breaking verdicts that changed legal history
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-2 xl:grid-cols-4 gap-8">
-            {practiceAreas.map((area, index) => (
-              <div key={index} className="bg-gradient-to-br from-slate-700 to-slate-800 rounded-2xl p-8 border border-slate-600 hover:border-amber-500 transition-all hover:scale-105 group">
-                <div className={`w-16 h-16 bg-gradient-to-r ${area.color} rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
-                  <area.icon className="w-8 h-8 text-white" />
+          <div className="relative">
+            <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl overflow-hidden border border-gray-700">
+              <div className="grid lg:grid-cols-2 gap-0">
+                <div className="relative h-96 lg:h-auto">
+                  <div className="w-full h-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center">
+                    <div className="text-center p-8">
+                      <div className="text-8xl font-black text-white/20 mb-4">{victories[currentVictory].bgAmount}</div>
+                      <div className="text-white font-bold text-xl opacity-80">{victories[currentVictory].bgLabel}</div>
+                    </div>
+                  </div>
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-4">{area.title}</h3>
-                <p className="text-slate-400 mb-6 leading-relaxed">{area.description}</p>
-                <div className="text-amber-400 font-bold mb-4">{area.cases}</div>
-                <Link 
-                  href="/practice-areas"
-                  className="inline-flex items-center text-orange-400 hover:text-orange-300 font-semibold"
-                >
-                  Learn More
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Link>
+                <div className="p-12 flex flex-col justify-center">
+                  <div className="text-6xl font-black bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent mb-4">
+                    {victories[currentVictory].amount}
+                  </div>
+                  <h3 className="text-3xl font-bold text-white mb-2">{victories[currentVictory].type}</h3>
+                  <p className="text-blue-400 font-semibold text-lg mb-4">{victories[currentVictory].description}</p>
+                  <p className="text-gray-300 mb-6 leading-relaxed">{victories[currentVictory].details}</p>
+                  <div className="grid grid-cols-2 gap-4 mb-6">
+                    <div>
+                      <div className="text-sm text-gray-400">Lead Attorney</div>
+                      <div className="text-white font-semibold">{victories[currentVictory].attorney}</div>
+                    </div>
+                    <div>
+                      <div className="text-sm text-gray-400">Year</div>
+                      <div className="text-white font-semibold">{victories[currentVictory].year}</div>
+                    </div>
+                  </div>
+                  <Link 
+                    href="/case-studies"
+                    className="inline-flex items-center text-blue-400 hover:text-blue-300 font-semibold"
+                  >
+                    Read Full Case Study
+                    <ArrowRight className="w-5 h-5 ml-2" />
+                  </Link>
+                </div>
               </div>
-            ))}
+            </div>
+
+            {/* Navigation */}
+            <button 
+              onClick={() => setCurrentVictory((prev) => (prev - 1 + victories.length) % victories.length)}
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/70 transition-all"
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+            <button 
+              onClick={() => setCurrentVictory((prev) => (prev + 1) % victories.length)}
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/70 transition-all"
+            >
+              <ChevronRight className="w-6 h-6" />
+            </button>
+
+            {/* Dots */}
+            <div className="flex justify-center gap-2 mt-8">
+              {victories.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentVictory(index)}
+                  className={`w-3 h-3 rounded-full transition-all ${
+                    index === currentVictory ? 'bg-blue-400' : 'bg-gray-600'
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Legal Expertise Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-black to-gray-900">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-5xl font-black text-white mb-6">
+              LEGAL EXPERTISE
+            </h2>
+            <p className="text-xl text-gray-400">
+              Elite representation across all major practice areas
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="group cursor-pointer">
+              <div className="relative bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl overflow-hidden border border-gray-700 hover:border-blue-500 transition-all duration-500 transform hover:scale-[1.02]">
+                <div className="absolute inset-0 opacity-20 bg-gradient-to-br from-red-600 to-orange-600"></div>
+                <div className="relative p-8">
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-r from-red-600 to-orange-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <Shield className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-white mb-2">Civil Rights</h3>
+                  <p className="text-gray-400 mb-4">Police brutality, discrimination, constitutional violations</p>
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <div className="text-green-400 font-semibold text-sm">$8M+ Recent Victories</div>
+                      <div className="text-blue-400 text-xs">Dream Team Experience</div>
+                    </div>
+                    <ArrowRight className="w-5 h-5 text-gray-500 group-hover:text-blue-400 transition-colors" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="group cursor-pointer">
+              <div className="relative bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl overflow-hidden border border-gray-700 hover:border-blue-500 transition-all duration-500 transform hover:scale-[1.02]">
+                <div className="absolute inset-0 opacity-20 bg-gradient-to-br from-blue-600 to-purple-600"></div>
+                <div className="relative p-8">
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <Car className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-white mb-2">Personal Injury</h3>
+                  <p className="text-gray-400 mb-4">Auto accidents, medical malpractice, product liability</p>
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <div className="text-green-400 font-semibold text-sm">$4.9B Record Verdict</div>
+                      <div className="text-blue-400 text-xs">Maximum Recovery</div>
+                    </div>
+                    <ArrowRight className="w-5 h-5 text-gray-500 group-hover:text-blue-400 transition-colors" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="group cursor-pointer">
+              <div className="relative bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl overflow-hidden border border-gray-700 hover:border-blue-500 transition-all duration-500 transform hover:scale-[1.02]">
+                <div className="absolute inset-0 opacity-20 bg-gradient-to-br from-purple-600 to-pink-600"></div>
+                <div className="relative p-8">
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <Heart className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-white mb-2">Wrongful Death</h3>
+                  <p className="text-gray-400 mb-4">Medical malpractice, negligence, family advocacy</p>
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <div className="text-green-400 font-semibold text-sm">$5M+ Settlements</div>
+                      <div className="text-blue-400 text-xs">Compassionate Representation</div>
+                    </div>
+                    <ArrowRight className="w-5 h-5 text-gray-500 group-hover:text-blue-400 transition-colors" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="group cursor-pointer">
+              <div className="relative bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl overflow-hidden border border-gray-700 hover:border-blue-500 transition-all duration-500 transform hover:scale-[1.02]">
+                <div className="absolute inset-0 opacity-20 bg-gradient-to-br from-gray-600 to-gray-800"></div>
+                <div className="relative p-8">
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-r from-gray-600 to-gray-800 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <Gavel className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-white mb-2">Criminal Defense</h3>
+                  <p className="text-gray-400 mb-4">High-profile cases, serious felonies, appeals</p>
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <div className="text-green-400 font-semibold text-sm">Not Guilty Verdicts</div>
+                      <div className="text-blue-400 text-xs">O.J. Simpson Dream Team</div>
+                    </div>
+                    <ArrowRight className="w-5 h-5 text-gray-500 group-hover:text-blue-400 transition-colors" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Dream Team Legacy Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-gray-900 via-black to-gray-900">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div>
+              <div className="inline-flex items-center gap-3 mb-6">
+                <Crown className="w-8 h-8 text-yellow-400" />
+                <span className="text-yellow-400 font-bold text-lg">DREAM TEAM LEGACY</span>
+              </div>
+              
+              <h2 className="text-5xl font-black text-white mb-6">
+                FROM THE TRIAL OF THE CENTURY
+              </h2>
+              
+              <p className="text-xl text-gray-300 mb-8 leading-relaxed">
+                Carl E. Douglas, founding partner and Dream Team coordinator, brings legendary experience from the most watched criminal trial in American history to every case we handle.
+              </p>
+              
+              <div className="space-y-4 mb-8">
+                <div className="flex items-center gap-3">
+                  <Star className="w-5 h-5 text-yellow-400" />
+                  <span className="text-gray-300">O.J. Simpson Defense Team Coordinator</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Star className="w-5 h-5 text-yellow-400" />
+                  <span className="text-gray-300">Former Cochran Firm Managing Attorney</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Star className="w-5 h-5 text-yellow-400" />
+                  <span className="text-gray-300">Celebrity Defense Attorney</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Star className="w-5 h-5 text-yellow-400" />
+                  <span className="text-gray-300">$4.9B Record Verdict Winner</span>
+                </div>
+              </div>
+              
+              <Link 
+                href="/team"
+                className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold rounded-lg hover:scale-105 transition-all"
+              >
+                <Users className="w-5 h-5 mr-2" />
+                Meet the Dream Team
+              </Link>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-4">
+                <div className="relative h-48 rounded-xl overflow-hidden bg-gradient-to-br from-yellow-600 to-orange-600 flex items-center justify-center">
+                  <div className="text-center">
+                    <Crown className="w-16 h-16 text-white/80 mx-auto mb-4" />
+                    <div className="text-white font-bold text-lg">Dream Team</div>
+                    <div className="text-white/80 text-sm">O.J. Simpson Trial</div>
+                  </div>
+                </div>
+                <div className="relative h-32 rounded-xl overflow-hidden bg-gradient-to-br from-green-600 to-emerald-600 flex items-center justify-center">
+                  <div className="text-center">
+                    <DollarSign className="w-12 h-12 text-white/80 mx-auto mb-2" />
+                    <div className="text-white font-bold">$4.9B Record</div>
+                  </div>
+                </div>
+              </div>
+              <div className="space-y-4 mt-8">
+                <div className="relative h-32 rounded-xl overflow-hidden bg-gradient-to-br from-red-600 to-pink-600 flex items-center justify-center">
+                  <div className="text-center">
+                    <Shield className="w-12 h-12 text-white/80 mx-auto mb-2" />
+                    <div className="text-white font-bold">Civil Rights</div>
+                  </div>
+                </div>
+                <div className="relative h-48 rounded-xl overflow-hidden bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center">
+                  <div className="text-center">
+                    <Users className="w-16 h-16 text-white/80 mx-auto mb-4" />
+                    <div className="text-white font-bold text-lg">Expert Team</div>
+                    <div className="text-white/80 text-sm">30+ Years Experience</div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Client Testimonials */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-slate-800/50">
-        <div className="max-w-4xl mx-auto">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-900 to-black">
+        <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-5xl font-black text-white mb-6">
-              CLIENT TESTIMONIALS
+              CLIENT VICTORIES
             </h2>
-            <p className="text-xl text-slate-400">
-              Hear from clients whose lives we've transformed through justice
+            <p className="text-xl text-gray-400">
+              Real stories from real families whose lives we've changed
             </p>
           </div>
 
@@ -392,28 +538,31 @@ export default function HomePage() {
               <div 
                 key={index}
                 className={`transition-all duration-1000 ${
-                  index === currentTestimonial ? 'opacity-100 transform translate-x-0' : 'opacity-0 transform translate-x-full absolute inset-0'
+                  index === currentTestimonial 
+                    ? 'opacity-100 translate-x-0' 
+                    : index < currentTestimonial 
+                      ? 'opacity-0 absolute inset-0 -translate-x-8' 
+                      : 'opacity-0 absolute inset-0 translate-x-8'
                 }`}
               >
-                <div className="bg-gradient-to-br from-slate-700 to-slate-800 rounded-2xl p-8 border border-slate-600">
-                  <div className="flex items-center mb-6">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-6 h-6 text-yellow-400 fill-current" />
-                    ))}
-                  </div>
-                  
-                  <blockquote className="text-2xl text-white font-light leading-relaxed mb-8">
-                    "{testimonial.quote}"
-                  </blockquote>
-                  
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="font-bold text-white text-xl">{testimonial.name}</div>
-                      <div className="text-slate-400">{testimonial.case}</div>
+                <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-12 border border-gray-700">
+                  <div className="grid lg:grid-cols-3 gap-8 items-center">
+                    <div className="lg:col-span-2">
+                      <div className="text-4xl text-blue-400 mb-6">"</div>
+                      <blockquote className="text-2xl text-white italic mb-8 leading-relaxed">
+                        {testimonial.quote}
+                      </blockquote>
+                      <div>
+                        <div className="text-lg font-bold text-white">{testimonial.name}</div>
+                        <div className="text-blue-400 font-semibold">{testimonial.case}</div>
+                      </div>
                     </div>
-                    <div className="text-right">
-                      <div className="text-2xl font-black text-green-400">{testimonial.amount}</div>
-                      <div className="text-slate-400 text-sm">Settlement/Verdict</div>
+                    <div className="relative h-64 rounded-xl overflow-hidden bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center">
+                      <div className="text-center">
+                        <Trophy className="w-20 h-20 text-white/80 mx-auto mb-4" />
+                        <div className="text-white font-bold text-xl">{testimonial.amount}</div>
+                        <div className="text-white/80 text-sm">Victory</div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -421,13 +570,13 @@ export default function HomePage() {
             ))}
 
             {/* Navigation dots */}
-            <div className="flex justify-center mt-8 gap-3">
+            <div className="flex justify-center gap-2 mt-8">
               {testimonials.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => setCurrentTestimonial(index)}
                   className={`w-3 h-3 rounded-full transition-all ${
-                    index === currentTestimonial ? 'bg-amber-400 scale-125' : 'bg-slate-600 hover:bg-slate-500'
+                    index === currentTestimonial ? 'bg-blue-400' : 'bg-gray-600'
                   }`}
                 />
               ))}
@@ -437,160 +586,205 @@ export default function HomePage() {
       </section>
 
       {/* AI Integration Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-purple-900 via-blue-900 to-slate-900">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <div className="inline-flex items-center gap-3 mb-8">
-                <Brain className="w-8 h-8 text-purple-400" />
-                <span className="text-purple-400 font-bold text-lg">AI-POWERED LEGAL TECHNOLOGY</span>
-              </div>
-              
-              <h2 className="text-5xl font-black text-white mb-8">
-                THE FUTURE OF LAW IS HERE
-              </h2>
-              
-              <p className="text-xl text-slate-300 mb-8 leading-relaxed">
-                Our proprietary AI system analyzes millions of legal precedents in seconds, 
-                giving us an unprecedented advantage in building winning cases.
-              </p>
-              
-              <div className="grid grid-cols-2 gap-6 mb-8">
-                <div className="text-center">
-                  <div className="text-3xl font-black text-purple-400 mb-2">2.4s</div>
-                  <p className="text-slate-400">Average AI Response Time</p>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-black text-blue-400 mb-2">98.7%</div>
-                  <p className="text-slate-400">Legal Analysis Accuracy</p>
-                </div>
-              </div>
-              
-              <Link 
-                href="/portal"
-                className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold rounded-lg hover:scale-105 transition-all"
-              >
-                <MessageCircle className="mr-2 h-5 w-5" />
-                Try AI Legal Assistant
-              </Link>
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-900 via-purple-900 to-blue-900">
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="inline-flex items-center gap-3 mb-8">
+            <Brain className="w-8 h-8 text-blue-400" />
+            <Sparkles className="w-6 h-6 text-yellow-400" />
+            <Gavel className="w-8 h-8 text-blue-400" />
+          </div>
+          
+          <h2 className="text-5xl font-black text-white mb-8">
+            GET INSTANT CASE ANALYSIS
+          </h2>
+          <p className="text-2xl text-white/90 mb-12 leading-relaxed">
+            Our AI-powered system will analyze your case, match you with the right attorney, and provide an estimated case value - all in minutes.
+          </p>
+          
+          <div className="flex flex-col sm:flex-row gap-6 justify-center">
+            <Link 
+              href="/intake"
+              className="inline-flex items-center px-12 py-6 text-xl font-black text-black bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 rounded-xl hover:scale-105 transition-all transform shadow-2xl"
+            >
+              <Brain className="mr-3 h-6 w-6" />
+              Start AI Case Analysis
+            </Link>
+            <button className="inline-flex items-center px-12 py-6 text-xl font-black text-white bg-transparent border-4 border-white rounded-xl hover:bg-white hover:text-blue-900 transition-all transform hover:scale-105">
+              <MessageCircle className="mr-3 h-6 w-6" />
+              Chat with Maya AI
+            </button>
+          </div>
+
+          <div className="flex items-center justify-center gap-8 mt-12 text-sm text-white/70">
+            <div className="flex items-center gap-2">
+              <CheckCircle className="w-5 h-5" />
+              <span>100% Confidential</span>
             </div>
-            
-            <div className="relative">
-              <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-8 border border-slate-600">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-4 h-4 bg-red-500 rounded-full"></div>
-                  <div className="w-4 h-4 bg-yellow-500 rounded-full"></div>
-                  <div className="w-4 h-4 bg-green-500 rounded-full"></div>
-                  <span className="text-slate-400 text-sm ml-4">AI Legal Research Terminal</span>
-                </div>
-                
-                <div className="space-y-4 text-sm">
-                  <div className="text-green-400">$ analyze-precedent --case="product-liability" --jurisdiction="california"</div>
-                  <div className="text-slate-300">Analyzing 47,392 similar cases...</div>
-                  <div className="text-slate-300">Found 23 winning precedents with $4.9B+ recoveries</div>
-                  <div className="text-blue-400">Strongest argument: Manufacturing defect pattern (87% win rate)</div>
-                  <div className="text-purple-400">Recommended strategy: Class action with individual settlements</div>
-                  <div className="text-amber-400">Estimated case value: $2.1B - $4.9B</div>
-                  <div className="text-green-400">$ </div>
-                </div>
-              </div>
+            <div className="flex items-center gap-2">
+              <CheckCircle className="w-5 h-5" />
+              <span>No Obligation</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <CheckCircle className="w-5 h-5" />
+              <span>Free Analysis</span>
             </div>
           </div>
         </div>
       </section>
 
       {/* Contact Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-amber-900 via-orange-900 to-red-900">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center gap-3 mb-8">
-            <Scale className="w-8 h-8 text-amber-400" />
-            <Sparkles className="w-6 h-6 text-yellow-400" />
-            <Gavel className="w-8 h-8 text-amber-400" />
-          </div>
-          
-          <h2 className="text-5xl font-black text-white mb-8">
-            READY TO MAKE HISTORY?
-          </h2>
-          <p className="text-2xl text-white/90 mb-12 leading-relaxed">
-            Don't let corporations get away with it. Join the hundreds of clients who've won life-changing settlements. 
-            Your fight for justice starts with one phone call.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-6 justify-center mb-12">
-            <Link 
-              href="tel:+1-555-LAW-FIRM"
-              className="inline-flex items-center px-16 py-8 text-3xl font-black text-white bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl hover:scale-105 transition-all transform shadow-2xl"
-            >
-              <Phone className="mr-4 h-8 w-8" />
-              CALL NOW: (555) LAW-FIRM
-            </Link>
+      <section id="contact" className="py-20 px-4 sm:px-6 lg:px-8 bg-black">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-5xl font-black text-white mb-6">
+              READY TO WIN?
+            </h2>
+            <p className="text-xl text-gray-400">
+              Contact the billion-dollar legal team today
+            </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-6 border border-white/20">
-              <Phone className="w-12 h-12 text-amber-400 mx-auto mb-4" />
-              <div className="font-bold text-white text-lg">(555) LAW-FIRM</div>
-              <div className="text-white/80">24/7 Emergency Line</div>
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div>
+              <div className="space-y-8">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                    <Phone className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-white mb-2">24/7 Emergency Line</h3>
+                    <p className="text-2xl font-black text-blue-400">(213) 995-3991</p>
+                    <p className="text-gray-400">Immediate response for urgent legal matters</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-gradient-to-r from-green-600 to-emerald-600 rounded-lg flex items-center justify-center">
+                    <MapPin className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-white mb-2">Los Angeles Office</h3>
+                    <p className="text-gray-400">
+                      5120 W. Goldleaf Circle, Suite 140<br />
+                      Los Angeles, CA 90056
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-gradient-to-r from-yellow-600 to-orange-600 rounded-lg flex items-center justify-center">
+                    <Mail className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-white mb-2">Email Us</h3>
+                    <p className="text-blue-400 font-semibold">info@douglashickslaw.com</p>
+                    <p className="text-gray-400">We respond within hours</p>
+                  </div>
+                </div>
+              </div>
             </div>
-            
-            <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-6 border border-white/20">
-              <Calendar className="w-12 h-12 text-amber-400 mx-auto mb-4" />
-              <div className="font-bold text-white text-lg">Free Consultation</div>
-              <div className="text-white/80">No obligation case review</div>
-            </div>
-            
-            <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-6 border border-white/20">
-              <DollarSign className="w-12 h-12 text-amber-400 mx-auto mb-4" />
-              <div className="font-bold text-white text-lg">No Fee Unless We Win</div>
-              <div className="text-white/80">You pay nothing upfront</div>
+
+            <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-8 border border-gray-700">
+              <h3 className="text-2xl font-bold text-white mb-6">Free Case Evaluation</h3>
+              <form className="space-y-6">
+                <div>
+                  <input
+                    type="text"
+                    placeholder="Your Name *"
+                    required
+                    className="w-full p-4 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <input
+                    type="email"
+                    placeholder="Your Email *"
+                    required
+                    className="w-full p-4 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <input
+                    type="tel"
+                    placeholder="Your Phone *"
+                    required
+                    className="w-full p-4 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <textarea
+                    placeholder="Tell us about your case... *"
+                    rows={4}
+                    required
+                    className="w-full p-4 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="w-full py-4 rounded-lg font-bold transition-all bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:scale-105"
+                >
+                  <span className="flex items-center justify-center gap-2">
+                    <Send className="w-5 h-5" />
+                    Get Free Consultation
+                  </span>
+                </button>
+                <p className="text-gray-400 text-xs text-center">
+                  * Required fields. All information is confidential and protected by attorney-client privilege.
+                </p>
+              </form>
             </div>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-slate-900 border-t border-slate-700 py-12 px-4 sm:px-6 lg:px-8">
+      <footer className="bg-gray-900 border-t border-gray-800 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-4 gap-8">
             <div className="md:col-span-2">
               <div className="flex items-center mb-4">
-                <Scale className="w-8 h-8 text-amber-500 mr-3" />
-                <span className="text-2xl font-bold text-white">Douglass Hicks Law</span>
+                <Image
+                  src="/images/scraped/logo-main.png"
+                  alt="Douglass Hicks Law"
+                  width={40}
+                  height={40}
+                  className="mr-3"
+                />
+                <span className="text-xl font-bold text-white">Douglass Hicks Law</span>
               </div>
-              <p className="text-slate-400 mb-4">
-                Record-breaking verdicts. Unmatched experience. We don't just win cases—we make history.
+              <p className="text-gray-400 mb-4">
+                Billion-dollar legal representation from the O.J. Simpson Dream Team. Fighting for justice since 1990.
               </p>
               <div className="flex items-center gap-4">
-                <div className="text-amber-400 font-bold">$4.9B+ Recovered</div>
-                <div className="text-green-400 font-bold">500+ Cases Won</div>
-                <div className="text-blue-400 font-bold">AI-Powered</div>
+                <div className="text-yellow-400 font-bold">$4.9B Record Verdict</div>
+                <div className="text-blue-400 font-bold">Dream Team Legacy</div>
               </div>
             </div>
             
             <div>
               <h4 className="text-lg font-bold text-white mb-4">Practice Areas</h4>
-              <ul className="space-y-2 text-slate-400">
-                <li><Link href="/practice-areas" className="hover:text-white transition-colors">Personal Injury</Link></li>
-                <li><Link href="/practice-areas" className="hover:text-white transition-colors">Civil Rights</Link></li>
-                <li><Link href="/practice-areas" className="hover:text-white transition-colors">Criminal Defense</Link></li>
-                <li><Link href="/practice-areas" className="hover:text-white transition-colors">Employment Law</Link></li>
+              <ul className="space-y-2 text-gray-400">
+                <li><Link href="/practice-areas/civil-rights" className="hover:text-white transition-colors">Civil Rights</Link></li>
+                <li><Link href="/practice-areas/personal-injury" className="hover:text-white transition-colors">Personal Injury</Link></li>
+                <li><Link href="/practice-areas/criminal-defense" className="hover:text-white transition-colors">Criminal Defense</Link></li>
+                <li><Link href="/practice-areas/wrongful-death" className="hover:text-white transition-colors">Wrongful Death</Link></li>
               </ul>
             </div>
             
             <div>
               <h4 className="text-lg font-bold text-white mb-4">Quick Links</h4>
-              <ul className="space-y-2 text-slate-400">
-                <li><Link href="/results" className="hover:text-white transition-colors">Case Results</Link></li>
-                <li><Link href="/team" className="hover:text-white transition-colors">Legal Team</Link></li>
+              <ul className="space-y-2 text-gray-400">
+                <li><Link href="/team" className="hover:text-white transition-colors">Our Team</Link></li>
+                <li><Link href="/case-studies" className="hover:text-white transition-colors">Case Studies</Link></li>
                 <li><Link href="/testimonials" className="hover:text-white transition-colors">Testimonials</Link></li>
-                <li><Link href="/portal" className="hover:text-white transition-colors">Client Portal</Link></li>
+                <li><Link href="/intake" className="hover:text-white transition-colors">Free Case Review</Link></li>
               </ul>
             </div>
           </div>
           
-          <div className="border-t border-slate-800 mt-8 pt-8 text-center">
-            <p className="text-slate-500 text-sm">
-              © 2024 Douglass Hicks Law Firm. All rights reserved. | Fighting for Justice Since 1995
+          <div className="border-t border-gray-800 mt-8 pt-8 text-center">
+            <p className="text-gray-500 text-sm">
+              © 2025 Douglass Hicks Law. All rights reserved. | Dream Team Legacy | $4.9B Record Verdict
             </p>
           </div>
         </div>
