@@ -241,10 +241,10 @@ export default function HomePage() {
           </div>
           
           <h1 className="text-6xl md:text-8xl font-black mb-8 leading-tight">
-            <span className="text-white">FIGHTING FOR</span>
+            <span className="text-white">🚨 TEST DEPLOYMENT</span>
             <br />
             <span className="bg-gradient-to-r from-amber-400 via-orange-500 to-red-500 bg-clip-text text-transparent">
-              JUSTICE
+              ENTERPRISE SYSTEM ACTIVE
             </span>
           </h1>
           
