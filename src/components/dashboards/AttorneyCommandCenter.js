@@ -98,8 +98,8 @@ const AttorneyCommandCenter = ({ userRole, aiActive, setAiActive }) => {
       time: '10:30 AM',
       title: 'AI Case Review Session',
       type: 'ai-session',
-      aiNote: '🔍 Review 3 new opportunities identified by LEX',
-      participants: ['LEX AI', 'Paralegals'],
+      aiNote: '🔍 Review 3 new opportunities identified by Maya',
+      participants: ['Maya AI', 'Paralegals'],
       duration: '30m'
     },
     {
@@ -158,7 +158,7 @@ const AttorneyCommandCenter = ({ userRole, aiActive, setAiActive }) => {
               <div className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-sm border border-purple-400/30 px-6 py-3 rounded-2xl shadow-xl">
                 <div className="flex items-center space-x-3">
                   <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse shadow-lg shadow-green-400/50"></div>
-                  <span className="text-purple-200 font-medium">LEX AI Online</span>
+                  <span className="text-purple-200 font-medium">Maya AI Online</span>
                   <div className="w-px h-4 bg-purple-400/30"></div>
                   <span className="text-slate-300 text-sm">3 insights pending</span>
                 </div>
@@ -187,6 +187,36 @@ const AttorneyCommandCenter = ({ userRole, aiActive, setAiActive }) => {
                 <MessageCircle className="w-5 h-5" />
                 <span className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full animate-pulse shadow-lg shadow-green-500/50"></span>
               </button>
+
+              {/* Core Action Tools */}
+              <div className="flex items-center space-x-2 ml-4 pl-4 border-l border-gray-700">
+                <button
+                  onClick={() => setShowUnifiedBrowser(true)}
+                  className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-indigo-500/20 to-indigo-600/20 border border-indigo-500/30 text-indigo-200 hover:from-indigo-500/30 hover:to-indigo-600/30 rounded-xl transition-all duration-300 shadow-lg hover:shadow-indigo-500/20"
+                  title="AI Browser"
+                >
+                  <Globe className="w-4 h-4" />
+                  <span className="hidden lg:inline text-sm font-medium">AI Browser</span>
+                </button>
+
+                <button
+                  onClick={() => setShowDocumentBrowser(true)}
+                  className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-violet-500/20 to-violet-600/20 border border-violet-500/30 text-violet-200 hover:from-violet-500/30 hover:to-violet-600/30 rounded-xl transition-all duration-300 shadow-lg hover:shadow-violet-500/20"
+                  title="Document Browser"
+                >
+                  <Briefcase className="w-4 h-4" />
+                  <span className="hidden lg:inline text-sm font-medium">Documents</span>
+                </button>
+
+                <button
+                  onClick={() => console.log('Legal Research clicked')}
+                  className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-500/20 to-purple-600/20 border border-purple-500/30 text-purple-200 hover:from-purple-500/30 hover:to-purple-600/30 rounded-xl transition-all duration-300 shadow-lg hover:shadow-purple-500/20"
+                  title="Legal Research"
+                >
+                  <Scale className="w-4 h-4" />
+                  <span className="hidden lg:inline text-sm font-medium">Research</span>
+                </button>
+              </div>
 
               <div className="flex items-center space-x-3 ml-4 pl-4 border-l border-gray-700">
                 <div className="text-right">
@@ -435,8 +465,8 @@ const AttorneyCommandCenter = ({ userRole, aiActive, setAiActive }) => {
                 <Brain className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h4 className="font-bold text-white">LEX AI Quick Actions</h4>
-                <p className="text-xs text-gray-400">Voice enabled • Say "Hey LEX" to activate</p>
+                <h4 className="font-bold text-white">Maya AI Quick Actions</h4>
+                <p className="text-xs text-gray-400">Voice enabled • Say "Hey Maya" to activate</p>
               </div>
             </div>
             
@@ -461,45 +491,6 @@ const AttorneyCommandCenter = ({ userRole, aiActive, setAiActive }) => {
         </div>
       </div>
 
-      {/* Modern Attorney Toolbar */}
-      <div className="relative bg-white/5 backdrop-blur-2xl border-t border-white/10 px-8 py-4 sticky bottom-0">
-        <div className="flex items-center space-x-3 overflow-x-auto">
-          {[
-            { icon: <Globe className="w-5 h-5" />, label: 'AI Browser', action: 'browser', gradient: 'from-indigo-500 to-indigo-600' },
-            { icon: <Briefcase className="w-5 h-5" />, label: 'Document Browser', action: 'documents', gradient: 'from-violet-500 to-violet-600' },
-            { icon: <FileText className="w-5 h-5" />, label: 'Draft Motion', action: 'draft', gradient: 'from-blue-500 to-blue-600' },
-            { icon: <Scale className="w-5 h-5" />, label: 'Legal Research', action: 'research', gradient: 'from-purple-500 to-purple-600' },
-            { icon: <DollarSign className="w-5 h-5" />, label: 'Settlement Calculator', action: 'calculate', gradient: 'from-green-500 to-green-600' },
-            { icon: <BarChart3 className="w-5 h-5" />, label: 'Case Analysis', action: 'analyze', gradient: 'from-orange-500 to-orange-600' },
-            { icon: <Calendar className="w-5 h-5" />, label: 'Schedule Court', action: 'schedule', gradient: 'from-pink-500 to-pink-600' },
-            { icon: <Phone className="w-5 h-5" />, label: 'Client Call', action: 'call', gradient: 'from-cyan-500 to-cyan-600' },
-            { icon: <Users className="w-5 h-5" />, label: 'Team Meeting', action: 'meeting', gradient: 'from-indigo-500 to-indigo-600' },
-            { icon: <Shield className="w-5 h-5" />, label: 'Compliance Check', action: 'compliance', gradient: 'from-emerald-500 to-emerald-600' },
-            { icon: <Award className="w-5 h-5" />, label: 'Victory Analytics', action: 'victory', gradient: 'from-yellow-500 to-yellow-600' },
-            { icon: <Target className="w-5 h-5" />, label: 'Strategy Builder', action: 'strategy', gradient: 'from-red-500 to-red-600' }
-          ].map((tool) => (
-            <button
-              key={tool.action}
-              onClick={() => {
-                if (tool.action === 'documents') {
-                  setShowDocumentBrowser(true)
-                } else if (tool.action === 'browser') {
-                  setShowUnifiedBrowser(true)
-                } else {
-                  console.log(`${tool.action} clicked`)
-                }
-              }}
-              className={`group flex items-center space-x-3 px-4 py-2.5 bg-white/10 hover:bg-gradient-to-r hover:${tool.gradient} backdrop-blur-sm border border-white/20 hover:border-white/30 rounded-2xl text-slate-300 hover:text-white transition-all duration-300 font-medium whitespace-nowrap hover:scale-105 shadow-lg hover:shadow-xl`}
-              title={tool.label}
-            >
-              <div className="group-hover:animate-pulse">
-                {tool.icon}
-              </div>
-              <span className="hidden lg:inline group-hover:font-semibold">{tool.label}</span>
-            </button>
-          ))}
-        </div>
-      </div>
 
       {/* Legal Messaging Hub Modal */}
       {showMessaging && (

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Brain, Mic, Volume2 } from 'lucide-react'
 
 // Import advanced dashboards
-import AttorneyCommandCenter from './dashboards/AttorneyCommandCenter'
+import AttorneyCommandCenterV2 from './dashboards/AttorneyCommandCenterV2'
 import CaseManagerWorkflowHub from './dashboards/CaseManagerWorkflowHub'
 import ParalegalResearchPowerhouse from './dashboards/ParalegalResearchPowerhouse'
 import LegalAssistantAdminCommand from './dashboards/LegalAssistantAdminCommand'
@@ -15,6 +15,7 @@ import AdminControlCenter from './admin/AdminControlCenter'
 
 // Import AI Assistant
 import AIAssistant from './ai/AIAssistant'
+import FloatingRoleSwitcher from './ui/FloatingRoleSwitcher'
 
 const AdvancedRolePortal = () => {
   const [userRole, setUserRole] = useState(null)
@@ -71,7 +72,7 @@ const AdvancedRolePortal = () => {
 
     switch (userRole.id) {
       case 'attorney':
-        return <AttorneyCommandCenter {...dashboardProps} />
+        return <AttorneyCommandCenterV2 {...dashboardProps} />
       case 'case_manager':
         return <CaseManagerWorkflowHub {...dashboardProps} />
       case 'paralegal':
@@ -85,7 +86,7 @@ const AdvancedRolePortal = () => {
       case 'admin':
         return <AdminControlCenter {...dashboardProps} />
       default:
-        return <AttorneyCommandCenter {...dashboardProps} />
+        return <AttorneyCommandCenterV2 {...dashboardProps} />
     }
   }
 
@@ -104,7 +105,7 @@ const AdvancedRolePortal = () => {
             </div>
             <div className="flex items-center space-x-3 p-2">
               <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" style={{animationDelay: '0.2s'}}></div>
-              <span className="text-sm text-gray-300">Initializing LEX AI Assistant</span>
+              <span className="text-sm text-gray-300">Initializing Maya AI Assistant</span>
             </div>
             <div className="flex items-center space-x-3 p-2">
               <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse" style={{animationDelay: '0.4s'}}></div>
@@ -144,7 +145,7 @@ const AdvancedRolePortal = () => {
               ? 'bg-gradient-to-r from-red-500 to-red-600 scale-110 shadow-red-500/50 animate-pulse' 
               : 'bg-gradient-to-r from-blue-500 to-blue-600 hover:scale-105 shadow-blue-500/30'
           }`}
-          title={voiceListening ? 'Stop Voice Command' : 'Start Voice Command (Say "Hey LEX")'}
+          title={voiceListening ? 'Stop Voice Command' : 'Start Voice Command (Say "Hey Maya")'}
         >
           {voiceListening ? (
             <Volume2 className="w-6 h-6 text-white" />
@@ -161,7 +162,7 @@ const AdvancedRolePortal = () => {
               ? 'bg-gradient-to-r from-purple-500 to-pink-500 scale-110 shadow-purple-500/50' 
               : 'bg-gradient-to-r from-purple-600 to-purple-700 hover:scale-105 shadow-purple-600/30'
           }`}
-          title="Open LEX AI Assistant"
+          title="Open Maya AI Assistant"
         >
           <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-pink-400 animate-pulse opacity-20"></div>
           <div className="flex items-center justify-center relative z-10">
@@ -184,56 +185,8 @@ const AdvancedRolePortal = () => {
         </div>
       </div>
 
-      {/* Role Switcher & HR Demo Access */}
-      <div className="fixed bottom-6 left-6 z-50">
-        <div className="space-y-3">
-          {/* Quick HR Portal Access */}
-          <div className="bg-purple-900/95 backdrop-blur-sm border border-purple-500/50 rounded-xl p-3 shadow-xl">
-            <label className="text-xs text-purple-300 block mb-2">🚀 Demo Access</label>
-            <button
-              onClick={() => window.open('/portal/hr', '_blank')}
-              className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 shadow-lg"
-            >
-              👥 Open HR Portal
-            </button>
-            <div className="mt-2 text-xs text-purple-300">
-              Direct access to full HR dashboard
-            </div>
-          </div>
-
-          {/* Role Switcher (Development Mode) */}
-          {process.env.NODE_ENV === 'development' && (
-            <div className="bg-gray-900/95 backdrop-blur-sm border border-gray-700/50 rounded-xl p-3 shadow-xl">
-              <label className="text-xs text-gray-400 block mb-2">Switch Role (Dev Mode)</label>
-              <select
-                value={userRole?.id || ''}
-                onChange={(e) => {
-                  if (e.target.value === 'hr') {
-                    // Open HR portal in new tab for full experience
-                    window.open('/portal/hr', '_blank')
-                  } else {
-                    const newUrl = new URL(window.location)
-                    newUrl.searchParams.set('role', e.target.value)
-                    window.location.href = newUrl.toString()
-                  }
-                }}
-                className="bg-gray-800 text-white px-3 py-2 rounded-lg text-sm border border-gray-600 min-w-[180px]"
-              >
-                <option value="attorney">👨‍💼 Attorney</option>
-                <option value="case_manager">📋 Case Manager</option>
-                <option value="paralegal">📚 Paralegal</option>
-                <option value="legal_assistant">🏢 Legal Assistant</option>
-                <option value="secretary">📞 Secretary</option>
-                <option value="hr">👥 HR Manager (Opens Portal)</option>
-                <option value="admin">🔐 Admin</option>
-              </select>
-              <div className="mt-2 text-xs text-gray-500">
-                Current: {userRole?.department}
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
+      {/* Floating Role Switcher */}
+      <FloatingRoleSwitcher userRole={userRole} />
 
       {/* Voice Command Status */}
       {voiceListening && (
@@ -244,7 +197,7 @@ const AdvancedRolePortal = () => {
                 <Volume2 className="w-8 h-8 text-white" />
               </div>
               <h3 className="text-xl font-bold text-white mb-2">🎤 Voice Command Active</h3>
-              <p className="text-gray-400 mb-4">Say "Hey LEX" followed by your command</p>
+              <p className="text-gray-400 mb-4">Say "Hey Maya" followed by your command</p>
               <div className="flex items-center justify-center space-x-2">
                 <div className="w-2 h-8 bg-blue-500 rounded-full animate-pulse"></div>
                 <div className="w-2 h-12 bg-blue-400 rounded-full animate-pulse" style={{animationDelay: '0.1s'}}></div>

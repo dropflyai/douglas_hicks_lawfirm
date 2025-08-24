@@ -63,7 +63,7 @@ const AIAssistantSidebar = ({
       return `🔍 **Web Research Assistant**\n\nI'm here to help with your research. I can:\n- Suggest better search terms\n- Analyze web content\n- Extract key information\n- Fact-check claims\n- Find additional sources\n\nWhat are you researching today?`
     }
 
-    return `🤖 **LEX - Your AI Legal Assistant**\n\nI'm your intelligent legal companion. I can help you with:\n- Document analysis and review\n- Legal research and case law\n- Motion drafting and briefs\n- Case strategy and planning\n- Compliance and risk assessment\n\nHow can I assist you today?`
+    return `🤖 **Maya - Your AI Legal Assistant**\n\nI'm your intelligent legal companion. I can help you with:\n- Document analysis and review\n- Legal research and case law\n- Motion drafting and briefs\n- Case strategy and planning\n- Compliance and risk assessment\n\nHow can I assist you today?`
   }
 
   const getContextualSuggestions = () => {
@@ -199,7 +199,7 @@ const AIAssistantSidebar = ({
           className="flex items-center space-x-2 px-4 py-3 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl shadow-lg hover:from-purple-500 hover:to-blue-500 transition-all"
         >
           <Brain className="w-5 h-5 text-white animate-pulse" />
-          <span className="text-white font-medium">LEX AI</span>
+          <span className="text-white font-medium">Maya AI</span>
           {messages.length > 1 && (
             <div className="w-2 h-2 bg-green-400 rounded-full animate-ping"></div>
           )}
@@ -219,7 +219,7 @@ const AIAssistantSidebar = ({
               <Brain className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h3 className="font-bold text-white">LEX AI Assistant</h3>
+              <h3 className="font-bold text-white">Maya AI Assistant</h3>
               <p className="text-xs text-gray-400">Legal Intelligence Engine</p>
             </div>
           </div>
@@ -285,7 +285,7 @@ const AIAssistantSidebar = ({
                   <div className="w-6 h-6 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center">
                     <Bot className="w-3 h-3 text-white" />
                   </div>
-                  <span className="text-xs font-medium text-purple-400">LEX AI</span>
+                  <span className="text-xs font-medium text-purple-400">Maya AI</span>
                   <span className="text-xs text-gray-500">
                     {new Date(message.timestamp).toLocaleTimeString()}
                   </span>
@@ -461,7 +461,7 @@ const AIAssistantSidebar = ({
         </form>
 
         <div className="flex items-center justify-between mt-2 text-xs text-gray-500">
-          <span>LEX AI can make mistakes. Verify important information.</span>
+          <span>Maya AI can make mistakes. Verify important information.</span>
           <div className="flex items-center space-x-2">
             <div className="w-1 h-1 bg-green-400 rounded-full"></div>
             <span>Connected</span>

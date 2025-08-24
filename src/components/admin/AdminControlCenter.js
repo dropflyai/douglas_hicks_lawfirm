@@ -345,7 +345,7 @@ const AdminControlCenter = () => {
                     { time: '14:31:42', user: 'Sarah Johnson', action: 'Generated settlement report', level: 'info' },
                     { time: '14:30:18', user: 'System', action: 'AI model training completed', level: 'success' },
                     { time: '14:29:03', user: 'John Smith', action: 'Updated security settings', level: 'warning' },
-                    { time: '14:28:45', user: 'LEX AI', action: 'Processed 247 legal queries', level: 'info' },
+                    { time: '14:28:45', user: 'Maya AI', action: 'Processed 247 legal queries', level: 'info' },
                     { time: '14:27:12', user: 'Michael Chen', action: 'Document analysis completed', level: 'success' }
                   ].map((activity, index) => (
                     <div key={index} className="flex items-center justify-between p-3 bg-black/30 rounded-lg hover:bg-black/50 transition-all">

@@ -167,7 +167,7 @@ const AttorneyDashboard = ({ userRole, aiActive, setAiActive }) => {
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2 bg-gradient-to-r from-purple-900/30 to-pink-900/30 px-3 py-1.5 rounded-full border border-purple-500/20">
                 <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                <span className="text-xs font-medium text-purple-300">LEX AI Online</span>
+                <span className="text-xs font-medium text-purple-300">Maya AI Online</span>
               </div>
               
               <div className="flex items-center space-x-2">
@@ -211,7 +211,7 @@ const AttorneyDashboard = ({ userRole, aiActive, setAiActive }) => {
               className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl font-semibold hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-200 flex items-center space-x-2 group"
             >
               <Brain className="w-5 h-5 group-hover:animate-pulse" />
-              <span>Ask LEX AI</span>
+              <span>Ask Maya AI</span>
             </button>
           </div>
         </div>

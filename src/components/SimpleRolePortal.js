@@ -27,7 +27,7 @@ const SimpleRolePortal = () => {
               className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl font-semibold hover:shadow-lg transition-all flex items-center space-x-2"
             >
               <Brain className="w-5 h-5" />
-              <span>Ask LEX AI</span>
+              <span>Ask Maya AI</span>
             </button>
           </div>
         </div>
@@ -44,7 +44,7 @@ const SimpleRolePortal = () => {
                   <Brain className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold text-white">LEX AI Assistant</h2>
+                  <h2 className="text-xl font-bold text-white">Maya AI Assistant</h2>
                   <p className="text-sm text-gray-400">Revolutionary Legal AI • Ready to Transform Your Practice</p>
                 </div>
               </div>
@@ -68,7 +68,7 @@ const SimpleRolePortal = () => {
                   <h4 className="text-xl font-bold text-purple-300 mb-3">✅ Phase 1 Complete: Foundation Built</h4>
                   <ul className="space-y-2 text-gray-300">
                     <li>🎯 Role-based authentication system created</li>
-                    <li>🧠 AI Assistant LEX integrated and functional</li>
+                    <li>🧠 AI Assistant Maya integrated and functional</li>
                     <li>⚡ Voice interface ready for commands</li>
                     <li>📱 Responsive design with mobile optimization</li>
                     <li>🎨 Premium dark theme with gold accents</li>
@@ -89,7 +89,7 @@ const SimpleRolePortal = () => {
                 <div className="bg-gradient-to-r from-yellow-900/20 to-orange-900/20 border border-yellow-500/20 rounded-2xl p-6">
                   <h4 className="text-xl font-bold text-yellow-300 mb-3">🎪 Revolutionary Features Ready</h4>
                   <ul className="space-y-2 text-gray-300">
-                    <li>🗣️ "Hey LEX" voice commands</li>
+                    <li>🗣️ "Hey Maya" voice commands</li>
                     <li>🔮 Predictive case analytics</li>
                     <li>⚡ 10x productivity AI automations</li>
                     <li>📊 Real-time collaboration tools</li>

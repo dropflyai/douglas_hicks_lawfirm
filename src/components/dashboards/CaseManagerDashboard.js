@@ -33,7 +33,7 @@ const CaseManagerDashboard = ({ userRole, aiActive, setAiActive }) => {
             onClick={() => setAiActive(true)}
             className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl font-semibold hover:shadow-lg transition-all"
           >
-            🧠 Ask LEX AI - Case Management
+            🧠 Ask Maya AI - Case Management
           </button>
         </div>
       </div>

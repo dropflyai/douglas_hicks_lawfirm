@@ -167,7 +167,7 @@ const LegalAssistantDashboard = ({ userRole, aiActive, setAiActive }) => {
               <div className="bg-gradient-to-r from-teal-500/20 to-cyan-500/20 backdrop-blur-sm border border-teal-400/30 px-6 py-3 rounded-2xl shadow-xl">
                 <div className="flex items-center space-x-3">
                   <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse shadow-lg shadow-green-400/50"></div>
-                  <span className="text-teal-200 font-medium">LEX Assistant Online</span>
+                  <span className="text-teal-200 font-medium">Maya Assistant Online</span>
                   <div className="w-px h-4 bg-teal-400/30"></div>
                   <span className="text-slate-300 text-sm">8 tasks pending</span>
                 </div>
@@ -186,7 +186,7 @@ const LegalAssistantDashboard = ({ userRole, aiActive, setAiActive }) => {
                 className="px-6 py-3 bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-400 hover:to-teal-500 text-white rounded-2xl font-semibold transition-all hover:scale-105 shadow-xl shadow-teal-500/25 flex items-center space-x-3"
               >
                 <Brain className="w-5 h-5" />
-                <span>LEX Assistant</span>
+                <span>Maya Assistant</span>
               </button>
             </div>
           </div>

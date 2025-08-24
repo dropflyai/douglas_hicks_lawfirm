@@ -74,7 +74,7 @@ const LegalMessagingHub = ({ userRole, onClose }) => {
     },
     {
       id: 3,
-      user: 'LEX AI Assistant',
+      user: 'Maya AI Assistant',
       role: 'AI Legal Assistant',
       avatar: '🤖',
       message: '🧠 AI Analysis: Based on the new discovery documents, settlement probability increased to 89% (+12%). Recommend accepting any offer above $340K.',

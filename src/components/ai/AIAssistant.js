@@ -15,7 +15,7 @@ const AIAssistant = ({ active, setActive, userRole }) => {
   // Role-specific AI prompts and capabilities
   const roleCapabilities = {
     attorney: {
-      greeting: "Hi Douglas! I'm LEX, your AI legal assistant. I can help with case strategy, legal research, brief drafting, and client communications.",
+      greeting: "Hi Douglas! I'm Maya, your AI legal assistant. I can help with case strategy, legal research, brief drafting, and client communications.",
       capabilities: [
         "🎯 Case strategy analysis and outcome prediction",
         "📝 Draft motions, briefs, and legal documents", 
@@ -31,7 +31,7 @@ const AIAssistant = ({ active, setActive, userRole }) => {
       ]
     },
     case_manager: {
-      greeting: "Hello Sarah! I'm LEX, optimizing your case workflow. I can coordinate discovery, manage timelines, and automate vendor communications.",
+      greeting: "Hello Sarah! I'm Maya, optimizing your case workflow. I can coordinate discovery, manage timelines, and automate vendor communications.",
       capabilities: [
         "⚡ Automated discovery coordination",
         "📋 Smart timeline and deadline management",
@@ -47,7 +47,7 @@ const AIAssistant = ({ active, setActive, userRole }) => {
       ]
     },
     paralegal: {
-      greeting: "Hi Michael! I'm LEX, your research and drafting powerhouse. I can accelerate legal research, draft documents, and analyze evidence.",
+      greeting: "Hi Michael! I'm Maya, your research and drafting powerhouse. I can accelerate legal research, draft documents, and analyze evidence.",
       capabilities: [
         "📚 Advanced legal research with case summaries",
         "✍️ Intelligent document drafting and assembly",
@@ -63,7 +63,7 @@ const AIAssistant = ({ active, setActive, userRole }) => {
       ]
     },
     legal_assistant: {
-      greeting: "Hello Jennifer! I'm LEX, streamlining your administrative workflows. I can manage intake, organize documents, and optimize scheduling.",
+      greeting: "Hello Jennifer! I'm Maya, streamlining your administrative workflows. I can manage intake, organize documents, and optimize scheduling.",
       capabilities: [
         "📋 Intelligent client intake processing",
         "📁 Smart document management and filing",
@@ -79,7 +79,7 @@ const AIAssistant = ({ active, setActive, userRole }) => {
       ]
     },
     secretary: {
-      greeting: "Hi Maria! I'm LEX, your communication orchestrator. I can handle calls, coordinate meetings, and manage correspondence.",
+      greeting: "Hi Maria! I'm Maya, your communication orchestrator. I can handle calls, coordinate meetings, and manage correspondence.",
       capabilities: [
         "📞 Smart call routing and message taking",
         "✈️ Intelligent travel planning",
@@ -204,7 +204,7 @@ const AIAssistant = ({ active, setActive, userRole }) => {
               <Brain className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-white">LEX AI Assistant</h2>
+              <h2 className="text-xl font-bold text-white">Maya AI Assistant</h2>
               <p className="text-sm text-gray-400">Powered by Advanced Legal AI • {userRole?.title}</p>
             </div>
           </div>
@@ -247,7 +247,7 @@ const AIAssistant = ({ active, setActive, userRole }) => {
                     <div className="w-2 h-2 bg-purple-500 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
                     <div className="w-2 h-2 bg-purple-500 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
                   </div>
-                  <span className="text-gray-400 text-sm">LEX is thinking...</span>
+                  <span className="text-gray-400 text-sm">Maya is thinking...</span>
                 </div>
               </div>
             </div>
@@ -278,7 +278,7 @@ const AIAssistant = ({ active, setActive, userRole }) => {
                 ref={textareaRef}
                 value={transcript}
                 onChange={(e) => setTranscript(e.target.value)}
-                placeholder="Ask LEX anything... or use voice commands"
+                placeholder="Ask Maya anything... or use voice commands"
                 className="w-full p-4 bg-gray-800 border border-gray-600 rounded-2xl text-white placeholder-gray-400 resize-none focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50"
                 rows={3}
                 onKeyPress={(e) => {
