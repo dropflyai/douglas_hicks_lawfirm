@@ -199,13 +199,13 @@ export default function HomePage() {
           </div>
           
           <h1 className="text-6xl md:text-8xl font-black mb-8 leading-tight">
-            <span className="text-white">BILLION</span>
+            <span className="text-white">FIGHTING</span>
             <br />
             <span className="bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 bg-clip-text text-transparent animate-pulse">
-              DOLLAR
+              FOR OUR
             </span>
             <br />
-            <span className="text-white">LAWYERS</span>
+            <span className="text-white">COMMUNITY</span>
           </h1>
           
           <p className="text-2xl md:text-3xl text-gray-300 mb-12 font-light leading-relaxed">
