@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import {
-  Highlight, Pen, Eraser, MousePointer, Square, Circle, Type,
+  Highlighter, Pen, Eraser, MousePointer, Square, Circle, Type,
   Undo, Redo, ZoomIn, ZoomOut, RotateCw, Save, MessageSquare,
   Users, Clock, Eye, EyeOff, Layers, Settings, Download,
   ChevronLeft, ChevronRight, Menu, X, Plus, Trash2, Edit3,
@@ -133,7 +133,7 @@ const DocumentViewer = ({ document, onClose, userRole, collaborators = [] }) => 
 
   const tools = [
     { id: 'pointer', icon: MousePointer, label: 'Select', color: 'text-gray-400' },
-    { id: 'highlight', icon: Highlight, label: 'Highlight', color: 'text-yellow-400' },
+    { id: 'highlight', icon: Highlighter, label: 'Highlight', color: 'text-yellow-400' },
     { id: 'pen', icon: Pen, label: 'Pen', color: 'text-blue-400' },
     { id: 'rectangle', icon: Square, label: 'Rectangle', color: 'text-red-400' },
     { id: 'circle', icon: Circle, label: 'Circle', color: 'text-green-400' },

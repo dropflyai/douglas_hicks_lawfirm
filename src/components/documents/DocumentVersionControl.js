@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react'
 import {
   Clock, GitBranch, User, Download, Eye, ArrowRight, 
   FileText, Shield, AlertTriangle, Check, X, 
-  MoreVertical, Trash2, RestoreIcon as Restore, Star,
-  Compare, Lock, Unlock, Calendar, Tag, Filter,
+  MoreVertical, Trash2, RotateCcw as Restore, Star,
+  GitCompare, Lock, Unlock, Calendar, Tag, Filter,
   Activity, TrendingUp, AlertCircle, Info
 } from 'lucide-react'
 
@@ -268,7 +268,7 @@ const DocumentVersionControl = ({ document, onVersionSelect, onClose }) => {
                 onClick={handleCompareVersions}
                 className="flex items-center space-x-2 px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-700 transition-all"
               >
-                <Compare className="w-5 h-5" />
+                <GitCompare className="w-5 h-5" />
                 <span>Compare</span>
               </button>
             )}

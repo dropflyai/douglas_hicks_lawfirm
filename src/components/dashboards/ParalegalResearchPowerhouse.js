@@ -11,11 +11,15 @@ import {
   ChevronRight, Plus, Filter, Star, Eye, MessageCircle
 } from 'lucide-react'
 import LegalMessagingHub from '../messaging/LegalMessagingHub'
+import WorkspaceBrowser from '../browser/WorkspaceBrowser'
 
 const ParalegalResearchPowerhouse = ({ userRole, aiActive, setAiActive }) => {
   const [activeView, setActiveView] = useState('research')
   const [selectedDocument, setSelectedDocument] = useState(null)
   const [showMessaging, setShowMessaging] = useState(false)
+  const [selectedWorkspace, setSelectedWorkspace] = useState('dashboard')
+  const [navigationHistory, setNavigationHistory] = useState(['dashboard'])
+  const [historyIndex, setHistoryIndex] = useState(0)
   
   // Comprehensive research tasks
   const researchTasks = [
@@ -170,6 +174,61 @@ const ParalegalResearchPowerhouse = ({ userRole, aiActive, setAiActive }) => {
       'No cases addressing specific procedural issue',
       'Limited precedent in this jurisdiction'
     ]
+  }
+
+  // Navigation functions
+  const navigateTo = (workspace) => {
+    const newHistory = navigationHistory.slice(0, historyIndex + 1)
+    newHistory.push(workspace)
+    setNavigationHistory(newHistory)
+    setHistoryIndex(newHistory.length - 1)
+    setSelectedWorkspace(workspace)
+  }
+
+  const navigateBack = () => {
+    if (historyIndex > 0) {
+      const newIndex = historyIndex - 1
+      setHistoryIndex(newIndex)
+      setSelectedWorkspace(navigationHistory[newIndex])
+      return true
+    }
+    return false
+  }
+
+  const navigateForward = () => {
+    if (historyIndex < navigationHistory.length - 1) {
+      const newIndex = historyIndex + 1
+      setHistoryIndex(newIndex)
+      setSelectedWorkspace(navigationHistory[newIndex])
+      return true
+    }
+    return false
+  }
+
+  // Paralegal Tools
+  const paralegalTools = [
+    { id: 'research', name: 'Research', icon: Search },
+    { id: 'documents', name: 'Documents', icon: FileText },
+    { id: 'cases', name: 'Cases', icon: Briefcase },
+    { id: 'calendar', name: 'Calendar', icon: Calendar },
+    { id: 'billing', name: 'Billing', icon: DollarSign },
+    { id: 'contacts', name: 'Contacts', icon: Users },
+  ]
+
+  if (selectedWorkspace !== 'dashboard') {
+    return (
+      <WorkspaceBrowser 
+        workspace={selectedWorkspace}
+        selectedCase={null}
+        onBack={navigateBack}
+        onForward={navigateForward}
+        onNavigate={navigateTo}
+        canGoBack={historyIndex > 0}
+        canGoForward={historyIndex < navigationHistory.length - 1}
+        setAiActive={setAiActive}
+        setAiVoiceActive={() => {}}
+      />
+    )
   }
 
   return (

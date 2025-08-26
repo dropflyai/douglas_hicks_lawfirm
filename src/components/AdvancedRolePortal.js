@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Brain, Mic, Volume2 } from 'lucide-react'
 
 // Import advanced dashboards
+import AttorneyCommandCenterV3 from './dashboards/AttorneyCommandCenterV3'
 import AttorneyCommandCenterV2 from './dashboards/AttorneyCommandCenterV2'
 import CaseManagerWorkflowHub from './dashboards/CaseManagerWorkflowHub'
 import ParalegalResearchPowerhouse from './dashboards/ParalegalResearchPowerhouse'
@@ -28,7 +29,7 @@ const AdvancedRolePortal = () => {
   useEffect(() => {
     const detectUserRole = async () => {
       const roles = [
-        { id: 'attorney', title: 'Senior Partner', name: 'Douglas Hicks', department: 'Litigation' },
+        { id: 'attorney', title: 'Senior Partner', name: 'Carl Douglass', department: 'Litigation' },
         { id: 'case_manager', title: 'Senior Case Manager', name: 'Sarah Johnson', department: 'Operations' },
         { id: 'paralegal', title: 'Senior Paralegal', name: 'Michael Chen', department: 'Research' },
         { id: 'legal_assistant', title: 'Legal Assistant', name: 'Jennifer Davis', department: 'Administration' },
@@ -72,7 +73,7 @@ const AdvancedRolePortal = () => {
 
     switch (userRole.id) {
       case 'attorney':
-        return <AttorneyCommandCenterV2 {...dashboardProps} />
+        return <AttorneyCommandCenterV3 {...dashboardProps} />
       case 'case_manager':
         return <CaseManagerWorkflowHub {...dashboardProps} />
       case 'paralegal':
@@ -124,66 +125,8 @@ const AdvancedRolePortal = () => {
   return (
     <div className="min-h-screen bg-black text-white relative">
       
-      {/* AI Assistant Modal */}
-      <AIAssistant 
-        active={aiActive}
-        setActive={setAiActive}
-        userRole={userRole}
-      />
-
       {/* Role-Specific Dashboard */}
       {renderRoleSpecificDashboard()}
-
-      {/* Advanced AI Floating Controls */}
-      <div className="fixed bottom-6 right-6 flex flex-col space-y-3 z-50">
-        
-        {/* Voice Activation Button */}
-        <button
-          onClick={toggleVoiceListening}
-          className={`w-14 h-14 rounded-full shadow-2xl transition-all duration-300 flex items-center justify-center ${
-            voiceListening 
-              ? 'bg-gradient-to-r from-red-500 to-red-600 scale-110 shadow-red-500/50 animate-pulse' 
-              : 'bg-gradient-to-r from-blue-500 to-blue-600 hover:scale-105 shadow-blue-500/30'
-          }`}
-          title={voiceListening ? 'Stop Voice Command' : 'Start Voice Command (Say "Hey Maya")'}
-        >
-          {voiceListening ? (
-            <Volume2 className="w-6 h-6 text-white" />
-          ) : (
-            <Mic className="w-6 h-6 text-white" />
-          )}
-        </button>
-
-        {/* Main AI Assistant Button */}
-        <button
-          onClick={() => setAiActive(!aiActive)}
-          className={`w-16 h-16 rounded-full shadow-2xl transition-all duration-300 relative overflow-hidden ${
-            aiActive 
-              ? 'bg-gradient-to-r from-purple-500 to-pink-500 scale-110 shadow-purple-500/50' 
-              : 'bg-gradient-to-r from-purple-600 to-purple-700 hover:scale-105 shadow-purple-600/30'
-          }`}
-          title="Open Maya AI Assistant"
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-pink-400 animate-pulse opacity-20"></div>
-          <div className="flex items-center justify-center relative z-10">
-            {aiActive ? (
-              <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-            ) : (
-              <Brain className="w-8 h-8 text-white" />
-            )}
-          </div>
-        </button>
-
-        {/* Role Status Indicator */}
-        <div className="bg-gray-900/95 backdrop-blur-sm border border-gray-700/50 rounded-2xl px-3 py-2 shadow-xl">
-          <div className="text-xs font-medium text-white">{userRole?.name}</div>
-          <div className="text-xs text-gray-400">{userRole?.title}</div>
-          <div className="flex items-center space-x-1 mt-1">
-            <div className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></div>
-            <span className="text-xs text-green-400">AI Active</span>
-          </div>
-        </div>
-      </div>
 
       {/* Floating Role Switcher */}
       <FloatingRoleSwitcher userRole={userRole} />

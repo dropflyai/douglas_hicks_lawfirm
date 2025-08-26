@@ -3,10 +3,10 @@
 import { useState, useEffect, useRef } from 'react'
 import {
   Users, MessageSquare, Video, Mic, MicOff, VideoOff, Phone,
-  Screen, Hand, Coffee, Clock, Bell, Settings, ChevronDown,
+  ScreenShare, Hand, Coffee, Clock, Bell, Settings, ChevronDown,
   User, Crown, Shield, Star, Activity, Zap, Send, Smile,
   Paperclip, MoreHorizontal, Volume2, VolumeX, X, Plus,
-  Edit3, Eye, Cursor, Highlight, PenTool, Type
+  Edit3, Eye, MousePointer, Highlighter, PenTool, Type
 } from 'lucide-react'
 
 const CollaborationHub = ({ document, isActive, onToggle, userRole }) => {
@@ -30,13 +30,13 @@ const CollaborationHub = ({ document, isActive, onToggle, userRole }) => {
     const sampleCollaborators = [
       {
         id: 1,
-        name: 'Carl Douglas',
+        name: 'Carl Douglass',
         role: 'Senior Partner',
         avatar: '/avatars/carl.jpg',
         status: 'active',
         lastSeen: new Date().toISOString(),
         permissions: ['view', 'edit', 'comment', 'approve'],
-        isCurrentUser: userRole?.name === 'Carl Douglas',
+        isCurrentUser: userRole?.name === 'Carl Douglass',
         activity: 'Reviewing section 3',
         cursor: { x: 245, y: 320, color: '#3b82f6' },
         tool: 'highlight'
@@ -98,7 +98,7 @@ const CollaborationHub = ({ document, isActive, onToggle, userRole }) => {
     const sampleMessages = [
       {
         id: 1,
-        user: 'Carl Douglas',
+        user: 'Carl Douglass',
         avatar: '/avatars/carl.jpg',
         message: 'Team, please focus on the settlement terms in section 3. We need this finalized today.',
         timestamp: new Date(Date.now() - 10 * 60000).toISOString(),
@@ -129,7 +129,7 @@ const CollaborationHub = ({ document, isActive, onToggle, userRole }) => {
         message: '@Carl The medical records reference on page 2 needs verification. Should I cross-check with our case files?',
         timestamp: new Date(Date.now() - 3 * 60000).toISOString(),
         type: 'mention',
-        mentions: ['Carl Douglas']
+        mentions: ['Carl Douglass']
       }
     ]
 
@@ -179,11 +179,11 @@ const CollaborationHub = ({ document, isActive, onToggle, userRole }) => {
 
   const getToolIcon = (tool) => {
     switch (tool) {
-      case 'highlight': return Highlight
+      case 'highlight': return Highlighter
       case 'comment': return MessageSquare
       case 'text': return Type
       case 'edit': return Edit3
-      case 'pointer': return Cursor
+      case 'pointer': return MousePointer
       default: return Eye
     }
   }
@@ -334,7 +334,7 @@ const CollaborationHub = ({ document, isActive, onToggle, userRole }) => {
                   isScreenSharing ? 'bg-blue-600' : 'bg-gray-700 hover:bg-gray-600'
                 }`}
               >
-                <Screen className="w-4 h-4" />
+                <ScreenShare className="w-4 h-4" />
               </button>
             </div>
           </div>

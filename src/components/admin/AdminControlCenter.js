@@ -12,14 +12,45 @@ import {
   UserCheck, UserX, Calendar, Mail, Phone, MessageCircle
 } from 'lucide-react'
 import LegalMessagingHub from '../messaging/LegalMessagingHub'
+import WorkspaceBrowser from '../browser/WorkspaceBrowser'
 
-const AdminControlCenter = () => {
+const AdminControlCenter = ({ userRole, aiActive, setAiActive }) => {
+  const [selectedWorkspace, setSelectedWorkspace] = useState('dashboard')
+  const [navigationHistory, setNavigationHistory] = useState(['dashboard'])
+  const [historyIndex, setHistoryIndex] = useState(0)
+  const [aiVoiceActive, setAiVoiceActive] = useState(false)
+  
   const [activeTab, setActiveTab] = useState('overview')
   const [securityLevel, setSecurityLevel] = useState('maximum')
   const [aiGovernance, setAiGovernance] = useState('strict')
   const [systemStatus, setSystemStatus] = useState('optimal')
   const [realTimeData, setRealTimeData] = useState({})
   const [showMessaging, setShowMessaging] = useState(false)
+
+  // Navigation system
+  const navigateTo = (workspace) => {
+    const newHistory = navigationHistory.slice(0, historyIndex + 1)
+    newHistory.push(workspace)
+    setNavigationHistory(newHistory)
+    setHistoryIndex(newHistory.length - 1)
+    setSelectedWorkspace(workspace)
+  }
+
+  const navigateBack = () => {
+    if (historyIndex > 0) {
+      const newIndex = historyIndex - 1
+      setHistoryIndex(newIndex)
+      setSelectedWorkspace(navigationHistory[newIndex])
+    }
+  }
+
+  const navigateForward = () => {
+    if (historyIndex < navigationHistory.length - 1) {
+      const newIndex = historyIndex + 1
+      setHistoryIndex(newIndex)
+      setSelectedWorkspace(navigationHistory[newIndex])
+    }
+  }
 
   // Real-time system monitoring
   useEffect(() => {
@@ -206,6 +237,27 @@ const AdminControlCenter = () => {
     }
   }
 
+  // Render admin dashboard or workspace browser
+  if (selectedWorkspace !== 'dashboard') {
+    return (
+      <div className="min-h-screen bg-black text-white">
+        <WorkspaceBrowser 
+          userRole={userRole}
+          selectedWorkspace={selectedWorkspace}
+          navigateTo={navigateTo}
+          navigateBack={navigateBack}
+          navigateForward={navigateForward}
+          canGoBack={historyIndex > 0}
+          canGoForward={historyIndex < navigationHistory.length - 1}
+          aiActive={aiActive}
+          setAiActive={setAiActive}
+          aiVoiceActive={aiVoiceActive}
+          setAiVoiceActive={setAiVoiceActive}
+        />
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-black text-white">
       
@@ -229,7 +281,7 @@ const AdminControlCenter = () => {
               </div>
               
               <button 
-                onClick={() => setShowMessaging(true)}
+                onClick={() => navigateTo('communications')}
                 className="relative p-2 bg-red-900/30 hover:bg-red-800/40 border border-red-500/30 hover:border-red-400/50 rounded-xl transition-all duration-300"
                 title="Secure Admin Messaging"
               >
@@ -537,7 +589,10 @@ const AdminControlCenter = () => {
               </div>
 
               <div className="mt-6 flex justify-between items-center">
-                <button className="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-xl text-sm font-medium transition-all">
+                <button 
+                  onClick={() => navigateTo('permissions-editor')}
+                  className="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-xl text-sm font-medium transition-all"
+                >
                   Edit Permissions
                 </button>
                 <div className="text-xs text-gray-400">
@@ -574,7 +629,10 @@ const AdminControlCenter = () => {
                   ))}
                 </div>
 
-                <button className="mt-4 w-full py-2 bg-red-600/20 hover:bg-red-600/30 border border-red-500/50 rounded-xl text-sm font-medium text-red-400 transition-all">
+                <button 
+                  onClick={() => navigateTo('authentication-config')}
+                  className="mt-4 w-full py-2 bg-red-600/20 hover:bg-red-600/30 border border-red-500/50 rounded-xl text-sm font-medium text-red-400 transition-all"
+                >
                   Configure Authentication
                 </button>
               </div>
@@ -595,7 +653,10 @@ const AdminControlCenter = () => {
                   ))}
                 </div>
 
-                <button className="mt-4 w-full py-2 bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/50 rounded-xl text-sm font-medium text-blue-400 transition-all">
+                <button 
+                  onClick={() => navigateTo('encryption-manager')}
+                  className="mt-4 w-full py-2 bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/50 rounded-xl text-sm font-medium text-blue-400 transition-all"
+                >
                   Manage Encryption
                 </button>
               </div>
@@ -740,7 +801,10 @@ const AdminControlCenter = () => {
                     <h4 className="font-semibold text-white">Estimated Time to Complete</h4>
                     <p className="text-sm text-gray-400">2-3 hours with IT administrator</p>
                   </div>
-                  <button className="px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 rounded-xl font-semibold transition-all">
+                  <button 
+                    onClick={() => navigateTo('setup-wizard')}
+                    className="px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 rounded-xl font-semibold transition-all"
+                  >
                     Resume Setup Wizard
                   </button>
                 </div>
@@ -767,7 +831,7 @@ const AdminControlCenter = () => {
           ].map((tool) => (
             <button
               key={tool.action}
-              onClick={() => console.log(`${tool.action} clicked`)}
+              onClick={() => navigateTo(tool.action)}
               className={`flex items-center space-x-2 px-3 py-1.5 bg-gray-700/50 hover:bg-${tool.color}-600/30 rounded-lg text-gray-300 hover:text-white transition-all duration-300 text-sm whitespace-nowrap`}
               title={tool.label}
             >

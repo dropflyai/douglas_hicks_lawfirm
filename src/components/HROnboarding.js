@@ -18,8 +18,7 @@ import {
   Key, Fingerprint, ShieldCheck, ShieldAlert,
   UserX, UserCheck2, Users2, Crown, Sparkles, Scale
 } from 'lucide-react';
-import SecureNavigation from './SecureNavigation';
-import { useSecureNavigation } from '../hooks/useSecureNavigation';
+import WorkspaceBrowser from './browser/WorkspaceBrowser'
 
 export default function HROnboarding() {
   const router = useRouter();
@@ -403,11 +402,11 @@ export default function HROnboarding() {
               AI Insights
             </button>
             <button
-              onClick={() => setShowNewHireForm(true)}
+              onClick={() => navigateTo('browser')}
               className="px-6 py-3 bg-gradient-to-r from-[#f4c900] to-[#b68600] rounded-xl font-semibold hover:shadow-xl hover:shadow-yellow-500/20 transition-all duration-300 flex items-center gap-2"
             >
               <UserPlus className="w-5 h-5" />
-              Add Employee
+              Open Workspace
             </button>
           </div>
         </div>
@@ -726,16 +725,28 @@ export default function HROnboarding() {
               <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-6">
                 <h3 className="text-lg font-bold text-white mb-4">Quick Actions</h3>
                 <div className="space-y-3">
-                  <button className="w-full text-left px-4 py-3 bg-gradient-to-r from-purple-600 to-purple-800 rounded-lg hover:from-purple-700 hover:to-purple-900 transition-all text-sm text-white font-semibold">
+                  <button 
+                    onClick={() => navigateTo('ai-tools')}
+                    className="w-full text-left px-4 py-3 bg-gradient-to-r from-purple-600 to-purple-800 rounded-lg hover:from-purple-700 hover:to-purple-900 transition-all text-sm text-white font-semibold"
+                  >
                     🤖 Generate Interview Questions
                   </button>
-                  <button className="w-full text-left px-4 py-3 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors text-sm text-gray-300">
+                  <button 
+                    onClick={() => navigateTo('communications')}
+                    className="w-full text-left px-4 py-3 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors text-sm text-gray-300"
+                  >
                     📧 Send Bulk Emails
                   </button>
-                  <button className="w-full text-left px-4 py-3 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors text-sm text-gray-300">
+                  <button 
+                    onClick={() => navigateTo('reports')}
+                    className="w-full text-left px-4 py-3 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors text-sm text-gray-300"
+                  >
                     📊 Export Candidate Report
                   </button>
-                  <button className="w-full text-left px-4 py-3 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors text-sm text-gray-300">
+                  <button 
+                    onClick={() => navigateTo('background-checks')}
+                    className="w-full text-left px-4 py-3 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors text-sm text-gray-300"
+                  >
                     🔍 Background Check All
                   </button>
                 </div>

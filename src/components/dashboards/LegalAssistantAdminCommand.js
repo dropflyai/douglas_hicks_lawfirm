@@ -28,12 +28,16 @@ import {
   Star,
   Zap
 } from 'lucide-react'
+import WorkspaceBrowser from '../browser/WorkspaceBrowser'
 
 const LegalAssistantAdminCommand = ({ userRole, aiActive, setAiActive }) => {
   const [activeTab, setActiveTab] = useState('overview')
   const [appointments, setAppointments] = useState([])
   const [tasks, setTasks] = useState([])
   const [clients, setClients] = useState([])
+  const [selectedWorkspace, setSelectedWorkspace] = useState('dashboard')
+  const [navigationHistory, setNavigationHistory] = useState(['dashboard'])
+  const [historyIndex, setHistoryIndex] = useState(0)
 
   // Simulated data loading
   useEffect(() => {
@@ -335,6 +339,61 @@ const LegalAssistantAdminCommand = ({ userRole, aiActive, setAiActive }) => {
       </div>
     </div>
   )
+
+  // Navigation functions
+  const navigateTo = (workspace) => {
+    const newHistory = navigationHistory.slice(0, historyIndex + 1)
+    newHistory.push(workspace)
+    setNavigationHistory(newHistory)
+    setHistoryIndex(newHistory.length - 1)
+    setSelectedWorkspace(workspace)
+  }
+
+  const navigateBack = () => {
+    if (historyIndex > 0) {
+      const newIndex = historyIndex - 1
+      setHistoryIndex(newIndex)
+      setSelectedWorkspace(navigationHistory[newIndex])
+      return true
+    }
+    return false
+  }
+
+  const navigateForward = () => {
+    if (historyIndex < navigationHistory.length - 1) {
+      const newIndex = historyIndex + 1
+      setHistoryIndex(newIndex)
+      setSelectedWorkspace(navigationHistory[newIndex])
+      return true
+    }
+    return false
+  }
+
+  // Legal Assistant Tools
+  const legalAssistantTools = [
+    { id: 'cases', name: 'Cases', icon: Briefcase },
+    { id: 'documents', name: 'Documents', icon: FileText },
+    { id: 'calendar', name: 'Calendar', icon: Calendar },
+    { id: 'billing', name: 'Billing', icon: Calculator },
+    { id: 'contacts', name: 'Contacts', icon: Users },
+    { id: 'research', name: 'Research', icon: Search },
+  ]
+
+  if (selectedWorkspace !== 'dashboard') {
+    return (
+      <WorkspaceBrowser 
+        workspace={selectedWorkspace}
+        selectedCase={null}
+        onBack={navigateBack}
+        onForward={navigateForward}
+        onNavigate={navigateTo}
+        canGoBack={historyIndex > 0}
+        canGoForward={historyIndex < navigationHistory.length - 1}
+        setAiActive={setAiActive}
+        setAiVoiceActive={() => {}}
+      />
+    )
+  }
 
   return (
     <div className="min-h-screen bg-black text-white">

@@ -30,12 +30,16 @@ import {
   Radio,
   Zap
 } from 'lucide-react'
+import WorkspaceBrowser from '../browser/WorkspaceBrowser'
 
 const SecretaryCommunicationHub = ({ userRole, aiActive, setAiActive }) => {
   const [activeTab, setActiveTab] = useState('communications')
   const [calls, setCalls] = useState([])
   const [messages, setMessages] = useState([])
   const [visitors, setVisitors] = useState([])
+  const [selectedWorkspace, setSelectedWorkspace] = useState('dashboard')
+  const [navigationHistory, setNavigationHistory] = useState(['dashboard'])
+  const [historyIndex, setHistoryIndex] = useState(0)
 
   // Simulated real-time data
   useEffect(() => {
@@ -350,6 +354,61 @@ const SecretaryCommunicationHub = ({ userRole, aiActive, setAiActive }) => {
       </div>
     </div>
   )
+
+  // Navigation functions
+  const navigateTo = (workspace) => {
+    const newHistory = navigationHistory.slice(0, historyIndex + 1)
+    newHistory.push(workspace)
+    setNavigationHistory(newHistory)
+    setHistoryIndex(newHistory.length - 1)
+    setSelectedWorkspace(workspace)
+  }
+
+  const navigateBack = () => {
+    if (historyIndex > 0) {
+      const newIndex = historyIndex - 1
+      setHistoryIndex(newIndex)
+      setSelectedWorkspace(navigationHistory[newIndex])
+      return true
+    }
+    return false
+  }
+
+  const navigateForward = () => {
+    if (historyIndex < navigationHistory.length - 1) {
+      const newIndex = historyIndex + 1
+      setHistoryIndex(newIndex)
+      setSelectedWorkspace(navigationHistory[newIndex])
+      return true
+    }
+    return false
+  }
+
+  // Secretary Tools
+  const secretaryTools = [
+    { id: 'contacts', name: 'Contacts', icon: Users },
+    { id: 'calendar', name: 'Calendar', icon: Calendar },
+    { id: 'documents', name: 'Documents', icon: FileText },
+    { id: 'cases', name: 'Cases', icon: Phone },
+    { id: 'billing', name: 'Billing', icon: Mail },
+    { id: 'messages', name: 'Messages', icon: MessageSquare },
+  ]
+
+  if (selectedWorkspace !== 'dashboard') {
+    return (
+      <WorkspaceBrowser 
+        workspace={selectedWorkspace}
+        selectedCase={null}
+        onBack={navigateBack}
+        onForward={navigateForward}
+        onNavigate={navigateTo}
+        canGoBack={historyIndex > 0}
+        canGoForward={historyIndex < navigationHistory.length - 1}
+        setAiActive={setAiActive}
+        setAiVoiceActive={() => {}}
+      />
+    )
+  }
 
   return (
     <div className="min-h-screen bg-black text-white">

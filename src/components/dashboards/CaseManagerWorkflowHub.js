@@ -8,11 +8,15 @@ import {
   Workflow, Package, MapPin, Phone, Mail, Bell, Briefcase, MessageCircle
 } from 'lucide-react'
 import LegalMessagingHub from '../messaging/LegalMessagingHub'
+import WorkspaceBrowser from '../browser/WorkspaceBrowser'
 
 const CaseManagerWorkflowHub = ({ userRole, aiActive, setAiActive }) => {
   const [selectedWorkflow, setSelectedWorkflow] = useState(null)
   const [automationMode, setAutomationMode] = useState(true)
   const [showMessaging, setShowMessaging] = useState(false)
+  const [selectedWorkspace, setSelectedWorkspace] = useState('dashboard')
+  const [navigationHistory, setNavigationHistory] = useState(['dashboard'])
+  const [historyIndex, setHistoryIndex] = useState(0)
 
   // AI-powered case pipeline
   const casePipeline = {
@@ -121,6 +125,61 @@ const CaseManagerWorkflowHub = ({ userRole, aiActive, setAiActive }) => {
       { area: 'Discovery automation', saved: '$14K', percent: '8%' },
       { area: 'Timeline optimization', saved: '$4K', percent: '3%' }
     ]
+  }
+
+  // Navigation functions
+  const navigateTo = (workspace) => {
+    const newHistory = navigationHistory.slice(0, historyIndex + 1)
+    newHistory.push(workspace)
+    setNavigationHistory(newHistory)
+    setHistoryIndex(newHistory.length - 1)
+    setSelectedWorkspace(workspace)
+  }
+
+  const navigateBack = () => {
+    if (historyIndex > 0) {
+      const newIndex = historyIndex - 1
+      setHistoryIndex(newIndex)
+      setSelectedWorkspace(navigationHistory[newIndex])
+      return true
+    }
+    return false
+  }
+
+  const navigateForward = () => {
+    if (historyIndex < navigationHistory.length - 1) {
+      const newIndex = historyIndex + 1
+      setHistoryIndex(newIndex)
+      setSelectedWorkspace(navigationHistory[newIndex])
+      return true
+    }
+    return false
+  }
+
+  // Case Manager Tools
+  const caseManagerTools = [
+    { id: 'cases', name: 'Cases', icon: Briefcase, gradient: 'from-blue-500 to-blue-600' },
+    { id: 'documents', name: 'Documents', icon: FileText, gradient: 'from-green-500 to-green-600' },
+    { id: 'calendar', name: 'Calendar', icon: Calendar, gradient: 'from-orange-500 to-orange-600' },
+    { id: 'billing', name: 'Billing', icon: DollarSign, gradient: 'from-emerald-500 to-emerald-600' },
+    { id: 'contacts', name: 'Contacts', icon: Users, gradient: 'from-purple-500 to-purple-600' },
+    { id: 'reports', name: 'Reports', icon: BarChart3, gradient: 'from-cyan-500 to-cyan-600' },
+  ]
+
+  if (selectedWorkspace !== 'dashboard') {
+    return (
+      <WorkspaceBrowser 
+        workspace={selectedWorkspace}
+        selectedCase={null}
+        onBack={navigateBack}
+        onForward={navigateForward}
+        onNavigate={navigateTo}
+        canGoBack={historyIndex > 0}
+        canGoForward={historyIndex < navigationHistory.length - 1}
+        setAiActive={setAiActive}
+        setAiVoiceActive={() => {}}
+      />
+    )
   }
 
   return (
@@ -501,28 +560,17 @@ const CaseManagerWorkflowHub = ({ userRole, aiActive, setAiActive }) => {
       {/* Modern Case Manager Toolbar */}
       <div className="relative bg-white/5 backdrop-blur-2xl border-t border-white/10 px-8 py-4 sticky bottom-0">
         <div className="flex items-center space-x-3 overflow-x-auto">
-          {[
-            { icon: <Zap className="w-5 h-5" />, label: 'Auto-Assign Case', action: 'assign', gradient: 'from-green-500 to-green-600' },
-            { icon: <Calendar className="w-5 h-5" />, label: 'Schedule Review', action: 'schedule', gradient: 'from-blue-500 to-blue-600' },
-            { icon: <Clock className="w-5 h-5" />, label: 'Deadline Tracker', action: 'deadline', gradient: 'from-orange-500 to-orange-600' },
-            { icon: <DollarSign className="w-5 h-5" />, label: 'Budget Analysis', action: 'budget', gradient: 'from-emerald-500 to-emerald-600' },
-            { icon: <Users className="w-5 h-5" />, label: 'Team Allocation', action: 'team', gradient: 'from-purple-500 to-purple-600' },
-            { icon: <FileText className="w-5 h-5" />, label: 'Generate Report', action: 'report', gradient: 'from-cyan-500 to-cyan-600' },
-            { icon: <Target className="w-5 h-5" />, label: 'Performance Metrics', action: 'metrics', gradient: 'from-pink-500 to-pink-600' },
-            { icon: <Briefcase className="w-5 h-5" />, label: 'Vendor Management', action: 'vendor', gradient: 'from-indigo-500 to-indigo-600' },
-            { icon: <TrendingUp className="w-5 h-5" />, label: 'Optimization', action: 'optimize', gradient: 'from-teal-500 to-teal-600' },
-            { icon: <Bell className="w-5 h-5" />, label: 'Set Alert', action: 'alert', gradient: 'from-red-500 to-red-600' }
-          ].map((tool) => (
+          {caseManagerTools.map((tool) => (
             <button
-              key={tool.action}
-              onClick={() => console.log(`${tool.action} clicked`)}
+              key={tool.id}
+              onClick={() => navigateTo(tool.id)}
               className={`group flex items-center space-x-3 px-4 py-2.5 bg-white/10 hover:bg-gradient-to-r hover:${tool.gradient} backdrop-blur-sm border border-white/20 hover:border-white/30 rounded-2xl text-slate-300 hover:text-white transition-all duration-300 font-medium whitespace-nowrap hover:scale-105 shadow-lg hover:shadow-xl`}
-              title={tool.label}
+              title={tool.name}
             >
               <div className="group-hover:animate-pulse">
-                {tool.icon}
+                <tool.icon className="w-5 h-5" />
               </div>
-              <span className="hidden lg:inline group-hover:font-semibold">{tool.label}</span>
+              <span className="hidden lg:inline group-hover:font-semibold">{tool.name}</span>
             </button>
           ))}
         </div>

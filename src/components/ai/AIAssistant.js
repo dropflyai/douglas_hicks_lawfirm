@@ -3,8 +3,9 @@
 import { useState, useEffect, useRef } from 'react'
 import { Mic, MicOff, Send, X, Sparkles, Brain, Zap } from 'lucide-react'
 
-const AIAssistant = ({ active, setActive, userRole }) => {
+const AIAssistant = ({ active, setActive, userRole, voiceActive, setVoiceActive, context }) => {
   const [isListening, setIsListening] = useState(false)
+  const [contextInfo, setContextInfo] = useState(null)
   const [transcript, setTranscript] = useState('')
   const [aiResponse, setAiResponse] = useState('')
   const [isProcessing, setIsProcessing] = useState(false)
@@ -15,7 +16,7 @@ const AIAssistant = ({ active, setActive, userRole }) => {
   // Role-specific AI prompts and capabilities
   const roleCapabilities = {
     attorney: {
-      greeting: "Hi Douglas! I'm Maya, your AI legal assistant. I can help with case strategy, legal research, brief drafting, and client communications.",
+      greeting: "Hi Carl! I'm Maya, your AI legal assistant. I can help with case strategy, legal research, brief drafting, and client communications.",
       capabilities: [
         "🎯 Case strategy analysis and outcome prediction",
         "📝 Draft motions, briefs, and legal documents", 
@@ -24,10 +25,13 @@ const AIAssistant = ({ active, setActive, userRole }) => {
         "📊 Case performance analytics"
       ],
       quickActions: [
+        "Analyze my calendar",
+        "Schedule client meeting", 
+        "Check for conflicts",
         "Draft a motion to dismiss",
         "Research similar cases",
         "Analyze settlement prospects",
-        "Schedule client calls"
+        "Set smart reminders"
       ]
     },
     case_manager: {
@@ -100,14 +104,34 @@ const AIAssistant = ({ active, setActive, userRole }) => {
     if (active && userRole) {
       const roleData = roleCapabilities[userRole.id]
       if (roleData) {
+        let greeting = roleData.greeting
+        
+        // Add context to greeting if available
+        if (context?.case) {
+          greeting += `\n\nI see you're working on ${context.case.name}. I'm ready to help with this case.`
+        } else if (context?.workspace && context.workspace !== 'dashboard') {
+          greeting += `\n\nYou're in the ${context.workspace} workspace. How can I assist?`
+        }
+        
         setChatHistory([{
           type: 'ai',
-          message: roleData.greeting,
+          message: greeting,
           timestamp: new Date()
         }])
       }
     }
-  }, [active, userRole])
+  }, [active, userRole, context])
+
+  // Handle voice activation from parent component
+  useEffect(() => {
+    if (voiceActive !== undefined) {
+      if (voiceActive && !isListening) {
+        startListening()
+      } else if (!voiceActive && isListening) {
+        stopListening()
+      }
+    }
+  }, [voiceActive, isListening])
 
   // Speech Recognition Setup
   useEffect(() => {
@@ -160,6 +184,43 @@ const AIAssistant = ({ active, setActive, userRole }) => {
     const roleData = roleCapabilities[userRole?.id || 'attorney']
     
     setTimeout(() => {
+      // Enhanced calendar-aware responses
+      const getCalendarResponse = (query) => {
+        const lowerQuery = query.toLowerCase()
+        
+        // Calendar-specific intelligence
+        if (lowerQuery.includes('calendar') || lowerQuery.includes('schedule')) {
+          return `📅 **Smart Calendar Analysis**\n\nI see you're looking at your calendar. Here's what I've analyzed:\n\n🎯 **Today's Focus**:\n• Client meeting at 9:00 AM - Johnson case settlement discussion\n• Court hearing at 2:00 PM - State v. Rodriguez motion\n• Document review at 4:30 PM - Williams estate planning\n\n⚡ **AI Recommendations**:\n• Prepare settlement terms before 9 AM meeting\n• Review witness statements for 2 PM court hearing\n• Have trust documents ready for 4:30 PM review\n\n🔍 **Conflict Analysis**: No scheduling conflicts detected\n📊 **Productivity Score**: 95% - Well-balanced day\n\nWould you like me to prepare briefing materials for any of these appointments?`
+        }
+        
+        if (lowerQuery.includes('meeting') || lowerQuery.includes('appointment')) {
+          return `📅 **Meeting Scheduler Activated**\n\nI can help you schedule efficiently:\n\n🎯 **Available Slots This Week**:\n• **Tomorrow**: 10:30 AM - 12:00 PM, 3:00 PM - 5:00 PM\n• **Wednesday**: 9:00 AM - 11:00 AM, 1:30 PM - 3:30 PM  \n• **Thursday**: 11:00 AM - 1:00 PM, 4:00 PM - 6:00 PM\n• **Friday**: 9:30 AM - 12:00 PM\n\n🤖 **AI Suggestions**:\n• Best time for client calls: Tuesday 10:30 AM (post-coffee, pre-lunch)\n• Optimal court prep: Wednesday morning (fresh mind)\n• Document review: Friday AM (fewer interruptions)\n\nWho would you like to meet with?`
+        }
+        
+        if (lowerQuery.includes('conflict') || lowerQuery.includes('available')) {
+          return `🔍 **Calendar Conflict Analysis**\n\nI've scanned your schedule for potential issues:\n\n✅ **No Hard Conflicts Detected**\n\n⚠️ **Optimization Opportunities**:\n• 15-min buffer between Johnson meeting and court hearing\n• Consider moving document review to morning for better focus\n• Travel time to courthouse: 25 minutes (factor in traffic)\n\n📊 **Calendar Health Score**: 87/100\n\n💡 **Maya's Suggestions**:\n• Block 30 minutes before court for final prep\n• Schedule brief team check-in after Rodriguez hearing\n• Add reminder to review settlement terms tonight\n\nShall I implement these optimizations?`
+        }
+        
+        if (lowerQuery.includes('remind') || lowerQuery.includes('alert')) {
+          return `🔔 **Smart Reminder System**\n\nI'll set up intelligent reminders for you:\n\n📱 **Today's Active Reminders**:\n• 8:30 AM: Review Johnson settlement terms\n• 1:30 PM: Gather Rodriguez case files\n• 4:00 PM: Prep Williams trust documents\n\n🧠 **AI-Powered Alerts**:\n• Weather update: 20% rain at 2 PM (courthouse has covered parking)\n• Traffic alert: Court route clear, normal 25-min drive\n• Case update: New evidence filed in Rodriguez case this morning\n\n⚡ **Proactive Suggestions**:\n• Print backup copies of key documents\n• Charge devices for court recording\n• Review judge's recent rulings on similar motions\n\nWould you like me to create custom alerts for specific cases?`
+        }
+        
+        return null
+      }
+      
+      const calendarResponse = getCalendarResponse(query)
+      if (calendarResponse) {
+        const aiMessage = {
+          type: 'ai',
+          message: calendarResponse,
+          timestamp: new Date()
+        }
+        setChatHistory(prev => [...prev, aiMessage])
+        setIsProcessing(false)
+        setTranscript('')
+        return
+      }
+
       const responses = {
         "draft": `I'll help you draft that document. Based on the case details, here's a structured approach:\n\n1. **Legal Theory**: [Analysis]\n2. **Key Arguments**: [Strategic points]\n3. **Supporting Cases**: [Relevant precedents]\n\nWould you like me to generate the full draft?`,
         "research": `I found 12 relevant cases for your query. Here are the most applicable:\n\n• **Smith v. Johnson (2023)**: Similar fact pattern, favorable outcome\n• **Brown v. Corp (2022)**: Key precedent on liability\n• **Davis v. State (2023)**: Recent ruling on damages\n\nShall I provide detailed case summaries?`,
@@ -292,7 +353,15 @@ const AIAssistant = ({ active, setActive, userRole }) => {
             
             <div className="flex flex-col space-y-2">
               <button
-                onClick={isListening ? stopListening : startListening}
+                onClick={() => {
+                  if (isListening) {
+                    stopListening()
+                    if (setVoiceActive) setVoiceActive(false)
+                  } else {
+                    startListening()
+                    if (setVoiceActive) setVoiceActive(true)
+                  }
+                }}
                 className={`p-3 rounded-xl transition-all ${
                   isListening
                     ? 'bg-red-600 hover:bg-red-700 text-white'

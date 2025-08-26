@@ -47,7 +47,7 @@ const FloatingRoleSwitcher = ({ userRole }) => {
     setIsDragging(true)
   }
 
-  if (!process.env.NODE_ENV || process.env.NODE_ENV !== 'development') return null
+  // Always show the role switcher (removed dev-only restriction)
 
   return (
     <>
