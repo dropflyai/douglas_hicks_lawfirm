@@ -51,9 +51,14 @@
 ## 🚀 **DEMO READY FEATURES**
 
 ### **Demo URLs:**
-- **Attorney Portal**: `http://localhost:3002/portal/attorney`
-- **Admin Dashboard**: `http://localhost:3002/portal/admin`
-- **Role Switching**: Add `?role=attorney|admin|paralegal|hr` to URL
+- **Local Development**: `http://localhost:3002/portal/attorney`
+- **Production**: `https://douglas-hicks-lawfirm.vercel.app/portal/attorney`
+- **Role Switching**: Add `?role=attorney|admin|paralegal|legal_assistant|secretary|hr` to URL
+
+### **Production Access:**
+- **Secretary Dashboard**: https://douglas-hicks-lawfirm.vercel.app/portal/attorney?role=secretary
+- **Legal Assistant**: https://douglas-hicks-lawfirm.vercel.app/portal/attorney?role=legal_assistant
+- **Case Manager**: https://douglas-hicks-lawfirm.vercel.app/portal/attorney?role=case_manager
 
 ### **Demo Script:**
 1. **Virtual Device Security** - Show empty browser storage
@@ -82,7 +87,13 @@
 
 ## 💾 **SAVED VERSIONS**
 
-### **v3.0 (CURRENT)**
+### **v4.0 (CURRENT)**
+- **Toolbar Consistency**: All dashboards have top-aligned toolbars
+- **Enhanced Functionality**: All toolbar buttons properly functional
+- **Production Ready**: Deployed to Vercel with complete features
+- **Archive**: `versions-archive/v4.0-toolbar-consistency-complete-*.zip`
+
+### **v3.0 (PREVIOUS)**
 - **Full Feature Set**: Complete virtual legal workspace
 - **All Bugs Fixed**: Navigation, scrolling, imports all working
 - **Demo Ready**: Ready for client presentations
@@ -92,6 +103,9 @@
 ```bash
 # List all versions
 git tag -l "v*"
+
+# Restore v4.0 (current)
+git checkout v4.0-toolbar-consistency-complete---all-dashboards-have-toolbars-moved-to-top-with-functional-buttons
 
 # Restore v3.0
 git checkout v3.0-complete-virtual-legal-workspace---casesdocumentsresearch-tabs-working-fixed-scrolling-role-based-security-maya-ai-integration-ready-for-demo
