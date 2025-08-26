@@ -203,6 +203,32 @@ const SecretaryDashboard = ({ userRole, aiActive, setAiActive }) => {
             </div>
           </div>
         </div>
+
+        {/* Secretary Toolbar - Moved to Top */}
+        <div className="px-6 pb-4">
+          <div className="flex items-center space-x-2 overflow-x-auto">
+            {[
+              { icon: <Phone className="w-4 h-4" />, label: 'Phone', action: 'phone', color: 'green' },
+              { icon: <Mail className="w-4 h-4" />, label: 'Email', action: 'email', color: 'blue' },
+              { icon: <Calendar className="w-4 h-4" />, label: 'Calendar', action: 'calendar', color: 'purple' },
+              { icon: <FileText className="w-4 h-4" />, label: 'Documents', action: 'documents', color: 'rose' },
+              { icon: <MapPin className="w-4 h-4" />, label: 'Travel', action: 'travel', color: 'orange' },
+              { icon: <Printer className="w-4 h-4" />, label: 'Print', action: 'print', color: 'teal' },
+              { icon: <Settings className="w-4 h-4" />, label: 'Settings', action: 'settings', color: 'gray' }
+            ].map((tool) => (
+              <button
+                key={tool.action}
+                onClick={() => console.log(`${tool.action} clicked`)}
+                className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white transition-all duration-300 font-medium whitespace-nowrap"
+                title={tool.label}
+              >
+                {tool.icon}
+                <span className="text-sm">{tool.label}</span>
+              </button>
+            ))}
+          </div>
+          </div>
+        </div>
       </header>
 
       <div className="relative px-8 py-10">
@@ -334,32 +360,6 @@ const SecretaryDashboard = ({ userRole, aiActive, setAiActive }) => {
           </div>
         </div>
 
-        {/* Modern Secretary Toolbar */}
-        <div className="relative bg-white/5 backdrop-blur-2xl border-t border-white/10 px-8 py-4 sticky bottom-0">
-          <div className="flex items-center space-x-3 overflow-x-auto">
-            {[
-              { icon: <Phone className="w-5 h-5" />, label: 'Phone', action: 'phone', gradient: 'from-green-500 to-green-600' },
-              { icon: <Mail className="w-5 h-5" />, label: 'Email', action: 'email', gradient: 'from-blue-500 to-blue-600' },
-              { icon: <Calendar className="w-5 h-5" />, label: 'Calendar', action: 'calendar', gradient: 'from-purple-500 to-purple-600' },
-              { icon: <FileText className="w-5 h-5" />, label: 'Documents', action: 'documents', gradient: 'from-rose-500 to-rose-600' },
-              { icon: <MapPin className="w-5 h-5" />, label: 'Travel', action: 'travel', gradient: 'from-orange-500 to-orange-600' },
-              { icon: <Printer className="w-5 h-5" />, label: 'Print', action: 'print', gradient: 'from-teal-500 to-teal-600' },
-              { icon: <Settings className="w-5 h-5" />, label: 'Settings', action: 'settings', gradient: 'from-gray-500 to-gray-600' }
-            ].map((tool) => (
-              <button
-                key={tool.action}
-                onClick={() => console.log(`${tool.action} clicked`)}
-                className={`group flex items-center space-x-3 px-4 py-2.5 bg-white/10 hover:bg-gradient-to-r hover:${tool.gradient} backdrop-blur-sm border border-white/20 hover:border-white/30 rounded-2xl text-slate-300 hover:text-white transition-all duration-300 font-medium whitespace-nowrap hover:scale-105 shadow-lg hover:shadow-xl`}
-                title={tool.label}
-              >
-                <div className="group-hover:animate-pulse">
-                  {tool.icon}
-                </div>
-                <span className="hidden lg:inline group-hover:font-semibold">{tool.label}</span>
-              </button>
-            ))}
-          </div>
-        </div>
       </div>
 
       {/* Legal Messaging Hub Modal */}

@@ -438,6 +438,40 @@ const LegalAssistantAdminCommand = ({ userRole, aiActive, setAiActive }) => {
             ))}
           </div>
         </div>
+        
+        {/* Legal Assistant Toolbar - Moved to Top */}
+        <div className="px-6 pb-4">
+          <div className="flex items-center space-x-2 overflow-x-auto">
+            {[
+              { icon: <Calendar className="w-4 h-4" />, label: 'Schedule Meeting', action: 'calendar' },
+              { icon: <Phone className="w-4 h-4" />, label: 'Quick Call', action: 'communications' },
+              { icon: <Mail className="w-4 h-4" />, label: 'Send Email', action: 'messages' },
+              { icon: <FileText className="w-4 h-4" />, label: 'New Document', action: 'documents' },
+              { icon: <Users className="w-4 h-4" />, label: 'Client Update', action: 'clients' },
+              { icon: <CheckCircle className="w-4 h-4" />, label: 'Complete Task', action: 'overview' },
+              { icon: <Bell className="w-4 h-4" />, label: 'Set Reminder', action: 'calendar' },
+              { icon: <Calculator className="w-4 h-4" />, label: 'Billing', action: 'billing' },
+              { icon: <Archive className="w-4 h-4" />, label: 'File Document', action: 'documents' },
+              { icon: <Download className="w-4 h-4" />, label: 'Export Report', action: 'documents' }
+            ].map((tool) => (
+              <button
+                key={tool.action}
+                onClick={() => {
+                  if (['overview', 'calendar', 'clients', 'communications', 'documents'].includes(tool.action)) {
+                    setActiveTab(tool.action)
+                  } else {
+                    navigateTo(tool.action)
+                  }
+                }}
+                className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium whitespace-nowrap"
+                title={tool.label}
+              >
+                {tool.icon}
+                <span className="text-sm">{tool.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* Main Content */}
@@ -449,33 +483,6 @@ const LegalAssistantAdminCommand = ({ userRole, aiActive, setAiActive }) => {
         {activeTab === 'documents' && renderDocuments()}
       </div>
 
-      {/* Advanced Toolbar */}
-      <div className="bg-gray-800/50 border-t border-gray-700/30 px-6 py-2 sticky bottom-0">
-        <div className="flex items-center space-x-2 overflow-x-auto">
-          {[
-            { icon: <Calendar className="w-4 h-4" />, label: 'Schedule Meeting', action: 'schedule' },
-            { icon: <Phone className="w-4 h-4" />, label: 'Quick Call', action: 'call' },
-            { icon: <Mail className="w-4 h-4" />, label: 'Send Email', action: 'email' },
-            { icon: <FileText className="w-4 h-4" />, label: 'New Document', action: 'document' },
-            { icon: <Users className="w-4 h-4" />, label: 'Client Update', action: 'client' },
-            { icon: <CheckCircle className="w-4 h-4" />, label: 'Complete Task', action: 'complete' },
-            { icon: <Bell className="w-4 h-4" />, label: 'Set Reminder', action: 'reminder' },
-            { icon: <Calculator className="w-4 h-4" />, label: 'Billing', action: 'billing' },
-            { icon: <Archive className="w-4 h-4" />, label: 'File Document', action: 'file' },
-            { icon: <Download className="w-4 h-4" />, label: 'Export Report', action: 'export' }
-          ].map((tool) => (
-            <button
-              key={tool.action}
-              onClick={() => console.log(`${tool.action} clicked`)}
-              className="flex items-center space-x-2 px-3 py-1.5 bg-gray-700/50 hover:bg-purple-600/30 rounded-lg text-gray-300 hover:text-white transition-all duration-300 text-sm whitespace-nowrap"
-              title={tool.label}
-            >
-              {tool.icon}
-              <span className="hidden lg:inline">{tool.label}</span>
-            </button>
-          ))}
-        </div>
-      </div>
     </div>
   )
 }

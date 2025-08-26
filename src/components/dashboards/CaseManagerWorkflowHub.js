@@ -242,6 +242,26 @@ const CaseManagerWorkflowHub = ({ userRole, aiActive, setAiActive }) => {
             </div>
           </div>
         </div>
+
+        {/* Case Manager Toolbar - Moved to Top */}
+        <div className="px-6 pb-4">
+          <div className="flex items-center space-x-2 overflow-x-auto">
+            {caseManagerTools.map((tool) => {
+              const Icon = tool.icon
+              return (
+                <button
+                  key={tool.id}
+                  onClick={() => navigateTo(tool.id)}
+                  className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white transition-all duration-300 font-medium whitespace-nowrap"
+                  title={tool.name}
+                >
+                  <Icon className="w-4 h-4" />
+                  <span className="text-sm">{tool.name}</span>
+                </button>
+              )
+            })}
+          </div>
+        </div>
       </header>
 
       <div className="relative px-8 py-10">
@@ -557,24 +577,6 @@ const CaseManagerWorkflowHub = ({ userRole, aiActive, setAiActive }) => {
       </div>
       </div>
       
-      {/* Modern Case Manager Toolbar */}
-      <div className="relative bg-white/5 backdrop-blur-2xl border-t border-white/10 px-8 py-4 sticky bottom-0">
-        <div className="flex items-center space-x-3 overflow-x-auto">
-          {caseManagerTools.map((tool) => (
-            <button
-              key={tool.id}
-              onClick={() => navigateTo(tool.id)}
-              className={`group flex items-center space-x-3 px-4 py-2.5 bg-white/10 hover:bg-gradient-to-r hover:${tool.gradient} backdrop-blur-sm border border-white/20 hover:border-white/30 rounded-2xl text-slate-300 hover:text-white transition-all duration-300 font-medium whitespace-nowrap hover:scale-105 shadow-lg hover:shadow-xl`}
-              title={tool.name}
-            >
-              <div className="group-hover:animate-pulse">
-                <tool.icon className="w-5 h-5" />
-              </div>
-              <span className="hidden lg:inline group-hover:font-semibold">{tool.name}</span>
-            </button>
-          ))}
-        </div>
-      </div>
 
       {/* Legal Messaging Hub Modal */}
       {showMessaging && (

@@ -18,6 +18,7 @@ import {
 import LegalMessagingHub from '../messaging/LegalMessagingHub'
 import WorkspaceBrowser from '../browser/WorkspaceBrowser'
 import AIAssistant from '../ai/AIAssistant'
+import CaseManagerDashboard from '../case-management/CaseManagerDashboard'
 
 const AttorneyCommandCenterV3 = ({ userRole, aiActive, setAiActive }) => {
   const [currentTime, setCurrentTime] = useState(new Date())
@@ -622,8 +623,17 @@ const AttorneyCommandCenterV3 = ({ userRole, aiActive, setAiActive }) => {
               </div>
             </div>
           </div>
+        ) : selectedWorkspace === 'case-detail' ? (
+          // Enhanced Case Management Dashboard
+          <CaseManagerDashboard
+            selectedCase={selectedCase}
+            onBack={navigateBack}
+            onNavigate={navigateTo}
+            setAiActive={setAiActive}
+            setAiVoiceActive={setAiVoiceActive}
+          />
         ) : (
-          // Workspace Browser (Cases, Documents, Research, etc.)
+          // Workspace Browser (Documents, Research, etc.)
           <WorkspaceBrowser 
             workspace={selectedWorkspace}
             selectedCase={selectedCase}

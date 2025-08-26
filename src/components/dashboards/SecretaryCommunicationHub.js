@@ -41,6 +41,35 @@ const SecretaryCommunicationHub = ({ userRole, aiActive, setAiActive }) => {
   const [navigationHistory, setNavigationHistory] = useState(['dashboard'])
   const [historyIndex, setHistoryIndex] = useState(0)
 
+  // Navigation functions
+  const navigateTo = (workspace) => {
+    const newHistory = navigationHistory.slice(0, historyIndex + 1)
+    newHistory.push(workspace)
+    setNavigationHistory(newHistory)
+    setHistoryIndex(newHistory.length - 1)
+    setSelectedWorkspace(workspace)
+  }
+
+  const navigateBack = () => {
+    if (historyIndex > 0) {
+      const newIndex = historyIndex - 1
+      setHistoryIndex(newIndex)
+      setSelectedWorkspace(navigationHistory[newIndex])
+      return true
+    }
+    return false
+  }
+
+  const navigateForward = () => {
+    if (historyIndex < navigationHistory.length - 1) {
+      const newIndex = historyIndex + 1
+      setHistoryIndex(newIndex)
+      setSelectedWorkspace(navigationHistory[newIndex])
+      return true
+    }
+    return false
+  }
+
   // Simulated real-time data
   useEffect(() => {
     const loadData = () => {
@@ -355,35 +384,6 @@ const SecretaryCommunicationHub = ({ userRole, aiActive, setAiActive }) => {
     </div>
   )
 
-  // Navigation functions
-  const navigateTo = (workspace) => {
-    const newHistory = navigationHistory.slice(0, historyIndex + 1)
-    newHistory.push(workspace)
-    setNavigationHistory(newHistory)
-    setHistoryIndex(newHistory.length - 1)
-    setSelectedWorkspace(workspace)
-  }
-
-  const navigateBack = () => {
-    if (historyIndex > 0) {
-      const newIndex = historyIndex - 1
-      setHistoryIndex(newIndex)
-      setSelectedWorkspace(navigationHistory[newIndex])
-      return true
-    }
-    return false
-  }
-
-  const navigateForward = () => {
-    if (historyIndex < navigationHistory.length - 1) {
-      const newIndex = historyIndex + 1
-      setHistoryIndex(newIndex)
-      setSelectedWorkspace(navigationHistory[newIndex])
-      return true
-    }
-    return false
-  }
-
   // Secretary Tools
   const secretaryTools = [
     { id: 'contacts', name: 'Contacts', icon: Users },
@@ -453,6 +453,40 @@ const SecretaryCommunicationHub = ({ userRole, aiActive, setAiActive }) => {
             ))}
           </div>
         </div>
+        
+        {/* Communication Toolbar - Successfully Moved to Top */}
+        <div className="px-6 pb-4">
+          <div className="flex items-center space-x-2 overflow-x-auto">
+            {[
+              { icon: <Phone className="w-4 h-4" />, label: 'Answer Call', action: 'calls', key: 'answer-call' },
+              { icon: <PhoneCall className="w-4 h-4" />, label: 'Make Call', action: 'calls', key: 'make-call' },
+              { icon: <Mail className="w-4 h-4" />, label: 'Send Email', action: 'messages', key: 'send-email' },
+              { icon: <MessageSquare className="w-4 h-4" />, label: 'Internal Message', action: 'messages', key: 'internal-message' },
+              { icon: <Calendar className="w-4 h-4" />, label: 'Schedule Meeting', action: 'calendar', key: 'schedule-meeting' },
+              { icon: <UserCheck className="w-4 h-4" />, label: 'Check In Visitor', action: 'visitors', key: 'check-visitor' },
+              { icon: <Bell className="w-4 h-4" />, label: 'Send Alert', action: 'messages', key: 'send-alert' },
+              { icon: <Volume2 className="w-4 h-4" />, label: 'Voice Message', action: 'messages', key: 'voice-message' },
+              { icon: <Archive className="w-4 h-4" />, label: 'Archive', action: 'documents', key: 'archive' },
+              { icon: <Download className="w-4 h-4" />, label: 'Export Log', action: 'documents', key: 'export-log' }
+            ].map((tool) => (
+              <button
+                key={tool.key}
+                onClick={() => {
+                  if (tool.action === 'visitors' || tool.action === 'calls' || tool.action === 'messages') {
+                    setActiveTab(tool.action)
+                  } else {
+                    navigateTo(tool.action)
+                  }
+                }}
+                className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium whitespace-nowrap"
+                title={tool.label}
+              >
+                {tool.icon}
+                <span className="text-sm">{tool.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* Main Content */}
@@ -474,33 +508,6 @@ const SecretaryCommunicationHub = ({ userRole, aiActive, setAiActive }) => {
         )}
       </div>
 
-      {/* Advanced Communication Toolbar */}
-      <div className="bg-gray-800/50 border-t border-gray-700/30 px-6 py-2 sticky bottom-0">
-        <div className="flex items-center space-x-2 overflow-x-auto">
-          {[
-            { icon: <Phone className="w-4 h-4" />, label: 'Answer Call', action: 'answer' },
-            { icon: <PhoneCall className="w-4 h-4" />, label: 'Make Call', action: 'call' },
-            { icon: <Mail className="w-4 h-4" />, label: 'Send Email', action: 'email' },
-            { icon: <MessageSquare className="w-4 h-4" />, label: 'Internal Message', action: 'message' },
-            { icon: <Calendar className="w-4 h-4" />, label: 'Schedule Meeting', action: 'schedule' },
-            { icon: <UserCheck className="w-4 h-4" />, label: 'Check In Visitor', action: 'checkin' },
-            { icon: <Bell className="w-4 h-4" />, label: 'Send Alert', action: 'alert' },
-            { icon: <Volume2 className="w-4 h-4" />, label: 'Voice Message', action: 'voicemail' },
-            { icon: <Archive className="w-4 h-4" />, label: 'Archive', action: 'archive' },
-            { icon: <Download className="w-4 h-4" />, label: 'Export Log', action: 'export' }
-          ].map((tool) => (
-            <button
-              key={tool.action}
-              onClick={() => console.log(`${tool.action} clicked`)}
-              className="flex items-center space-x-2 px-3 py-1.5 bg-gray-700/50 hover:bg-blue-600/30 rounded-lg text-gray-300 hover:text-white transition-all duration-300 text-sm whitespace-nowrap"
-              title={tool.label}
-            >
-              {tool.icon}
-              <span className="hidden lg:inline">{tool.label}</span>
-            </button>
-          ))}
-        </div>
-      </div>
     </div>
   )
 }
